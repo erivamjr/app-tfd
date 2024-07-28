@@ -1,18 +1,22 @@
-import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './Page/Home/Home'
-import Login from './Page/Auth/Login'
-import CreateAccount from './Page/Auth/CreateAccount'
-
+import Auth from './Page/Auth/Auth'
+import SideBar from './Components/SideBar/SideBar'
+import Menu from './Components/Menu/Menu'
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/create-account" element={<CreateAccount />} />
-      </Routes>
+      <div className='flex h-screen'>
+        <SideBar />
+        <div className=' w-full h-full flex flex-col p-16'>
+          <Menu />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<Auth />} />
+          </Routes>
+        </div>
+      </div>
     </BrowserRouter>
   )
 }
