@@ -2,14 +2,20 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './Page/Home/Home'
 import Auth from './Page/Auth/Auth'
+import SideBar from './Components/SideBar/SideBar'
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/auth" element={<Auth />} />
-      </Routes>
+      <div className='flex h-screen'>
+        <SideBar />
+        <div className=' w-full h-full flex flex-col p-16'>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<Auth />} />
+          </Routes>
+        </div>
+      </div>
     </BrowserRouter>
   )
 }
