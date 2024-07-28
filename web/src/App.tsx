@@ -1,12 +1,21 @@
+<<<<<<< HEAD
+import AppRouter from "./Router";
+import './index.css'; 
+=======
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '../../../../../../../../vite.svg'
 import './App.css'
+>>>>>>> 22c097dbbe7f6e6d3938b3b0de8664ec29193169
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
+<<<<<<< HEAD
+    <div className='bg-slate-600'>
+      <AppRouter />
+    </div>
+  );
+=======
     <>
       <div>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
@@ -30,6 +39,7 @@ function App() {
       </p>
     </>
   )
+>>>>>>> 22c097dbbe7f6e6d3938b3b0de8664ec29193169
 }
 
-export default App
+export default App;
