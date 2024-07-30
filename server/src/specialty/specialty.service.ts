@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSpecialtyDto } from './dto/create-specialty.dto';
 import { UpdateSpecialtyDto } from './dto/update-specialty.dto';
 import { PrismaService } from '../database/prisma.service';
@@ -20,12 +20,16 @@ export class SpecialtyService {
   }
 
   async findOne(id: number) {
+    await this.idExists(id);
+
     return this.prisma.specialty.findUnique({
       where: { id },
     });
   }
 
   async update(id: number, updateSpecialtyDto: UpdateSpecialtyDto) {
+    await this.idExists(id);
+
     return this.prisma.specialty.update({
       where: { id },
       data: updateSpecialtyDto,
@@ -33,8 +37,20 @@ export class SpecialtyService {
   }
 
   async remove(id: number) {
+    await this.idExists(id);
+
     return this.prisma.specialty.delete({
       where: { id },
     });
+  }
+
+  async idExists(id: number) {
+    const specialty = await this.prisma.specialty.count({
+      where: { id },
+    });
+
+    if (!specialty) {
+      throw new NotFoundException(`Specialty ${id} not found`);
+    }
   }
 }
