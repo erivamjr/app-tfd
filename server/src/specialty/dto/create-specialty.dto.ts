@@ -1,7 +1,8 @@
-import { IsString, Min } from 'class-validator';
+import { IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class CreateSpecialtyDto {
-  @Min(3)
-  @IsString()
+  @Length(3, 50, { message: 'Name must be between 3 and 50 characters' })
+  @IsNotEmpty({ message: 'Name is required' })
+  @IsString({ message: 'Name must be a string' })
   name: string;
 }
