@@ -106,10 +106,10 @@ export default function Table() {
               <div className="">{item.telefone}</div>
               <div className="">{item.usuario}</div>
               <div className="">{item.dataDeCadastro}</div>
-              <div className="grid grid-cols-3 text-2xl text-center">
-                <div><TbReportSearch /></div>
-                <div><FaRegEdit /></div>
-                <div><RiDeleteBin6Line /></div>
+              <div className="flex gap-3 items-center justify-center text-2xl text-center">
+                <div className="bg-[#5CDEFF] p-3"><TbReportSearch /></div>
+                <div className="bg-[#5CDEFF] p-3"><FaRegEdit /></div>
+                <div className="bg-[#5CDEFF] p-3"><RiDeleteBin6Line /></div>
               </div>
             </div>
           </div>
