@@ -8,8 +8,6 @@ export class SpecialtyService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createSpecialtyDto: CreateSpecialtyDto) {
-    console.log(createSpecialtyDto);
-
     return this.prisma.specialty.create({
       data: createSpecialtyDto,
     });
