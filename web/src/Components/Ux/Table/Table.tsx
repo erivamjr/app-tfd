@@ -1,6 +1,7 @@
 import { TbReportSearch } from "react-icons/tb";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 
 export default function Table() {
@@ -58,30 +59,8 @@ export default function Table() {
       usuario: 'bruna.souza',
       dataDeCadastro: '2024-06-15',
       configuracoes: { theme: 'light', notifications: true }
-    },
-    {
-      id: 7,
-      nome: 'Pedro Santos',
-      cpf: '147.258.369-00',
-      telefone: '(71) 97890-1234',
-      usuario: 'pedro.santos',
-      dataDeCadastro: '2024-07-05',
-      configuracoes: { theme: 'dark', notifications: true }
-    },
-    {
-      id: 8,
-      nome: 'Juliana Almeida',
-      cpf: '963.852.741-00',
-      telefone: '(81) 98901-2345',
-      usuario: 'juliana.almeida',
-      dataDeCadastro: '2024-08-25',
-      configuracoes: { theme: 'light', notifications: false }
     }
   ];
-
-  console.log(users);
-
-
 
   return (
     <div className="mt-6">
@@ -107,7 +86,9 @@ export default function Table() {
               <div className="">{item.usuario}</div>
               <div className="">{item.dataDeCadastro}</div>
               <div className="flex gap-3 items-center justify-center text-2xl text-center">
-                <div className="bg-[#5CDEFF] p-3"><TbReportSearch /></div>
+                <Link to={`/detalhespaciente/${item.id}`}>
+                  <div className="bg-[#5CDEFF] p-3"><TbReportSearch /></div>
+                </Link>
                 <div className="bg-[#5CDEFF] p-3"><FaRegEdit /></div>
                 <div className="bg-[#5CDEFF] p-3"><RiDeleteBin6Line /></div>
               </div>
