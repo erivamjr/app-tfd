@@ -6,7 +6,7 @@ CREATE TYPE "Status" AS ENUM ('InProgress', 'Scheduled', 'Completed');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "phone" TEXT,
     "cpf" TEXT NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Patient" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "cpf" TEXT NOT NULL,
     "rg" TEXT,
@@ -33,7 +33,7 @@ CREATE TABLE "Patient" (
     "priority" "Priority" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Patient_pkey" PRIMARY KEY ("id")
 );
@@ -48,10 +48,10 @@ CREATE TABLE "Specialty" (
 
 -- CreateTable
 CREATE TABLE "Appointment" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "specialtyId" INTEGER NOT NULL,
-    "patientId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "patientId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "priority" "Priority" NOT NULL,
     "appointmentDate" TIMESTAMP(3) NOT NULL,
     "diagnosis" TEXT,
