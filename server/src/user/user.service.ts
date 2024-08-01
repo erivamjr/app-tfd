@@ -18,7 +18,7 @@ export class UserService {
   }
 
   async findOne(id: string) {
-    await this.idExists(id);
+    await this.uuidExists(id);
 
     return this.prisma.user.findUnique({
       where: { id },
@@ -26,7 +26,7 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    await this.idExists(id);
+    await this.uuidExists(id);
 
     return this.prisma.user.update({
       where: { id },
@@ -35,14 +35,14 @@ export class UserService {
   }
 
   async remove(id: string) {
-    await this.idExists(id);
+    await this.uuidExists(id);
 
     return this.prisma.user.delete({
       where: { id },
     });
   }
 
-  async idExists(id: string) {
+  async uuidExists(id: string) {
     const user = await this.prisma.user.count({
       where: { id },
     });
