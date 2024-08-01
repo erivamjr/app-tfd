@@ -1,15 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Delete } from '@nestjs/common';
 import { SpecialtyService } from './specialty.service';
 import { CreateSpecialtyDto } from './dto/create-specialty.dto';
 import { UpdateSpecialtyDto } from './dto/update-specialty.dto';
+import { ParamId } from '../decorators/param-id.decorator';
 
 @Controller('specialties')
 export class SpecialtyController {
@@ -26,20 +19,20 @@ export class SpecialtyController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.specialtyService.findOne(+id);
+  findOne(@ParamId() id: number) {
+    return this.specialtyService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @ParamId() id: number,
     @Body() updateSpecialtyDto: UpdateSpecialtyDto,
   ) {
-    return this.specialtyService.update(+id, updateSpecialtyDto);
+    return this.specialtyService.update(id, updateSpecialtyDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.specialtyService.remove(+id);
+  remove(@ParamId() id: number) {
+    return this.specialtyService.remove(id);
   }
 }
