@@ -8,18 +8,21 @@ export class RoleGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext) {
-    const reuieridRoles = this.reflector.getAllAndOverride<Role>(ROLES_KEY, [
+    const requeridRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
-    if (!reuieridRoles) {
+    if (!requeridRoles) {
       return true;
     }
 
     const { user } = context.switchToHttp().getRequest();
-    console.log({ reuieridRoles }, user);
 
-    return true;
+    console.log(requeridRoles);
+
+    const rolesFilted = requeridRoles.filter((role) => role === user.role);
+
+    return rolesFilted.length > 0;
   }
 }
