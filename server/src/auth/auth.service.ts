@@ -8,6 +8,7 @@ import { PrismaService } from '../database/prisma.service';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { UserService } from '../user/user.service';
 import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -65,9 +66,14 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: {
         email,
-        password,
       },
     });
+
+    const hash = bcrypt.compare(password, user.password);
+
+    if (!hash) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');

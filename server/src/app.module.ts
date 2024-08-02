@@ -4,14 +4,31 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { AuthModule } from './auth/auth.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
+    ThrottlerModule.forRoot([
+      {
+        limit: 10,
+        ttl: 60,
+        ignoreUserAgents: [/googlebot/gi],
+      },
+    ]),
     forwardRef(() => UserModule),
     AppointmentsModule,
     forwardRef(() => AuthModule),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
