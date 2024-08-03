@@ -1,19 +1,11 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
-import { UserModule } from '../user/user.module';
+import { SharedModule } from '../shared/shared.module';
 import { AuthService } from './auth.service';
 import { PrismaModule } from '../database/prisma.module';
 
 @Module({
-  imports: [
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
-    }),
-    forwardRef(() => UserModule),
-    PrismaModule,
-  ],
+  imports: [PrismaModule, SharedModule],
   controllers: [AuthController],
   providers: [AuthService],
   exports: [AuthService],
