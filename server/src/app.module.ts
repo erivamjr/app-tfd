@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PatientsModule } from './patients/patients.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { SpecialtyModule } from './specialty/specialty.module';
 
 @Module({
   imports: [
@@ -22,8 +23,9 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
       },
     ]),
     forwardRef(() => UserModule),
-    AppointmentsModule,
     forwardRef(() => AuthModule),
+    SpecialtyModule,
+    AppointmentsModule,
     PatientsModule,
     MailerModule.forRoot({
       transport: {
