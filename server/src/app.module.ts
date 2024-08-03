@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
+import { PatientsModule } from './patients/patients.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ConfigModule } from '@nestjs/config';
     forwardRef(() => UserModule),
     AppointmentsModule,
     forwardRef(() => AuthModule),
+    PatientsModule,
   ],
   controllers: [AppController],
   providers: [
