@@ -22,15 +22,22 @@ export class PatientsService {
     return this.prisma.patient.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} patient`;
+  findOne(id: string) {
+    return this.prisma.patient.findUnique({
+      where: { id },
+    });
   }
 
-  update(id: number, updatePatientDto: UpdatePatientDto) {
-    return `This action updates a #${id} patient`;
+  update(id: string, updatePatientDto: UpdatePatientDto) {
+    return this.prisma.patient.update({
+      where: { id },
+      data: updatePatientDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} patient`;
+  remove(id: string) {
+    return this.prisma.patient.delete({
+      where: { id },
+    });
   }
 }
