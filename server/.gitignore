@@ -3,6 +3,13 @@
 /node_modules
 /build
 
+
+# mock data for local development
+patient.json
+user.json
+appointment.json
+specialties.json
+
 # Logs
 logs
 *.log

@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { PrismaService } from '../database/prisma.service';
@@ -6,38 +10,71 @@ import { PrismaService } from '../database/prisma.service';
 @Injectable()
 export class PatientsService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createPatientDto: CreatePatientDto) {
+
+  async create(userId: string, createPatientDto: CreatePatientDto) {
+    await this.isExistCpf(createPatientDto.cpf);
+
     return this.prisma.patient.create({
       data: {
         ...createPatientDto,
-        priority: createPatientDto.priority, // Assegure-se de que está passando a enum corretamente
-        user: {
-          connect: { id: createPatientDto.user.connect.id },
-        },
+        priority: createPatientDto.priority,
+        userId: userId,
       },
     });
   }
 
-  findAll() {
+  async findAll() {
     return this.prisma.patient.findMany();
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
+    await this.uuidExists(id);
+
     return this.prisma.patient.findUnique({
       where: { id },
     });
   }
 
-  update(id: string, updatePatientDto: UpdatePatientDto) {
+  async update(id: string, updatePatientDto: UpdatePatientDto) {
+    await this.uuidExists(id);
+
     return this.prisma.patient.update({
       where: { id },
       data: updatePatientDto,
     });
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    await this.uuidExists(id);
+
     return this.prisma.patient.delete({
       where: { id },
     });
+  }
+
+  async search(name: string) {
+    return this.prisma.patient.findMany({
+      where: { name: { contains: name } },
+    });
+  }
+
+  async isExistCpf(cpf: string) {
+    const patient = await this.prisma.patient.count({
+      where: { cpf },
+    });
+
+    if (patient) {
+      throw new ConflictException('Patient already exists');
+    }
+  }
+
+  async uuidExists(id: string) {
+    const user = await this.prisma.user.count({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Specialty ${id} not found`);
+    }
   }
 }

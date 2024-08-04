@@ -45,7 +45,4 @@ export class CreatePatientDto {
   @IsEnum(Priority)
   @IsNotEmpty()
   priority: Priority;
-
-  @IsNotEmpty()
-  user: { connect: { id: string } };
 }
