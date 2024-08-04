@@ -32,8 +32,8 @@ export class PatientsController {
 
   @Roles(Role.ADMIN, Role.USER)
   @Get()
-  findAll() {
-    return this.patientsService.findAll();
+  findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
+    return this.patientsService.findAll({ page, limit });
   }
 
   @Roles(Role.ADMIN, Role.USER)
