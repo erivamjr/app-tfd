@@ -52,10 +52,21 @@ export class PatientsService {
     });
   }
 
-  async search(name: string) {
-    return this.prisma.patient.findMany({
-      where: { name: { contains: name } },
+  async search(name?: string, cpf?: string) {
+    const patients = await this.prisma.patient.findMany({
+      where: {
+        OR: [
+          { name: { contains: name, mode: 'insensitive' } },
+          { cpf: { contains: cpf, mode: 'insensitive' } },
+        ],
+      },
     });
+
+    if (!patients.length) {
+      throw new NotFoundException('Patients not found');
+    }
+
+    return patients;
   }
 
   async isExistCpf(cpf: string) {
@@ -69,12 +80,12 @@ export class PatientsService {
   }
 
   async uuidExists(id: string) {
-    const user = await this.prisma.user.count({
+    const user = await this.prisma.patient.count({
       where: { id },
     });
 
     if (!user) {
-      throw new NotFoundException(`Specialty ${id} not found`);
+      throw new NotFoundException(`Patient ${id} not found`);
     }
   }
 }
