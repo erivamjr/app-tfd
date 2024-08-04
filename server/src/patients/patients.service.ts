@@ -23,8 +23,34 @@ export class PatientsService {
     });
   }
 
-  async findAll() {
-    return this.prisma.patient.findMany();
+  async findAll(paginationParams: { page: number; limit: number }) {
+    const { page, limit } = paginationParams;
+
+    let paget = Number(page);
+    let limitt = Number(limit);
+
+    if (isNaN(page) || page <= 0) {
+      paget = 1;
+    }
+    if (isNaN(limit) || limit <= 0) {
+      limitt = 10;
+    }
+    const offset = (paget - 1) * limitt;
+
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.patient.findMany({
+        skip: offset,
+        take: limitt,
+      }),
+      this.prisma.patient.count(),
+    ]);
+
+    return {
+      data,
+      total,
+      page: paget,
+      pageCount: Math.ceil(total / limitt),
+    };
   }
 
   async findOne(id: string) {
