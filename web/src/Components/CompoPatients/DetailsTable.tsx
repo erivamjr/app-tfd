@@ -52,7 +52,7 @@ export default function DetailsTable() {
     <div className="mt-6">
       <div className=" ">
         <div className="mb-5 ">
-          <div className="grid grid-cols-12 gap-2 rounded p-2 text-center ">
+          <div className="grid grid-cols-12 gap-2 rounded p-2 text-center bg-blue-600 text-white ">
             <div className="">ID</div>
             <div className="">Usuario</div>
             <div className="">Prioridade</div>

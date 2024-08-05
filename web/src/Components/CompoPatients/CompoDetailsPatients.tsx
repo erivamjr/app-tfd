@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AdminToolbar from "../Ux/AdminToolbar/AdminToolbar";
 import { ImPrinter } from "react-icons/im";
 import { IoReturnDownBack } from "react-icons/io5";
@@ -9,30 +9,29 @@ import DetailsTable from "./DetailsTable";
 export default function DetailsPatients() {
   const { id } = useParams()
   return <div>
-    Details {id}
     <AdminToolbar>
       <div className="p-2 flex">
-        <div className=" text-[#857900] text-2xl flex flex-1 items-center justify-center">
+        <div className=" font-bold text-black text-2xl flex flex-1 items-center justify-center">
           Detalhes do Paciente
         </div>
         <div className="flex gap-3">
-          <div className="bg-[#FFF58A] p-3 text-2xl rounded">
+          <div className="bg-blue-600 text-white p-3 text-2xl rounded">
             <ImPrinter />
           </div>
-          <div className="bg-[#FFF58A] p-3 text-2xl rounded">
-            <IoReturnDownBack />
-          </div>
+          <Link to="/pacientes">
+            <div className="bg-blue-600 text-white p-3 text-2xl rounded">
+              <IoReturnDownBack />
+            </div>
+          </Link>
         </div>
 
       </div>
     </AdminToolbar>
     <Container >
       <div>
-        <AdminToolbar>
-          <div className="p-1 text-[#857900]">
-            Dados Pessoais
-          </div>
-        </AdminToolbar>
+        <div className="p-1 font-bold text-black">
+          Dados Pessoais
+        </div>
         <div className="grid grid-cols-2 w-full p-3">
           <div className="flex flex-col gap-2">
             <span>Nome: </span>
@@ -49,11 +48,9 @@ export default function DetailsPatients() {
             </div>
           </div>
         </div>
-        <AdminToolbar>
-          <div className="p-1 text-[#857900]">
-            Histórico
-          </div>
-        </AdminToolbar>
+        <div className="p-1 text-black font-bold">
+          Histórico
+        </div>
       </div>
       <DetailsTable />
     </Container>

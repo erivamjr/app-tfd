@@ -110,11 +110,11 @@ export default function Patients() {
             <span className='w-full'>
               <Input type="text" name="search" placeholder="Pesquisar" />
             </span>
-            <span className='bg-[#FFF58A] p-3 rounded cursor-pointer '>
+            <span className=' bg-blue-600 text-white hover:bg-blue-500  p-3 rounded cursor-pointer '>
               <CiSearch />
             </span>
           </div>
-          <div onClick={handleOpenModal} className='ml-10 bg-[#FFF58A] p-2 rounded flex items-center gap-2 cursor-pointer '>
+          <div onClick={handleOpenModal} className='ml-10 bg-blue-600 text-white hover:bg-blue-500 p-2 rounded flex items-center gap-2 cursor-pointer '>
             <span>
               <RiUserAddLine />
             </span>

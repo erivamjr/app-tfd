@@ -66,7 +66,7 @@ export default function Table() {
     <div className="mt-6">
       <div className=" ">
         <div className="mb-5 ">
-          <div className="grid grid-cols-7 gap-2 rounded bg-[#5CDEFF] p-2 text-center ">
+          <div className="grid grid-cols-7 gap-2 rounded bg-blue-600 text-white items-center p-2 text-center ">
             <div className="">ID</div>
             <div className="">Nome</div>
             <div className="">CPF</div>
@@ -77,8 +77,8 @@ export default function Table() {
           </div>
         </div>
         {users.map((item) => (
-          <div className="border mb-4 border-[#008BAD] p-3 rounded">
-            <div className="grid grid-cols-7 gap-2 text-center">
+          <div className="border mb-4 border-blue-300 p-3 rounded">
+            <div className="grid grid-cols-7 gap-2 text-center items-center">
               <div className="">{item.id}</div>
               <div className="">{item.nome}</div>
               <div className="">{item.cpf}</div>
@@ -87,10 +87,10 @@ export default function Table() {
               <div className="">{item.dataDeCadastro}</div>
               <div className="flex gap-3 items-center justify-center text-2xl text-center">
                 <Link to={`/detalhespaciente/${item.id}`}>
-                  <div className="bg-[#5CDEFF] p-3"><TbReportSearch /></div>
+                  <div className=" bg-yellow-600 hover:bg-yellow-500 text-white rounded p-3"><TbReportSearch /></div>
                 </Link>
-                <div className="bg-[#5CDEFF] p-3"><FaRegEdit /></div>
-                <div className="bg-[#5CDEFF] p-3"><RiDeleteBin6Line /></div>
+                <div className="bg-green-600 hover:bg-green-500 rounded text-white p-3"><FaRegEdit /></div>
+                <div className="bg-red-600 rounded hover:bg-red-500 text-white p-3"><RiDeleteBin6Line /></div>
               </div>
             </div>
           </div>

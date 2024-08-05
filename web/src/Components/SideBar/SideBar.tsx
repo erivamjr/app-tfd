@@ -19,15 +19,15 @@ export default function SideBar() {
   }
 
   return (
-    <div className={` ${sideBar ? 'w-16' : 'w-60'} h-screen flex flex-col bg-[#008BAD] text-white transition-width duration-300`}>
+    <div className={` ${sideBar ? 'w-16' : 'w-60'} h-screen flex flex-col bg-blue-600 text-white transition-width duration-300`}>
       <div
         onClick={handleSideBar}
-        className={`flex justify-end text-3xl cursor-pointer p-3 bg-[#008BAD]`}
+        className={`flex justify-end text-3xl cursor-pointer p-3 bg-blue-600`}
       >
         {sideBar ? <IoMenu /> : <IoIosClose />}
       </div>
       {!sideBar && (
-        <div className='flex justify-end items-center bg-[#008BAD]'>
+        <div className='flex justify-end items-center bg-blue-600'>
           <img className='w-36 h-36' src={Logo} alt="Logo" />
         </div>
       )}
@@ -51,7 +51,7 @@ function MenuItem({ to, icon, label, currentPage, setPage, sideBar }) {
   return (
     <li
       onClick={() => setPage(label)}
-      className={` flex gap-1 items-center p-2 cursor-pointer ${isActive ? 'w-full bg-white rounded text-[#006A85]' : 'hover:text-[#006A85]'} ${sideBar ? 'justify-center' : ''}`}
+      className={` flex gap-1 items-center p-2 cursor-pointer ${isActive ? 'w-full bg-white rounded text-[#006A85]' : 'hover:text-blue-300'} ${sideBar ? 'justify-center' : ''}`}
     >
       <span>{icon}</span>
       {!sideBar && <Link to={to}><span>{label}</span></Link>}
