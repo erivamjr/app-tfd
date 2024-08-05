@@ -1,3 +1,3 @@
 export default function UserName({ name }) {
-  return <div className="text-[#857900] font-bold">{name}</div>;
+  return <div className="text-black font-bold">{name}</div>;
 }
