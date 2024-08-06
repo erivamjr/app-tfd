@@ -1,4 +1,4 @@
-import { Priority } from '@prisma/client';
+import { Priority, Status } from '@prisma/client';
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateAppointmentDto {
@@ -41,9 +41,9 @@ export class CreateAppointmentDto {
   @IsString()
   requestDate: string;
 
+  @IsEnum(Status)
   @IsNotEmpty()
-  @IsString()
-  status: string;
+  status: Status;
 
   @IsString()
   notes?: string;
