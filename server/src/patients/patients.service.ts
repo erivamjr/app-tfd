@@ -11,13 +11,13 @@ import { PrismaService } from '../database/prisma.service';
 export class PatientsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userId: string, createPatientDto: CreatePatientDto) {
-    await this.isExistCpf(createPatientDto.cpf);
+  async create(userId: string, body: CreatePatientDto) {
+    await this.isExistCpf(body.cpf);
 
     return this.prisma.patient.create({
       data: {
-        ...createPatientDto,
-        priority: createPatientDto.priority,
+        ...body,
+        priority: body.priority,
         userId: userId,
       },
     });
@@ -61,12 +61,12 @@ export class PatientsService {
     });
   }
 
-  async update(id: string, updatePatientDto: UpdatePatientDto) {
+  async update(id: string, body: UpdatePatientDto) {
     await this.uuidExists(id);
 
     return this.prisma.patient.update({
       where: { id },
-      data: updatePatientDto,
+      data: body,
     });
   }
 

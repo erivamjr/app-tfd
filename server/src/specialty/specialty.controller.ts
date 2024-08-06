@@ -9,8 +9,8 @@ export class SpecialtyController {
   constructor(private readonly specialtyService: SpecialtyService) {}
 
   @Post()
-  create(@Body() createSpecialtyDto: CreateSpecialtyDto) {
-    return this.specialtyService.create(createSpecialtyDto);
+  create(@Body() body: CreateSpecialtyDto) {
+    return this.specialtyService.create(body);
   }
 
   @Get()
@@ -24,11 +24,8 @@ export class SpecialtyController {
   }
 
   @Patch(':id')
-  update(
-    @ParamId() id: number,
-    @Body() updateSpecialtyDto: UpdateSpecialtyDto,
-  ) {
-    return this.specialtyService.update(id, updateSpecialtyDto);
+  update(@ParamId() id: number, @Body() body: UpdateSpecialtyDto) {
+    return this.specialtyService.update(id, body);
   }
 
   @Delete(':id')

@@ -26,8 +26,8 @@ export class PatientsController {
 
   @Roles(Role.ADMIN, Role.USER)
   @Post()
-  create(@User('id') id, @Body() createPatientDto: CreatePatientDto) {
-    return this.patientsService.create(id, createPatientDto);
+  create(@User('id') id, @Body() body: CreatePatientDto) {
+    return this.patientsService.create(id, body);
   }
 
   @Roles(Role.ADMIN, Role.USER)
@@ -51,8 +51,8 @@ export class PatientsController {
 
   @Roles(Role.ADMIN, Role.USER)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
-    return this.patientsService.update(id, updatePatientDto);
+  update(@Param('id') id: string, @Body() body: UpdatePatientDto) {
+    return this.patientsService.update(id, body);
   }
 
   @Roles(Role.ADMIN)
