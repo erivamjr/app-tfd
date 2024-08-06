@@ -29,15 +29,16 @@ export class AppointmentsService {
     });
   }
 
-  async update(id: string, updateAppointmentDto: UpdateAppointmentDto) {
+  async update(id: string, body: UpdateAppointmentDto) {
     await this.uuidExists(id);
 
+    await this.findBySpecialtyIdAndPatientId(body.specialtyId, body.patientId);
     return this.prisma.appointment.update({
       where: {
         id: id,
       },
       data: {
-        ...updateAppointmentDto,
+        ...body,
       },
     });
   }
@@ -59,6 +60,26 @@ export class AppointmentsService {
 
     if (!user) {
       throw new NotFoundException(`Patient ${id} not found`);
+    }
+  }
+
+  async findBySpecialtyIdAndPatientId(specialty: number, patient: string) {
+    const specialtyId = await this.prisma.specialty.count({
+      where: {
+        id: specialty,
+      },
+    });
+
+    const patientId = await this.prisma.patient.count({
+      where: {
+        id: patient,
+      },
+    });
+
+    if (!specialtyId || !patientId) {
+      throw new NotFoundException(
+        `Specialty ${specialtyId} and Patient ${patientId} not found`,
+      );
     }
   }
 }
