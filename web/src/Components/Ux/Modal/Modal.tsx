@@ -11,7 +11,7 @@ export default function Modal({ isOpen, onClose, title, children }) {
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${isOpen ? 'is-open' : ''
         }`}
     >
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg mx-2 p-4">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl mx-2 p-4">
         <div className="flex justify-between items-center border-b pb-2">
           <h2 className="text-xl font-semibold">{title}</h2>
           <button

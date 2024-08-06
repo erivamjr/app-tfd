@@ -5,6 +5,7 @@ import SideBar from './Components/SideBar/SideBar'
 import Menu from './Components/Menu/Menu'
 import Patients from './Page/Patients/Patients'
 import DetailsPatients from './Page/Patients/DetailsPatients'
+import Request from './Page/Request/Request'
 
 export default function AppRouter() {
   return (
@@ -18,6 +19,7 @@ export default function AppRouter() {
             <Route path="/auth" element={<Auth />} />
             <Route path="/pacientes" element={<Patients />} />
             <Route path="/detalhespaciente/:id" element={<DetailsPatients />} />
+            <Route path="/solicitacao" element={<Request />} />
           </Routes>
         </div>
       </div>
