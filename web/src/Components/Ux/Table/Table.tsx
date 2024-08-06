@@ -78,7 +78,7 @@ export default function Table() {
         </div>
         {users.map((item) => (
           <div className="border mb-4 border-blue-300 p-3 rounded">
-            <div className="grid grid-cols-7 gap-2 text-center items-center">
+            <div className="sm:flex sm:flex-col lg:grid lg:grid-cols-7 lg:gap-2 text-center lg:items-center">
               <div className="">{item.id}</div>
               <div className="">{item.nome}</div>
               <div className="">{item.cpf}</div>
