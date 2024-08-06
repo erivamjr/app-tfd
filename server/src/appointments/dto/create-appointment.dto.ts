@@ -1,4 +1,5 @@
 import { Priority, Status } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateAppointmentDto {
@@ -19,8 +20,8 @@ export class CreateAppointmentDto {
   priority: Priority;
 
   @IsNotEmpty()
-  @IsString()
-  appointmentDate: string;
+  @Transform(({ value }) => new Date(value))
+  appointmentDate: Date;
 
   @IsString()
   diagnosis?: string;
@@ -38,8 +39,8 @@ export class CreateAppointmentDto {
   requestCode?: string;
 
   @IsNotEmpty()
-  @IsString()
-  requestDate: string;
+  @Transform(({ value }) => new Date(value))
+  requestDate: Date;
 
   @IsEnum(Status)
   @IsNotEmpty()

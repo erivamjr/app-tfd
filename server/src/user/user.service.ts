@@ -8,13 +8,13 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dataUser: CreateUserDto) {
+  async create(body: CreateUserDto) {
     const salt = await bcrypt.genSalt();
 
-    dataUser.password = await bcrypt.hash(dataUser.password, salt);
+    body.password = await bcrypt.hash(body.password, salt);
 
     return this.prisma.user.create({
-      data: dataUser,
+      data: body,
     });
   }
 
@@ -30,16 +30,16 @@ export class UserService {
     });
   }
 
-  async update(id: string, bodyUser: UpdateUserDto) {
+  async update(id: string, body: UpdateUserDto) {
     await this.uuidExists(id);
 
     const salt = await bcrypt.genSalt();
 
-    bodyUser.password = await bcrypt.hash(bodyUser.password, salt);
+    body.password = await bcrypt.hash(body.password, salt);
 
     return this.prisma.user.update({
       where: { id },
-      data: bodyUser,
+      data: body,
     });
   }
 

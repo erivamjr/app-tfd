@@ -15,14 +15,14 @@ import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     ThrottlerModule.forRoot([
       {
         limit: 10,
-        ttl: 60,
+        ttl: 60000,
         ignoreUserAgents: [/googlebot/gi],
       },
     ]),
+    ConfigModule.forRoot(),
     SharedModule,
     UserModule,
     AuthModule,
