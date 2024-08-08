@@ -16,7 +16,9 @@ export class AppointmentsService {
   }
 
   findAll() {
-    return this.prisma.appointment.findMany();
+    return this.prisma.appointment.findMany({
+      include: { patient: true, specialty: true },
+    });
   }
 
   async findOne(id: string) {
@@ -26,6 +28,7 @@ export class AppointmentsService {
       where: {
         id: id,
       },
+      include: { patient: true, specialty: true },
     });
   }
 
