@@ -2,14 +2,18 @@
 import Table from '../../Components/Ux/Table/Table';
 import AdminToolbar from '../../Components/Ux/AdminToolbar/AdminToolbar';
 import Input from '../../Components/Ux/Input/Input';
-import { CiSearch } from 'react-icons/ci';
+import { CiFloppyDisk, CiSearch } from 'react-icons/ci';
 import { RiUserAddLine } from 'react-icons/ri';
 import Modal from '../../Components/Ux/Modal/Modal';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import Label from '../../Components/Ux/Label/Label';
+import Button from '../../Components/Ux/Button/Button';
+import Loading from '../../Components/Ux/Loading/Loading';
 
 export default function Patients() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   function handleOpenModal() {
     setIsModalOpen(true);
   }
@@ -17,8 +21,13 @@ export default function Patients() {
     setIsModalOpen(false);
   }
 
-  function handleSubmit(e) {
-    e.preventDefaul()
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
   }
   return (
     <div>
@@ -70,6 +79,9 @@ export default function Patients() {
                       <div><Label label={'Nome da mãe'} /></div>
                       <div><Input type="number" name="name" placeholder="Nome da mãe" /></div>
                     </div>
+                  </div>
+                  <div>
+                    <Button icon={isLoading ? <Loading /> : <CiFloppyDisk />} title="Salvar" />
                   </div>
                 </div>
               </div>
