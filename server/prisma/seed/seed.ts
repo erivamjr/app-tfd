@@ -8,16 +8,16 @@ async function main() {
   // Criação de especialidades (Specialties)
   await prisma.specialty.createMany({
     data: [
-      { id: 1, name: 'Cardiologia' },
-      { id: 2, name: 'Dermatologia' },
-      { id: 3, name: 'Ortopedia' },
-      { id: 4, name: 'Neurologia' },
-      { id: 5, name: 'Ginecologia e Obstetrícia' },
-      { id: 6, name: 'Pediatria' },
-      { id: 7, name: 'Oftalmologia' },
-      { id: 8, name: 'Endocrinologia' },
-      { id: 9, name: 'Gastroenterologia' },
-      { id: 10, name: 'Psiquiatria' },
+      { id: 1, active: true, name: 'Cardiologia' },
+      { id: 2, active: true, name: 'Dermatologia' },
+      { id: 3, active: true, name: 'Ortopedia' },
+      { id: 4, active: true, name: 'Neurologia' },
+      { id: 5, active: true, name: 'Ginecologia e Obstetrícia' },
+      { id: 6, active: true, name: 'Pediatria' },
+      { id: 7, active: true, name: 'Oftalmologia' },
+      { id: 8, active: true, name: 'Endocrinologia' },
+      { id: 9, active: true, name: 'Gastroenterologia' },
+      { id: 10, active: true, name: 'Psiquiatria' },
     ],
   });
 
@@ -26,49 +26,53 @@ async function main() {
     data: [
       {
         id: 'ed5c416c-46a0-4e93-9484-d555c70af284',
-        name: 'geiza',
+        active: true,
         phone: '91991782007',
         cpf: '777.777.555-05',
         email: 'geizaportel@gmail.com',
         password:
           '$2b$10$Vzgc9ozxN2i/SwFRibnnL.Dn1P/TnkMFPZRVQ8GuiVwfSEFd2uqwK',
         role: 'user',
+        name: 'geiza',
         createdAt: '2024-07-31T23:38:40.141Z',
         updatedAt: '2024-07-31T23:38:40.141Z',
       },
       {
         id: '84d6d27e-475c-4e83-a1ae-b477698e399e',
-        name: 'Davi Mileras',
+        active: true,
         phone: '91991782007',
         cpf: '777.777.555-10',
         email: 'davi@gmail.com',
         password:
           '$2b$10$Vzgc9ozxN2i/SwFRibnnL.Dn1P/TnkMFPZRVQ8GuiVwfSEFd2uqwK',
         role: 'admin',
+        name: 'Davi Mileras',
         createdAt: '2024-08-02T19:43:00.357Z',
         updatedAt: '2024-08-02T19:43:00.357Z',
       },
       {
         id: 'ec487b8b-0d25-4af9-a57b-623b087e4fc3',
-        name: 'Jose Erivam',
+        active: true,
         phone: '91991782007',
         cpf: '777.777.555-06',
         email: 'erivamdev@gmail.com',
         password:
           '$2b$10$Vzgc9ozxN2i/SwFRibnnL.Dn1P/TnkMFPZRVQ8GuiVwfSEFd2uqwK',
         role: 'USER',
+        name: 'Jose Erivam',
         createdAt: '2024-08-02T11:47:59.357Z',
         updatedAt: '2024-08-03T18:43:44.114Z',
       },
       {
         id: 'ec487b8b-0d25-4af9-a57b-623b087e4fc2',
-        name: 'Taynara Pacheco',
+        active: true,
         phone: '91991782007',
         cpf: '777.777.555-61',
         email: 'taynara@gmail.com',
         password:
           '$2b$10$Vzgc9ozxN2i/SwFRibnnL.Dn1P/TnkMFPZRVQ8GuiVwfSEFd2uqwK',
         role: 'USER',
+        name: 'Taynara Pacheco',
         createdAt: '2024-08-02T11:47:59.357Z',
         updatedAt: '2024-08-03T18:43:44.114Z',
       },
@@ -90,6 +94,7 @@ async function main() {
         motherName: 'Maria Stark',
         priority: 'Normal',
         gender: 'M',
+        active: true,
         userId: 'ed5c416c-46a0-4e93-9484-d555c70af284',
       },
       {
@@ -104,6 +109,7 @@ async function main() {
         motherName: 'Ivan Petrovna',
         priority: 'Normal',
         gender: 'F',
+        active: true,
         userId: '84d6d27e-475c-4e83-a1ae-b477698e399e',
       },
       {
@@ -118,6 +124,7 @@ async function main() {
         motherName: 'Sarah Rogers',
         priority: 'Normal',
         gender: 'M',
+        active: true,
         userId: 'ec487b8b-0d25-4af9-a57b-623b087e4fc3',
       },
       {
@@ -132,6 +139,7 @@ async function main() {
         motherName: 'Marie Danvers',
         priority: 'Normal',
         gender: 'F',
+        active: true,
         userId: 'ec487b8b-0d25-4af9-a57b-623b087e4fc3',
       },
       {
@@ -146,6 +154,7 @@ async function main() {
         motherName: 'Rebecca Banner',
         priority: 'Normal',
         gender: 'M',
+        active: true,
         userId: 'ed5c416c-46a0-4e93-9484-d555c70af284',
       },
       {
@@ -160,6 +169,7 @@ async function main() {
         motherName: 'Mary Parker',
         priority: 'Normal',
         gender: 'M',
+        active: true,
         userId: '84d6d27e-475c-4e83-a1ae-b477698e399e',
       },
       {
@@ -174,6 +184,7 @@ async function main() {
         motherName: 'Magda Maximoff',
         priority: 'Normal',
         gender: 'F',
+        active: true,
         userId: 'ec487b8b-0d25-4af9-a57b-623b087e4fc3',
       },
       {
@@ -188,6 +199,7 @@ async function main() {
         motherName: 'Peggy Lang',
         priority: 'Normal',
         gender: 'M',
+        active: true,
         userId: 'ed5c416c-46a0-4e93-9484-d555c70af284',
       },
       {
@@ -202,6 +214,7 @@ async function main() {
         motherName: 'Beverly Strange',
         priority: 'Normal',
         gender: 'M',
+        active: true,
         userId: '84d6d27e-475c-4e83-a1ae-b477698e399e',
       },
       {
@@ -216,6 +229,7 @@ async function main() {
         motherName: 'Ramonda',
         priority: 'Normal',
         gender: 'M',
+        active: true,
         userId: 'ec487b8b-0d25-4af9-a57b-623b087e4fc2',
       },
       {
@@ -230,6 +244,7 @@ async function main() {
         motherName: 'Frigga',
         priority: 'Normal',
         gender: 'M',
+        active: true,
         userId: 'ed5c416c-46a0-4e93-9484-d555c70af284',
       },
       {
@@ -244,6 +259,7 @@ async function main() {
         motherName: 'Darlene Wilson',
         priority: 'Normal',
         gender: 'M',
+        active: true,
         userId: '84d6d27e-475c-4e83-a1ae-b477698e399e',
       },
       {
@@ -258,6 +274,7 @@ async function main() {
         motherName: 'Lila Rhodes',
         priority: 'Normal',
         gender: 'M',
+        active: true,
         userId: 'ec487b8b-0d25-4af9-a57b-623b087e4fc3',
       },
     ],
@@ -283,6 +300,7 @@ async function main() {
         requestDate: '2024-08-05T09:00:00.000Z',
         status: 'InProgress',
         notes: 'Additional notes about the appointment',
+        active: true,
         createdAt: '2024-08-05T00:06:53.973Z',
         updatedAt: '2024-08-05T00:06:53.973Z',
       },
@@ -301,6 +319,7 @@ async function main() {
         requestDate: '2024-08-05T09:00:00.000Z',
         status: 'InProgress',
         notes: 'Additional notes about the appointment',
+        active: true,
         createdAt: '2024-08-05T00:06:57.960Z',
         updatedAt: '2024-08-05T00:06:57.960Z',
       },
@@ -319,6 +338,7 @@ async function main() {
         requestDate: '2024-08-05T09:00:00.000Z',
         status: 'InProgress',
         notes: 'Additional notes about the appointment',
+        active: true,
         createdAt: '2024-08-05T00:06:58.292Z',
         updatedAt: '2024-08-05T00:06:58.292Z',
       },
@@ -337,6 +357,7 @@ async function main() {
         requestDate: '2024-08-05T09:00:00.000Z',
         status: 'InProgress',
         notes: 'Additional notes about the appointment',
+        active: true,
         createdAt: '2024-08-05T00:06:17.371Z',
         updatedAt: '2024-08-06T21:39:29.911Z',
       },
@@ -355,6 +376,7 @@ async function main() {
         requestDate: '2024-08-05T09:00:00.000Z',
         status: 'InProgress',
         notes: 'Additional notes about the appointment',
+        active: true,
         createdAt: '2024-08-06T21:53:41.540Z',
         updatedAt: '2024-08-06T21:53:41.540Z',
       },

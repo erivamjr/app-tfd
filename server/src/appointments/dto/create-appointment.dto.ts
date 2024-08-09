@@ -1,6 +1,12 @@
 import { Priority, Status } from '@prisma/client';
 import { Transform } from 'class-transformer';
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 
 export class CreateAppointmentDto {
   @IsNumber()
@@ -48,4 +54,7 @@ export class CreateAppointmentDto {
 
   @IsString()
   notes?: string;
+
+  @IsBoolean()
+  active: boolean;
 }
