@@ -23,6 +23,7 @@ model User {
   role         String        @default("user")
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  active       Boolean       @default(true)
   patients     Patient[]
   appointments Appointment[]
 }
@@ -38,6 +39,7 @@ model Patient {
   susCard      String?
   birthDate    DateTime?
   motherName   String?
+  active       Boolean       @default(true)
   priority     Priority
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -49,6 +51,7 @@ model Patient {
 model Specialty {
   id           Int           @id @default(autoincrement())
   name         String        @unique
+  active       Boolean       @default(true)
   appointments Appointment[]
 }
 
@@ -70,6 +73,7 @@ model Appointment {
   requestDate      DateTime
   status           Status
   notes            String?
+  active           Boolean   @default(true)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 }

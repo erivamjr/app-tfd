@@ -4,6 +4,7 @@ import {
   IsStrongPassword,
   IsOptional,
   IsEnum,
+  IsBoolean,
 } from 'class-validator';
 import { Role } from '../../enums/role.enum';
 
@@ -33,4 +34,7 @@ export class CreateUserDto {
   @IsOptional()
   @IsEnum(Role)
   role: string;
+
+  @IsBoolean()
+  active: boolean;
 }
