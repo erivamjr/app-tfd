@@ -11,8 +11,6 @@ import {
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
-import { Roles } from '../decorators/role.decorator';
-import { Role } from '../enums/role.enum';
 
 import { User } from '../decorators/user.decorator';
 import { SearchPatientDto } from './dto/search-patient.dto';
@@ -47,7 +45,6 @@ export class PatientsController {
     return this.patientsService.update(id, body);
   }
 
-  @Roles(Role.ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.patientsService.remove(id);
