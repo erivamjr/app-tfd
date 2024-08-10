@@ -10,9 +10,9 @@ import Request from './Page/Request/Request'
 export default function AppRouter() {
   return (
     <BrowserRouter>
-      <div className='flex h-screen'>
+      <div className="flex h-screen">
         <SideBar />
-        <div className=' w-full h-full flex flex-col p-16'>
+        <div className=" w-full h-full flex flex-col p-16">
           <Menu />
           <Routes>
             <Route path="/" element={<Home />} />

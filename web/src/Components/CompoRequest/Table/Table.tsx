@@ -1,8 +1,7 @@
-import { TbReportSearch } from "react-icons/tb";
-import { FaRegEdit } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
-
+import { TbReportSearch } from 'react-icons/tb'
+import { FaRegEdit } from 'react-icons/fa'
+import { RiDeleteBin6Line } from 'react-icons/ri'
+import { Link } from 'react-router-dom'
 
 export default function Table() {
   const users = [
@@ -13,7 +12,7 @@ export default function Table() {
       telefone: '(11) 91234-5678',
       usuario: 'joao.silva',
       dataDeCadastro: '2024-01-15',
-      configuracoes: { theme: 'dark', notifications: true }
+      configuracoes: { theme: 'dark', notifications: true },
     },
     {
       id: 2,
@@ -22,7 +21,7 @@ export default function Table() {
       telefone: '(21) 92345-6789',
       usuario: 'maria.oliveira',
       dataDeCadastro: '2024-02-20',
-      configuracoes: { theme: 'light', notifications: false }
+      configuracoes: { theme: 'light', notifications: false },
     },
     {
       id: 3,
@@ -31,7 +30,7 @@ export default function Table() {
       telefone: '(31) 93456-7890',
       usuario: 'carlos.pereira',
       dataDeCadastro: '2024-03-10',
-      configuracoes: { theme: 'dark', notifications: true }
+      configuracoes: { theme: 'dark', notifications: true },
     },
     {
       id: 4,
@@ -40,7 +39,7 @@ export default function Table() {
       telefone: '(41) 94567-8901',
       usuario: 'ana.costa',
       dataDeCadastro: '2024-04-05',
-      configuracoes: { theme: 'light', notifications: true }
+      configuracoes: { theme: 'light', notifications: true },
     },
     {
       id: 5,
@@ -49,7 +48,7 @@ export default function Table() {
       telefone: '(51) 95678-9012',
       usuario: 'lucas.fernandes',
       dataDeCadastro: '2024-05-25',
-      configuracoes: { theme: 'dark', notifications: false }
+      configuracoes: { theme: 'dark', notifications: false },
     },
     {
       id: 6,
@@ -58,9 +57,9 @@ export default function Table() {
       telefone: '(61) 96789-0123',
       usuario: 'bruna.souza',
       dataDeCadastro: '2024-06-15',
-      configuracoes: { theme: 'light', notifications: true }
-    }
-  ];
+      configuracoes: { theme: 'light', notifications: true },
+    },
+  ]
 
   return (
     <div className="mt-6">
@@ -87,10 +86,16 @@ export default function Table() {
               <div className="">{item.dataDeCadastro}</div>
               <div className="flex gap-3 items-center justify-center text-2xl text-center">
                 <Link to={`/detalhespaciente/${item.id}`}>
-                  <div className=" bg-yellow-600 hover:bg-yellow-500 text-white rounded p-3"><TbReportSearch /></div>
+                  <div className=" bg-yellow-600 hover:bg-yellow-500 text-white rounded p-3">
+                    <TbReportSearch />
+                  </div>
                 </Link>
-                <div className="bg-green-600 hover:bg-green-500 rounded text-white p-3"><FaRegEdit /></div>
-                <div className="bg-red-600 rounded hover:bg-red-500 text-white p-3"><RiDeleteBin6Line /></div>
+                <div className="bg-green-600 hover:bg-green-500 rounded text-white p-3">
+                  <FaRegEdit />
+                </div>
+                <div className="bg-red-600 rounded hover:bg-red-500 text-white p-3">
+                  <RiDeleteBin6Line />
+                </div>
               </div>
             </div>
           </div>
@@ -100,9 +105,12 @@ export default function Table() {
         <div className=" ">
           <div className="flex gap-3">
             <a href="#">&laquo;</a>
-            <a className="" href="#">1</a>
+            <a className="" href="#">
+              1
+            </a>
             <a href="#">2</a>
-            <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a></div>
+            <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a>
+          </div>
         </div>
       </div>
     </div>

@@ -1,14 +1,12 @@
-import { Link } from 'react-router-dom';
-import Input from "../../Components/Ux/Input/Input";
-import Logo from '../../Components/Ux/Logo/Vector.png';
-import Button from "../Ux/Button/Button";
+import { Link } from 'react-router-dom'
+import Input from '../../Components/Ux/Input/Input'
+import Logo from '../../Components/Ux/Logo/Vector.png'
+import Button from '../Ux/Button/Button'
 
 export default function CompoCreateAccount() {
   return (
     <div className="relative min-h-screen bg-gray-100">
-      <div className="absolute z-10 h-screen w-1/2 bg-[#008BAD] flex items-center justify-center">
-
-      </div>
+      <div className="absolute z-10 h-screen w-1/2 bg-[#008BAD] flex items-center justify-center"></div>
       <div className="relative z-20 flex items-center justify-center min-h-screen">
         <div className="flex w-[800px] shadow-lg">
           <div className="flex items-center justify-center w-1/2 bg-[#008BAD]">
@@ -29,7 +27,7 @@ export default function CompoCreateAccount() {
                   type="text"
                   name="name"
                   value=""
-                  onChange={() => { }}
+                  onChange={() => {}}
                   placeholder="Digite seu nome"
                 />
               </div>
@@ -39,7 +37,7 @@ export default function CompoCreateAccount() {
                   type="email"
                   name="email"
                   value=""
-                  onChange={() => { }}
+                  onChange={() => {}}
                   placeholder="Digite seu email"
                 />
               </div>
@@ -49,17 +47,19 @@ export default function CompoCreateAccount() {
                   type="password"
                   name="password"
                   value=""
-                  onChange={() => { }}
+                  onChange={() => {}}
                   placeholder="Digite sua senha"
                 />
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium">Confirme a Senha</label>
+                <label className="block text-sm font-medium">
+                  Confirme a Senha
+                </label>
                 <Input
                   type="password"
                   name="confirmPassword"
                   value=""
-                  onChange={() => { }}
+                  onChange={() => {}}
                   placeholder="Confirme sua senha"
                 />
               </div>
@@ -74,5 +74,5 @@ export default function CompoCreateAccount() {
         </div>
       </div>
     </div>
-  );
+  )
 }

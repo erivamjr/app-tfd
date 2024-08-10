@@ -7,36 +7,32 @@ import DetailsTable from './DetailsTable'
 import usePatients from '../Hooks/Api/Patiens/Patiens'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 
-
 export default function DetailsPatients() {
   const { id } = useParams()
   const { patients, isLoading, isError } = usePatients()
 
   const patient = patients.find((patient) => patient.id === id)
 
-  if (isLoading) return (
-    <DisplayMessage
-      message={'Carregando'}
-      color="green"
-      text="white"
-    />
-  )
+  if (isLoading)
+    return <DisplayMessage message={'Carregando'} color="green" text="white" />
 
-  if (isError) return (
-    <DisplayMessage
-      message={'Erro na solicitação.'}
-      color="red"
-      text="white"
-    />
-  )
+  if (isError)
+    return (
+      <DisplayMessage
+        message={'Erro na solicitação.'}
+        color="red"
+        text="white"
+      />
+    )
 
-  if (!patient) return (
-    <DisplayMessage
-      message={'Consultando paciente, aguarde !'}
-      color="yellow"
-      text="white"
-    />
-  )
+  if (!patient)
+    return (
+      <DisplayMessage
+        message={'Consultando paciente, aguarde !'}
+        color="yellow"
+        text="white"
+      />
+    )
 
   return (
     <div>
