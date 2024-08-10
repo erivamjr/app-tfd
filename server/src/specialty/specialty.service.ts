@@ -37,8 +37,9 @@ export class SpecialtyService {
   async remove(id: number) {
     await this.idExists(id);
 
-    return this.prisma.specialty.delete({
+    return this.prisma.specialty.update({
       where: { id },
+      data: { active: false },
     });
   }
 

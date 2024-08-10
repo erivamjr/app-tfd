@@ -49,10 +49,9 @@ export class AppointmentsService {
   async remove(id: string) {
     await this.uuidExists(id);
 
-    return this.prisma.appointment.delete({
-      where: {
-        id: id,
-      },
+    return this.prisma.appointment.update({
+      where: { id },
+      data: { active: false },
     });
   }
 

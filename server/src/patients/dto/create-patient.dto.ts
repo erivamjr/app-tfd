@@ -19,7 +19,7 @@ export class CreatePatientDto {
   cpf: string;
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   gender?: string;
 
   @IsString()
