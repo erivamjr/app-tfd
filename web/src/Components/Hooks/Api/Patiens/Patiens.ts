@@ -16,7 +16,9 @@ const usePatients = () => {
     const fetchPatients = async () => {
       try {
         setIsLoading(true)
-        const response = await api.get<{ data: Patient[] }>('/patients', { signal })
+        const response = await api.get<{ data: Patient[] }>('/patients', {
+          signal,
+        })
         console.log('Data received:', response.data.data)
         setPatients(response.data.data)
       } catch (error) {

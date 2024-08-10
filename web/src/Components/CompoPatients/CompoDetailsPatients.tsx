@@ -32,11 +32,7 @@ export default function DetailsPatients() {
 
   if (!patient)
     return (
-      <DisplayMessage
-        message={'Consultando ...'}
-        color="yellow"
-        text="white"
-      />
+      <DisplayMessage message={'Consultando ...'} color="yellow" text="white" />
     )
 
   return (

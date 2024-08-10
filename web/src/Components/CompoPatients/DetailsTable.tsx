@@ -25,11 +25,7 @@ export default function DetailsTable({
   console.log(item)
   if (!item)
     return (
-      <DisplayMessage
-        message={'Consultando ...'}
-        color="yellow"
-        text="white"
-      />
+      <DisplayMessage message={'Consultando ...'} color="yellow" text="white" />
     )
 
   return (

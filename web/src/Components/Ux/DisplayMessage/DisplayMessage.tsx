@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface DisplayMessageProps {
-  isLoading?: any,
+  isLoading?: any
   message: string
   color?: string
   text?: string
@@ -11,7 +11,7 @@ const DisplayMessage: React.FC<DisplayMessageProps> = ({
   isLoading,
   message,
   color,
-  text
+  text,
 }) => {
   return (
     <div
