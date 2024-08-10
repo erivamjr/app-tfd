@@ -17,7 +17,7 @@ import { SharedModule } from './shared/shared.module';
   imports: [
     ThrottlerModule.forRoot([
       {
-        limit: 10,
+        limit: 60,
         ttl: 60000,
         ignoreUserAgents: [/googlebot/gi],
       },

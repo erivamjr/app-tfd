@@ -34,7 +34,4 @@ export class CreateUserDto {
   @IsOptional()
   @IsEnum(Role)
   role: string;
-
-  @IsBoolean()
-  active: boolean;
 }

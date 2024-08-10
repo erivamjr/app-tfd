@@ -47,9 +47,6 @@ export class CreatePatientDto {
   @IsOptional()
   motherName?: string;
 
-  @IsBoolean()
-  active: boolean;
-
   @IsEnum(Priority)
   @IsNotEmpty()
   priority: Priority;
