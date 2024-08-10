@@ -1,90 +1,66 @@
-export default function DetailsTable() {
-  const dadosMedicos = [
-    {
-      id: 11374927,
-      Usuario: 'Taynara',
-      Prioridade: 'Normal',
-      Diagnostico: 'Sarampo',
-      EspecialidadesExames: 'Pediatria',
-      Solicitacao: '20/10/2023',
-      CID: '123',
-      Medico: 'Kelly',
-      CRM: '12345',
-      Status: 'Finalizado',
-      Agendamento: '22/10/2023',
-      FinalizadoData: '25/10/2023',
-      Obs: 'Realizado',
-    },
-    {
-      id: 11374927,
-      Usuario: 'Taynara',
-      Prioridade: 'Normal',
-      Diagnostico: 'Catapora',
-      EspecialidadesExames: 'Pediatria',
-      Solicitacao: '10/11/2023',
-      CID: '123',
-      Medico: 'Kelly',
-      CRM: '12345',
-      Status: 'Finalizado',
-      Agendamento: '22/12/2023',
-      FinalizadoData: '25/12/2023',
-      Obs: 'Nao foi',
-    },
-    {
-      id: 11374927,
-      Usuario: 'Luana',
-      Prioridade: 'Gestante',
-      Diagnostico: 'Prevencao',
-      EspecialidadesExames: 'Ginecologista',
-      Solicitacao: '28/09/2023',
-      CID: '123',
-      Medico: 'Felipe',
-      CRM: '65465',
-      Status: 'Andamento',
-      Agendamento: '',
-      FinalizadoData: '',
-      Obs: '',
-    },
-  ]
+import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
+
+interface DetailsTableProps {
+  item: any
+  isLoadingPoint: boolean
+  isErrorPoint: boolean
+}
+
+export default function DetailsTable({
+  item,
+  isLoadingPoint,
+  isErrorPoint,
+}: DetailsTableProps) {
+  if (isLoadingPoint)
+    return <DisplayMessage message={'Carregando'} color="green" text="white" />
+
+  if (isErrorPoint)
+    return (
+      <DisplayMessage
+        message={'Erro na solicitação.'}
+        color="red"
+        text="white"
+      />
+    )
+  console.log(item)
+  if (!item)
+    return (
+      <DisplayMessage message={'Consultando ...'} color="yellow" text="white" />
+    )
 
   return (
     <div className="mt-6">
-      <div className=" ">
+      <div className="">
         <div className="mb-5 ">
           <div className="grid grid-cols-12 gap-2 rounded p-2 text-center bg-blue-600 text-white ">
-            <div className="">ID</div>
-            <div className="">Usuario</div>
-            <div className="">Prioridade</div>
-            <div className="">Diagnostico</div>
-            <div className="">Exame</div>
-            <div className="">Solicitação</div>
-            <div className="">CID</div>
-            <div className="">Médico</div>
-            <div className="">CRM</div>
-            <div className="">Agendamento</div>
-            <div className="">Status</div>
+            <div>ID</div>
+            <div>Usuario</div>
+            <div>Prioridade</div>
+            <div>Diagnostico</div>
+            <div>Exame</div>
+            <div>Solicitação</div>
+            <div>CID</div>
+            <div>Médico</div>
+            <div>CRM</div>
+            <div>Agendamento</div>
+            <div>Status</div>
           </div>
         </div>
-        {dadosMedicos.map((item) => (
-          <div
-            className="border mb-4 border-[#008BAD] p-3 rounded"
-            key={item.id}
-          >
-            <div className="grid grid-cols-12 gap-2 text-center">
-              <div className="">{item.id}</div>
-              <div className="">{item.Usuario}</div>
-              <div className="">{item.Prioridade}</div>
-              <div className="">{item.Diagnostico}</div>
-              <div className="">{item.EspecialidadesExames}</div>
-              <div className="">{item.Solicitacao}</div>
-              <div className="">{item.CID}</div>
-              <div className="">{item.Medico}</div>
-              <div className="">{item.CRM}</div>
-              <div className="">{item.Agendamento}</div>
-              <div className="">{item.Status}</div>
-            </div>
+        <div className="border mb-4 border-[#008BAD] p-3 rounded" key={item.id}>
+          <div className="grid grid-cols-12 gap-2 text-center">
+            <div>{item.id}</div>
+            <div>{item.patient.name}</div>
+            <div>{item.priority}</div>
+            <div>{item.diagnosis}</div>
+            <div>{item.specialty.name}</div>
+            <div>{new Date(item.appointmentDate).toLocaleDateString()}</div>
+            <div>{item.cid}</div>
+            <div>{item.requestingDoctor}</div>
+            <div>{item.crm}</div>
+            <div>{new Date(item.appointmentDate).toLocaleDateString()}</div>
+            <div>{item.status === 'InProgress' && 'Em andamento'}</div>
           </div>
-        ))}
+        </div>
       </div>
       <div className="flex justify-center">
         <div className=" ">
