@@ -22,7 +22,6 @@ const useAppointment = () => {
             signal,
           },
         )
-        console.log('Data appointments:', response.data)
         setAppointments(response.data)
       } catch (error) {
         if (axios.isAxiosError(error) && error.message === 'canceled') {
@@ -37,7 +36,7 @@ const useAppointment = () => {
     }
 
     fetchAppointments()
-
+    console.log(appointments)
     return () => {
       controller.abort()
     }
