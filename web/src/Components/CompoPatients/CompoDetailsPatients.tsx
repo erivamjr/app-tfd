@@ -6,12 +6,17 @@ import Container from '../Ux/Container/Container'
 import DetailsTable from './DetailsTable'
 import usePatients from '../Hooks/Api/Patiens/Patiens'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
+import useAppointment from '../Hooks/Api/Appointments/Appointments'
 
 export default function DetailsPatients() {
   const { id } = useParams()
   const { patients, isLoading, isError } = usePatients()
+  const { appointments, isLoadingPoint, isErrorPoint } = useAppointment()
 
   const patient = patients.find((patient) => patient.id === id)
+  const appointment = appointments.find(
+    (appointment) => appointment.patientId === id,
+  )
 
   if (isLoading)
     return <DisplayMessage message={'Carregando'} color="green" text="white" />
@@ -27,11 +32,7 @@ export default function DetailsPatients() {
 
   if (!patient)
     return (
-      <DisplayMessage
-        message={'Consultando paciente, aguarde !'}
-        color="yellow"
-        text="white"
-      />
+      <DisplayMessage message={'Consultando ...'} color="yellow" text="white" />
     )
 
   return (
@@ -72,7 +73,11 @@ export default function DetailsPatients() {
           </div>
           <div className="p-1 text-black font-bold">Histórico</div>
         </section>
-        <DetailsTable />
+        <DetailsTable
+          item={appointment}
+          isErrorPoint={isErrorPoint}
+          isLoadingPoint={isLoadingPoint}
+        />
       </Container>
     </div>
   )
