@@ -1,34 +1,35 @@
 
-import Table from '../../Components/Ux/Table/Table';
-import AdminToolbar from '../../Components/Ux/AdminToolbar/AdminToolbar';
-import Input from '../../Components/Ux/Input/Input';
-import { CiFloppyDisk, CiSearch } from 'react-icons/ci';
-import { RiUserAddLine } from 'react-icons/ri';
-import Modal from '../../Components/Ux/Modal/Modal';
-import { FormEvent, useState } from 'react';
-import Label from '../../Components/Ux/Label/Label';
-import Button from '../../Components/Ux/Button/Button';
-import Loading from '../../Components/Ux/Loading/Loading';
+import Table from '../../Components/Ux/Table/Table'
+import AdminToolbar from '../../Components/Ux/AdminToolbar/AdminToolbar'
+import Input from '../../Components/Ux/Input/Input'
+import { CiFloppyDisk, CiSearch } from 'react-icons/ci'
+import { RiUserAddLine } from 'react-icons/ri'
+import Modal from '../../Components/Ux/Modal/Modal'
+import { FormEvent, useState } from 'react'
+import Label from '../../Components/Ux/Label/Label'
+import Button from '../../Components/Ux/Button/Button'
+import Loading from '../../Components/Ux/Loading/Loading'
 
 export default function Patients() {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   function handleOpenModal() {
-    setIsModalOpen(true);
+    setIsModalOpen(true)
   }
   function handleCloseModal() {
-    setIsModalOpen(false);
+    setIsModalOpen(false)
   }
 
   function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    setIsLoading(true);
+    e.preventDefault()
+    setIsLoading(true)
 
     setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+      setIsLoading(false)
+    }, 2000)
   }
+
   return (
     <div>
       <AdminToolbar>
