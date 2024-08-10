@@ -46,8 +46,9 @@ export class UserService {
   async remove(id: string) {
     await this.uuidExists(id);
 
-    return this.prisma.user.delete({
+    return this.prisma.user.update({
       where: { id },
+      data: { active: false },
     });
   }
 

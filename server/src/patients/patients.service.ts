@@ -73,8 +73,9 @@ export class PatientsService {
   async remove(id: string) {
     await this.uuidExists(id);
 
-    return this.prisma.patient.delete({
+    return this.prisma.patient.update({
       where: { id },
+      data: { active: false },
     });
   }
 
