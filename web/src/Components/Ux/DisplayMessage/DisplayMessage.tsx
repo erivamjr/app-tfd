@@ -9,7 +9,7 @@ interface DisplayMessageProps {
 const DisplayMessage: React.FC<DisplayMessageProps> = ({
   message,
   color,
-  text
+  text,
 }) => {
   return (
     <div

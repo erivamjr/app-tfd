@@ -1,52 +1,51 @@
-
 export default function DetailsTable() {
   const dadosMedicos = [
     {
       id: 11374927,
-      Usuario: "Taynara",
-      Prioridade: "Normal",
-      Diagnostico: "Sarampo",
-      EspecialidadesExames: "Pediatria",
-      Solicitacao: "20/10/2023",
-      CID: "123",
-      Medico: "Kelly",
-      CRM: "12345",
-      Status: "Finalizado",
-      Agendamento: "22/10/2023",
-      FinalizadoData: "25/10/2023",
-      Obs: "Realizado"
+      Usuario: 'Taynara',
+      Prioridade: 'Normal',
+      Diagnostico: 'Sarampo',
+      EspecialidadesExames: 'Pediatria',
+      Solicitacao: '20/10/2023',
+      CID: '123',
+      Medico: 'Kelly',
+      CRM: '12345',
+      Status: 'Finalizado',
+      Agendamento: '22/10/2023',
+      FinalizadoData: '25/10/2023',
+      Obs: 'Realizado',
     },
     {
       id: 11374927,
-      Usuario: "Taynara",
-      Prioridade: "Normal",
-      Diagnostico: "Catapora",
-      EspecialidadesExames: "Pediatria",
-      Solicitacao: "10/11/2023",
-      CID: "123",
-      Medico: "Kelly",
-      CRM: "12345",
-      Status: "Finalizado",
-      Agendamento: "22/12/2023",
-      FinalizadoData: "25/12/2023",
-      Obs: "Nao foi"
+      Usuario: 'Taynara',
+      Prioridade: 'Normal',
+      Diagnostico: 'Catapora',
+      EspecialidadesExames: 'Pediatria',
+      Solicitacao: '10/11/2023',
+      CID: '123',
+      Medico: 'Kelly',
+      CRM: '12345',
+      Status: 'Finalizado',
+      Agendamento: '22/12/2023',
+      FinalizadoData: '25/12/2023',
+      Obs: 'Nao foi',
     },
     {
       id: 11374927,
-      Usuario: "Luana",
-      Prioridade: "Gestante",
-      Diagnostico: "Prevencao",
-      EspecialidadesExames: "Ginecologista",
-      Solicitacao: "28/09/2023",
-      CID: "123",
-      Medico: "Felipe",
-      CRM: "65465",
-      Status: "Andamento",
-      Agendamento: "",
-      FinalizadoData: "",
-      Obs: ""
-    }
-  ];
+      Usuario: 'Luana',
+      Prioridade: 'Gestante',
+      Diagnostico: 'Prevencao',
+      EspecialidadesExames: 'Ginecologista',
+      Solicitacao: '28/09/2023',
+      CID: '123',
+      Medico: 'Felipe',
+      CRM: '65465',
+      Status: 'Andamento',
+      Agendamento: '',
+      FinalizadoData: '',
+      Obs: '',
+    },
+  ]
 
   return (
     <div className="mt-6">
@@ -67,7 +66,10 @@ export default function DetailsTable() {
           </div>
         </div>
         {dadosMedicos.map((item) => (
-          <div className="border mb-4 border-[#008BAD] p-3 rounded" key={item.id}>
+          <div
+            className="border mb-4 border-[#008BAD] p-3 rounded"
+            key={item.id}
+          >
             <div className="grid grid-cols-12 gap-2 text-center">
               <div className="">{item.id}</div>
               <div className="">{item.Usuario}</div>
@@ -88,7 +90,9 @@ export default function DetailsTable() {
         <div className=" ">
           <div className="flex gap-3">
             <a href="#">&laquo;</a>
-            <a className="" href="#">1</a>
+            <a className="" href="#">
+              1
+            </a>
             <a href="#">2</a>
             <a href="#">3</a>
             <a href="#">4</a>
@@ -97,5 +101,5 @@ export default function DetailsTable() {
         </div>
       </div>
     </div>
-  );
+  )
 }

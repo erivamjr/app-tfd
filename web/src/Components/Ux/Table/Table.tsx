@@ -1,18 +1,16 @@
-import { TbReportSearch } from "react-icons/tb"
-import { FaRegEdit } from "react-icons/fa"
-import { RiDeleteBin6Line } from "react-icons/ri"
-import { Link } from "react-router-dom"
-import usePatients from "../../Hooks/Api/Patiens/Patiens"
+import { TbReportSearch } from 'react-icons/tb'
+import { FaRegEdit } from 'react-icons/fa'
+import { RiDeleteBin6Line } from 'react-icons/ri'
+import { Link } from 'react-router-dom'
+import usePatients from '../../Hooks/Api/Patiens/Patiens'
 
 export default function Table() {
   const { patients, isLoading, isError } = usePatients()
 
   if (isLoading) {
     return (
-      <div className="bg-green-600 p-3 rounded text-white mt-5">
-        Loading...
-      </div>
-    );
+      <div className="bg-green-600 p-3 rounded text-white mt-5">Loading...</div>
+    )
   }
 
   if (isError) {
@@ -20,7 +18,7 @@ export default function Table() {
       <div className="bg-red-600 p-3 rounded text-white mt-5">
         Erro na requisição!
       </div>
-    );
+    )
   }
 
   if (!patients || !Array.isArray(patients)) {
@@ -28,7 +26,7 @@ export default function Table() {
       <div className="bg-red-600 p-3 rounded text-white mt-5">
         Não é uma lista de array.
       </div>
-    );
+    )
   }
 
   return (
@@ -55,11 +53,12 @@ export default function Table() {
               <div className="">{item.name}</div>
               <div className="">{item.cpf}</div>
               <div className="">{item.phone}</div>
-              <div className="">{item.usuario}</div><div className="">
+              <div className="">{item.usuario}</div>
+              <div className="">
                 {new Date(item.createdAt).toLocaleDateString('pt-BR', {
                   year: 'numeric',
                   month: 'long',
-                  day: 'numeric'
+                  day: 'numeric',
                 })}
               </div>
 
@@ -84,7 +83,9 @@ export default function Table() {
         <div className="">
           <div className="flex gap-3">
             <a href="#">&laquo</a>
-            <a className="" href="#">1</a>
+            <a className="" href="#">
+              1
+            </a>
             <a href="#">2</a>
             <a href="#">3</a>
             <a href="#">4</a>
