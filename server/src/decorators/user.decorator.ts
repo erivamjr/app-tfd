@@ -12,6 +12,9 @@ export const User = createParamDecorator(
       if (filter) {
         return request.user[filter];
       }
+
+      delete request.user.password;
+
       return request.user;
     } else {
       throw new NotFoundException('User not found');
