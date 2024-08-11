@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../database/prisma.service';
@@ -7,8 +11,8 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
-
   async create(body: CreateUserDto) {
+    await this.userExists(body);
     const salt = await bcrypt.genSalt();
 
     body.password = await bcrypt.hash(body.password, salt);
@@ -19,15 +23,25 @@ export class UserService {
   }
 
   async findAll() {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      where: { active: true },
+    });
   }
 
   async findOne(id: string) {
     await this.uuidExists(id);
 
-    return this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id },
     });
+
+    if (!user.active) {
+      throw new NotFoundException(
+        `User ${id} is inactive and cannot be found, request a reactivation by admin.`,
+      );
+    }
+
+    return user;
   }
 
   async update(id: string, body: UpdateUserDto) {
@@ -50,6 +64,22 @@ export class UserService {
       where: { id },
       data: { active: false },
     });
+  }
+
+  async userExists(body: CreateUserDto) {
+    const existingUser = await this.prisma.user.findFirst({
+      where: {
+        OR: [{ cpf: body.cpf }, { email: body.email }],
+      },
+    });
+
+    if (existingUser) {
+      if (existingUser.cpf === body.cpf) {
+        throw new ConflictException('CPF already in use by another user.');
+      } else if (existingUser.email === body.email) {
+        throw new ConflictException('Email already in use by another user.');
+      }
+    }
   }
 
   async uuidExists(id: string) {

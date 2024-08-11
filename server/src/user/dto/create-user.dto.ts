@@ -4,7 +4,6 @@ import {
   IsStrongPassword,
   IsOptional,
   IsEnum,
-  IsBoolean,
 } from 'class-validator';
 import { Role } from '../../enums/role.enum';
 

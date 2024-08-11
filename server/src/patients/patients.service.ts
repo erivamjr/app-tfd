@@ -39,6 +39,9 @@ export class PatientsService {
 
     const [data, total] = await this.prisma.$transaction([
       this.prisma.patient.findMany({
+        where: {
+          active: true,
+        },
         skip: offset,
         take: limitt,
       }),
