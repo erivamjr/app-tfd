@@ -20,7 +20,7 @@ export class AppointmentsService {
       where: {
         active: true,
       },
-      include: { patient: true, specialty: true },
+      include: { patient: true, specialty: true, user: true },
     });
   }
 
