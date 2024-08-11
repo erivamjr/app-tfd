@@ -17,7 +17,6 @@ export class PatientsService {
     return this.prisma.patient.create({
       data: {
         ...body,
-        priority: body.priority,
         userId: userId,
       },
     });
