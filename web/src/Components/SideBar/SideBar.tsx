@@ -1,16 +1,18 @@
 import { IoMenu } from 'react-icons/io5'
-import { CiHome, CiMedicalCase } from 'react-icons/ci'
+import { CiHome, CiLogout, CiMedicalCase } from 'react-icons/ci'
 import { IoIosClose } from 'react-icons/io'
 import Logo from '../Ux/Logo/Vector.png'
 
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { GoPeople } from 'react-icons/go'
 import { TbReportSearch } from 'react-icons/tb'
 import { RiCalendarScheduleLine } from 'react-icons/ri'
 import { GiBrain } from 'react-icons/gi'
+import { AuthContext } from '../Context/Auth'
 
 export default function SideBar() {
+  const { logout } = useContext(AuthContext)
   const [sideBar, setSideBar] = useState(false)
   const [page, setPage] = useState('Home')
 
@@ -85,19 +87,33 @@ export default function SideBar() {
             setPage={setPage}
             sideBar={sideBar}
           />
+          <MenuItem
+            to="/usuarios"
+            icon={<CiLogout />}
+            label="Sair"
+            currentPage={page}
+            setPage={setPage}
+            sideBar={sideBar}
+            onClick={logout}
+          />
         </ul>
       </div>
     </div>
   )
 }
 
-function MenuItem({ to, icon, label, currentPage, setPage, sideBar }) {
+function MenuItem({ to, icon, label, currentPage, setPage, sideBar, onClick }) {
   const isActive = currentPage === label
+
+  const handleClick = () => {
+    if (onClick) onClick() // Executa o onClick se ele for passado
+    setPage(label) // Define a página atual
+  }
 
   return (
     <li
-      onClick={() => setPage(label)}
-      className={` flex gap-1 items-center p-2 cursor-pointer ${isActive ? 'w-full bg-white rounded text-[#006A85]' : 'hover:text-blue-300'} ${sideBar ? 'justify-center' : ''}`}
+      onClick={handleClick}
+      className={`flex gap-1 items-center p-2 cursor-pointer ${isActive ? 'w-full bg-white rounded text-[#006A85]' : 'hover:text-blue-300'} ${sideBar ? 'justify-center' : ''}`}
     >
       <span>{icon}</span>
       {!sideBar && (
