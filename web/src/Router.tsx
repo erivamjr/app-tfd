@@ -17,30 +17,37 @@ export default function AppRouter() {
     }
     return children
   }
+
   return (
     <BrowserRouter>
       <AuthProvider>
-        <div className="flex h-screen">
-          <AdminPrivate>
-            <SideBar />
-          </AdminPrivate>
-          <div className=" w-full h-full flex flex-col p-16">
-            <AdminPrivate>
-              <Menu />
-            </AdminPrivate>
-            <Routes>
-              <Route path="/auth" element={<Auth />} />
+        <div className=" w-screen flex justify-center items-center h-screen">
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
 
-              <Route path="/" element={<Home />} />
-
-              <Route path="/pacientes" element={<Patients />} />
-              <Route
-                path="/detalhespaciente/:id"
-                element={<DetailsPatients />}
-              />
-              <Route path="/solicitacao" element={<Request />} />
-            </Routes>
-          </div>
+            <Route
+              path="/*"
+              element={
+                <AdminPrivate>
+                  <div className="flex w-full h-full">
+                    <SideBar />
+                    <div className="w-full h-full flex flex-col p-16">
+                      <Menu />
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/pacientes" element={<Patients />} />
+                        <Route
+                          path="/detalhespaciente/:id"
+                          element={<DetailsPatients />}
+                        />
+                        <Route path="/solicitacao" element={<Request />} />
+                      </Routes>
+                    </div>
+                  </div>
+                </AdminPrivate>
+              }
+            />
+          </Routes>
         </div>
       </AuthProvider>
     </BrowserRouter>
