@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import {
+  IsBoolean,
   IsDate,
   IsNotEmpty,
   IsOptional,
@@ -70,5 +71,4 @@ export class CreatePatientDto {
 
   @IsBoolean()
   active: boolean;
-
 }
