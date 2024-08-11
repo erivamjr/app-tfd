@@ -5,6 +5,9 @@ import { Pagination } from '../Ux/table/Pagination '
 import { TableActions } from '../Ux/table/TableActions'
 import TableCell from '../Ux/table/TableCell'
 import TableRow from '../Ux/table/TableRow'
+import { TbReportSearch } from 'react-icons/tb'
+import { FaRegEdit } from 'react-icons/fa'
+import { RiDeleteBin6Line } from 'react-icons/ri'
 
 export default function PatientsTable() {
   const { patients, isLoading, isError } = usePatients()
@@ -40,7 +43,29 @@ export default function PatientsTable() {
             })}
           </TableCell>
           <TableCell>
-            <TableActions id={patient.id} />
+            <div className="flex justify-between items-center w-full">
+              <TableActions
+                id={patient.id}
+                url={'detalhespaciente'}
+                icon={<TbReportSearch />}
+                color={'yellow'}
+                text={'white'}
+              />
+              <TableActions
+                id={patient.id}
+                url={'detalhespaciente'}
+                icon={<FaRegEdit />}
+                color={'green'}
+                text={'white'}
+              />
+              <TableActions
+                id={patient.id}
+                url={'detalhespaciente'}
+                icon={<RiDeleteBin6Line />}
+                color={'red'}
+                text={'white'}
+              />
+            </div>
           </TableCell>
         </TableRow>
       ))}
