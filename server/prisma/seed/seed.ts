@@ -21,7 +21,7 @@ async function main() {
     ],
   });
 
-  // Criação de usuários (Users) password 1235a@A
+  // Criação de usuários (Users) password 12345a@A
   await prisma.user.createMany({
     data: [
       {
@@ -58,7 +58,7 @@ async function main() {
         email: 'erivamdev@gmail.com',
         password:
           '$2b$10$Vzgc9ozxN2i/SwFRibnnL.Dn1P/TnkMFPZRVQ8GuiVwfSEFd2uqwK',
-        role: 'USER',
+        role: 'user',
         name: 'Jose Erivam',
         createdAt: '2024-08-02T11:47:59.357Z',
         updatedAt: '2024-08-03T18:43:44.114Z',
@@ -71,7 +71,7 @@ async function main() {
         email: 'taynara@gmail.com',
         password:
           '$2b$10$Vzgc9ozxN2i/SwFRibnnL.Dn1P/TnkMFPZRVQ8GuiVwfSEFd2uqwK',
-        role: 'USER',
+        role: 'user',
         name: 'Taynara Pacheco',
         createdAt: '2024-08-02T11:47:59.357Z',
         updatedAt: '2024-08-03T18:43:44.114Z',
@@ -92,7 +92,6 @@ async function main() {
         susCard: '987654321',
         birthDate: new Date('1975-05-29'),
         motherName: 'Maria Stark',
-        priority: 'Normal',
         gender: 'M',
         active: true,
         userId: 'ed5c416c-46a0-4e93-9484-d555c70af284',
@@ -107,7 +106,7 @@ async function main() {
         susCard: '123456789',
         birthDate: new Date('1983-11-22'),
         motherName: 'Ivan Petrovna',
-        priority: 'Normal',
+
         gender: 'F',
         active: true,
         userId: '84d6d27e-475c-4e83-a1ae-b477698e399e',
@@ -122,7 +121,6 @@ async function main() {
         susCard: '987654321',
         birthDate: new Date('1918-07-04'),
         motherName: 'Sarah Rogers',
-        priority: 'Normal',
         gender: 'M',
         active: true,
         userId: 'ec487b8b-0d25-4af9-a57b-623b087e4fc3',
@@ -137,7 +135,7 @@ async function main() {
         susCard: '987654321',
         birthDate: new Date('1960-03-17'),
         motherName: 'Marie Danvers',
-        priority: 'Normal',
+
         gender: 'F',
         active: true,
         userId: 'ec487b8b-0d25-4af9-a57b-623b087e4fc3',
@@ -152,7 +150,6 @@ async function main() {
         susCard: '987654321',
         birthDate: new Date('1969-12-18'),
         motherName: 'Rebecca Banner',
-        priority: 'Normal',
         gender: 'M',
         active: true,
         userId: 'ed5c416c-46a0-4e93-9484-d555c70af284',
@@ -167,7 +164,6 @@ async function main() {
         susCard: '123456789',
         birthDate: new Date('2001-08-10'),
         motherName: 'Mary Parker',
-        priority: 'Normal',
         gender: 'M',
         active: true,
         userId: '84d6d27e-475c-4e83-a1ae-b477698e399e',
@@ -182,7 +178,7 @@ async function main() {
         susCard: '987654321',
         birthDate: new Date('1990-12-10'),
         motherName: 'Magda Maximoff',
-        priority: 'Normal',
+
         gender: 'F',
         active: true,
         userId: 'ec487b8b-0d25-4af9-a57b-623b087e4fc3',
@@ -197,7 +193,6 @@ async function main() {
         susCard: '987654321',
         birthDate: new Date('1979-06-11'),
         motherName: 'Peggy Lang',
-        priority: 'Normal',
         gender: 'M',
         active: true,
         userId: 'ed5c416c-46a0-4e93-9484-d555c70af284',
@@ -212,7 +207,6 @@ async function main() {
         susCard: '123456789',
         birthDate: new Date('1960-08-14'),
         motherName: 'Beverly Strange',
-        priority: 'Normal',
         gender: 'M',
         active: true,
         userId: '84d6d27e-475c-4e83-a1ae-b477698e399e',
@@ -227,7 +221,6 @@ async function main() {
         susCard: '987654321',
         birthDate: new Date('1977-02-16'),
         motherName: 'Ramonda',
-        priority: 'Normal',
         gender: 'M',
         active: true,
         userId: 'ec487b8b-0d25-4af9-a57b-623b087e4fc2',
@@ -242,7 +235,6 @@ async function main() {
         susCard: '123456789',
         birthDate: new Date('1985-08-11'),
         motherName: 'Frigga',
-        priority: 'Normal',
         gender: 'M',
         active: true,
         userId: 'ed5c416c-46a0-4e93-9484-d555c70af284',
@@ -257,7 +249,6 @@ async function main() {
         susCard: '987654321',
         birthDate: new Date('1978-09-23'),
         motherName: 'Darlene Wilson',
-        priority: 'Normal',
         gender: 'M',
         active: true,
         userId: '84d6d27e-475c-4e83-a1ae-b477698e399e',
@@ -272,7 +263,6 @@ async function main() {
         susCard: '123456789',
         birthDate: new Date('1974-06-08'),
         motherName: 'Lila Rhodes',
-        priority: 'Normal',
         gender: 'M',
         active: true,
         userId: 'ec487b8b-0d25-4af9-a57b-623b087e4fc3',

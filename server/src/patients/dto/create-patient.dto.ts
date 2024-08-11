@@ -1,8 +1,6 @@
-import { Priority } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import {
   IsDate,
-  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -31,6 +29,30 @@ export class CreatePatientDto {
 
   @IsString()
   @IsOptional()
+  number?: string;
+
+  @IsString()
+  @IsOptional()
+  complement?: string;
+
+  @IsString()
+  @IsOptional()
+  district?: string;
+
+  @IsString()
+  @IsOptional()
+  city?: string;
+
+  @IsString()
+  @IsOptional()
+  state?: string;
+
+  @IsString()
+  @IsOptional()
+  zipCode?: string;
+
+  @IsString()
+  @IsOptional()
   phone?: string;
 
   @IsString()
@@ -46,7 +68,7 @@ export class CreatePatientDto {
   @IsOptional()
   motherName?: string;
 
-  @IsEnum(Priority)
-  @IsNotEmpty()
-  priority: Priority;
+  @IsBoolean()
+  active: boolean;
+
 }
