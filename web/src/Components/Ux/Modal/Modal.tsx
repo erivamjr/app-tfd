@@ -8,8 +8,9 @@ export default function Modal({ isOpen, onClose, title, children }) {
 
   return ReactDOM.createPortal(
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${isOpen ? 'is-open' : ''
-        }`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${
+        isOpen ? 'is-open' : ''
+      }`}
     >
       <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl mx-2 p-4">
         <div className="flex justify-between items-center border-b pb-2">
@@ -32,6 +33,6 @@ export default function Modal({ isOpen, onClose, title, children }) {
         </div>
       </div>
     </div>,
-    document.getElementById('root')
+    document.getElementById('root'),
   )
 }

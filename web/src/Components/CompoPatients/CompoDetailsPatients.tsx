@@ -6,37 +6,34 @@ import Container from '../Ux/Container/Container'
 import DetailsTable from './DetailsTable'
 import usePatients from '../Hooks/Api/Patiens/Patiens'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
-
+import useAppointment from '../Hooks/Api/Appointments/Appointments'
 
 export default function DetailsPatients() {
   const { id } = useParams()
   const { patients, isLoading, isError } = usePatients()
+  const { appointments, isLoadingPoint, isErrorPoint } = useAppointment()
 
   const patient = patients.find((patient) => patient.id === id)
-
-  if (isLoading) return (
-    <DisplayMessage
-      message={'Carregando'}
-      color="green"
-      text="white"
-    />
+  const appointment = appointments.find(
+    (appointment) => appointment.patientId === id,
   )
 
-  if (isError) return (
-    <DisplayMessage
-      message={'Erro na solicitação.'}
-      color="red"
-      text="white"
-    />
-  )
+  if (isLoading)
+    return <DisplayMessage message={'Carregando'} color="green" text="white" />
 
-  if (!patient) return (
-    <DisplayMessage
-      message={'Consultando paciente, aguarde !'}
-      color="yellow"
-      text="white"
-    />
-  )
+  if (isError)
+    return (
+      <DisplayMessage
+        message={'Erro na solicitação.'}
+        color="red"
+        text="white"
+      />
+    )
+
+  if (!patient)
+    return (
+      <DisplayMessage message={'Consultando ...'} color="yellow" text="white" />
+    )
 
   return (
     <div>
@@ -76,7 +73,11 @@ export default function DetailsPatients() {
           </div>
           <div className="p-1 text-black font-bold">Histórico</div>
         </section>
-        <DetailsTable />
+        <DetailsTable
+          item={appointment}
+          isErrorPoint={isErrorPoint}
+          isLoadingPoint={isLoadingPoint}
+        />
       </Container>
     </div>
   )
