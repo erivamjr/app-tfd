@@ -1,4 +1,3 @@
-
 export default function Input({ type, name, value, onChange, placeholder }) {
   return (
     <input
