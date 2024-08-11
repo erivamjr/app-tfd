@@ -6,8 +6,9 @@ import Modal from '../../Components/Ux/Modal/Modal'
 import { useState, FormEvent } from 'react'
 import Label from '../../Components/Ux/Label/Label'
 import Button from '../../Components/Ux/Button/Button'
-import Table from '../../Components/CompoRequest/Table/Table'
+import Table from '../../Components/CompoRequest/Table/RequestTable'
 import Loading from '../../Components/Ux/Loading/Loading'
+import RequestTable from '../../Components/CompoRequest/Table/RequestTable'
 
 export default function Request() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -134,7 +135,7 @@ export default function Request() {
           </div>
         </div>
       </AdminToolbar>
-      <Table />
+      <RequestTable />
     </div>
   )
 }

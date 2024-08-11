@@ -8,6 +8,7 @@ import { FormEvent, useState } from 'react'
 import Label from '../../Components/Ux/Label/Label'
 import Button from '../../Components/Ux/Button/Button'
 import Loading from '../../Components/Ux/Loading/Loading'
+import PatientsTable from '../../Components/CompoPatients/PatientsTable'
 
 export default function Patients() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -250,7 +251,7 @@ export default function Patients() {
           </div>
         </div>
       </AdminToolbar>
-      <Table />
+      <PatientsTable />
     </div>
   )
 }

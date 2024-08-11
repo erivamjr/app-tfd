@@ -8,6 +8,7 @@ import DetailsPatients from './Page/Patients/DetailsPatients'
 import Request from './Page/Request/Request'
 import { AuthContext, AuthProvider } from './Components/Context/Auth'
 import { useContext } from 'react'
+import User from './Page/User/User'
 
 export default function AppRouter() {
   const AdminPrivate = ({ children }) => {
@@ -41,6 +42,7 @@ export default function AppRouter() {
                           element={<DetailsPatients />}
                         />
                         <Route path="/solicitacao" element={<Request />} />
+                        <Route path="/usuarios" element={<User />} />
                       </Routes>
                     </div>
                   </div>
