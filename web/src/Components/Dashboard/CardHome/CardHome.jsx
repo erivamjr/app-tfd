@@ -1,7 +1,7 @@
 import React from 'react'
 import Chart from '../Chart'
 import useAppointment from '../../Hooks/Api/Appointments/Appointments'
-
+import Title from '../../Ux/Title/Title'
 export default function CardHome() {
   const {
     appointments,
@@ -22,10 +22,7 @@ export default function CardHome() {
   ]
   return (
     <div className="flex-1 p-6">
-      <header className="mb-1">
-        <h1 className="text-2xl font-bold">Dashboard Gerencial</h1>
-        <p className="text-gray-600">Analise de dados</p>
-      </header>
+      <Title title={'Dashboard Gerencial'} subTitle={'Analise de dados'} />
       <div className="grid grid-cols-4 gap-4">
         <div className="col-span-2 bg-blue-500 p-4 rounded-lg shadow">
           <h2 className="text-white font-bold text-1xl">
