@@ -17,7 +17,7 @@ export default function CompoLogin() {
   }
 
   return (
-    <div className="relative min-h-screen bg-gray-100">
+    <div className=" w-screen relative min-h-screen bg-gray-100">
       <div className="absolute z-10 h-screen w-1/2 bg-[#008BAD] flex items-center justify-center"></div>
       <div className="relative z-20 flex items-center justify-center min-h-screen">
         <div className="flex w-[800px] shadow-lg">
