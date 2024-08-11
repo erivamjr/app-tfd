@@ -12,9 +12,10 @@ CREATE TABLE "User" (
     "cpf" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" TEXT NOT NULL,
+    "role" TEXT NOT NULL DEFAULT 'user',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -23,14 +24,21 @@ CREATE TABLE "User" (
 CREATE TABLE "Patient" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "gender" TEXT,
     "cpf" TEXT NOT NULL,
     "rg" TEXT,
     "address" TEXT,
+    "number" TEXT,
+    "complement" TEXT,
+    "district" TEXT,
+    "city" TEXT,
+    "state" TEXT,
+    "zipCode" TEXT,
     "phone" TEXT,
     "susCard" TEXT,
     "birthDate" TIMESTAMP(3),
     "motherName" TEXT,
-    "priority" "Priority" NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL,
@@ -42,6 +50,7 @@ CREATE TABLE "Patient" (
 CREATE TABLE "Specialty" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Specialty_pkey" PRIMARY KEY ("id")
 );
@@ -62,6 +71,7 @@ CREATE TABLE "Appointment" (
     "requestDate" TIMESTAMP(3) NOT NULL,
     "status" "Status" NOT NULL,
     "notes" TEXT,
+    "active" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
