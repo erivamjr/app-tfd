@@ -9,7 +9,7 @@ export default function Menu() {
   return (
     <div>
       <UserProfile user={user} />
-      <hr className="border-0 bg-gray-200 h-1" />
+      <hr className="shadow-lg bg-gray-200 h-1" />
     </div>
   )
 }

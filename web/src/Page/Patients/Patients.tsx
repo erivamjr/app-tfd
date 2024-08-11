@@ -1,11 +1,12 @@
 import PatientsTable from '../../Components/CompoPatients/PatientsTable'
 import RegisterPatients from '../../Components/CompoPatients/RegisterPatient'
+import Container from '../../Components/Ux/Container/Container'
 
 export default function Patients() {
   return (
-    <div>
+    <Container>
       <RegisterPatients />
       <PatientsTable />
-    </div>
+    </Container>
   )
 }
