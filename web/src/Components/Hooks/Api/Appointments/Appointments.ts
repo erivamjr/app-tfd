@@ -16,18 +16,15 @@ const useAppointment = () => {
     const fetchAppointments = async () => {
       try {
         setIsLoading(true)
-        const response = await api.get<{ data: TypeAppointment[] }>(
-          '/appointments',
-          {
-            signal,
-          },
-        )
+        const response = await api.get<TypeAppointment[]>('/appointments', {
+          signal,
+        })
         setAppointments(response.data)
+        setIsLoading(false)
       } catch (error) {
-        if (axios.isAxiosError(error) && error.message === 'canceled') {
-          console.log('Request cancelled')
+        if (axios.isCancel(error)) {
+          console.log('Request canceled', error.message)
         } else {
-          console.error('Error fetching data:', error)
           setIsError(true)
         }
       } finally {
@@ -36,13 +33,23 @@ const useAppointment = () => {
     }
 
     fetchAppointments()
-    console.log(appointments)
+
     return () => {
       controller.abort()
     }
   }, [])
+  const countAppointments = appointments.length
+  const countInProgress = appointments.filter(
+    (appointment) => appointment.status === 'InProgress',
+  ).length
 
-  return { appointments, isLoading, isError }
+  return {
+    appointments,
+    isLoading,
+    isError,
+    countAppointments,
+    countInProgress,
+  }
 }
 
 export default useAppointment
