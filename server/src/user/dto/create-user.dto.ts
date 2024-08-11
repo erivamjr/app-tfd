@@ -4,11 +4,15 @@ import {
   IsStrongPassword,
   IsOptional,
   IsEnum,
+  IsNotEmpty,
+  Length,
 } from 'class-validator';
 import { Role } from '../../enums/role.enum';
+import { IsCpf } from '../../decorators/validate-cpf.decorator';
 
 export class CreateUserDto {
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsOptional()
@@ -16,9 +20,13 @@ export class CreateUserDto {
   phone: string;
 
   @IsString()
+  @Length(11, 11)
+  @IsNotEmpty()
+  @IsCpf()
   cpf: string;
 
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsStrongPassword({
