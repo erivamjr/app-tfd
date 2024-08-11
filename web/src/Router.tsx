@@ -22,7 +22,7 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <div className=" w-screen flex justify-center items-center h-screen">
+        <div className=" flex justify-center items-center h-screen">
           <Routes>
             <Route path="/auth" element={<Auth />} />
 
@@ -32,7 +32,7 @@ export default function AppRouter() {
                 <AdminPrivate>
                   <div className="flex w-full h-full">
                     <SideBar />
-                    <div className="w-full h-full flex flex-col p-16">
+                    <div className="w-full h-full flex flex-col p-8">
                       <Menu />
                       <Routes>
                         <Route path="/" element={<Home />} />
