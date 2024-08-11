@@ -2,8 +2,20 @@ import { Link } from 'react-router-dom'
 import Input from '../../Components/Ux/Input/Input'
 import Logo from '../../Components/Ux/Logo/Vector.png'
 import Button from '../Ux/Button/Button'
+import { useContext, useState } from 'react'
+import { AuthContext } from '../Context/Auth'
 
 export default function CompoLogin() {
+  const { autenticado, login } = useContext(AuthContext)
+
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    login(email, password)
+  }
+
   return (
     <div className="relative min-h-screen bg-gray-100">
       <div className="absolute z-10 h-screen w-1/2 bg-[#008BAD] flex items-center justify-center"></div>
@@ -26,8 +38,11 @@ export default function CompoLogin() {
                 <Input
                   type="email"
                   name="email"
-                  value=""
-                  onChange={() => {}}
+                  value={email}
+                  onChange={(e) => {
+                    e.preventDefault()
+                    setEmail(e.target.value)
+                  }}
                   placeholder="Digite seu email"
                 />
               </div>
@@ -36,13 +51,16 @@ export default function CompoLogin() {
                 <Input
                   type="password"
                   name="password"
-                  value=""
-                  onChange={() => {}}
+                  value={password}
+                  onChange={(e) => {
+                    e.preventDefault()
+                    setPassword(e.target.value)
+                  }}
                   placeholder="Digite sua senha"
                 />
               </div>
               <div className="w-full">
-                <Button type="submit" title="Entrar" />
+                <Button onClick={handleSubmit} title="Entrar" />
               </div>
             </form>
             <a href="#" className="mt-4 text-sm text-gray-500">
