@@ -4,63 +4,17 @@ import { Pagination } from '../../Ux/table/Pagination '
 import { TableActions } from '../../Ux/table/TableActions'
 import TableCell from '../../Ux/table/TableCell'
 import TableRow from '../../Ux/table/TableRow'
+import { FaRegEdit } from 'react-icons/fa'
+import { RiDeleteBin6Line } from 'react-icons/ri'
+import { TbReportSearch } from 'react-icons/tb'
+import useAppointment from '../../Hooks/Api/Appointments/Appointments'
 
 export default function RequestTable() {
-  const users = [
-    {
-      id: 1,
-      nome: 'João Silva',
-      cpf: '123.456.789-00',
-      telefone: '(11) 91234-5678',
-      usuario: 'joao.silva',
-      dataDeCadastro: '2024-01-15',
-    },
-    {
-      id: 2,
-      nome: 'Maria Oliveira',
-      cpf: '987.654.321-00',
-      telefone: '(21) 92345-6789',
-      usuario: 'maria.oliveira',
-      dataDeCadastro: '2024-02-20',
-    },
-    {
-      id: 3,
-      nome: 'Carlos Pereira',
-      cpf: '123.123.123-12',
-      telefone: '(31) 93456-7890',
-      usuario: 'carlos.pereira',
-      dataDeCadastro: '2024-03-10',
-    },
-    {
-      id: 4,
-      nome: 'Ana Costa',
-      cpf: '321.321.321-21',
-      telefone: '(41) 94567-8901',
-      usuario: 'ana.costa',
-      dataDeCadastro: '2024-04-05',
-    },
-    {
-      id: 5,
-      nome: 'Lucas Fernandes',
-      cpf: '456.456.456-45',
-      telefone: '(51) 95678-9012',
-      usuario: 'lucas.fernandes',
-      dataDeCadastro: '2024-05-25',
-    },
-    {
-      id: 6,
-      nome: 'Bruna Souza',
-      cpf: '789.789.789-78',
-      telefone: '(61) 96789-0123',
-      usuario: 'bruna.souza',
-      dataDeCadastro: '2024-06-15',
-    },
-  ]
-
+  const { appointments, isLoading, isError } = useAppointment()
+  console.log(appointments)
   return (
     <Table>
       <TableRow>
-        <TableCell isHeader>ID</TableCell>
         <TableCell isHeader>Nome</TableCell>
         <TableCell isHeader>CPF</TableCell>
         <TableCell isHeader>Telefone</TableCell>
@@ -68,22 +22,43 @@ export default function RequestTable() {
         <TableCell isHeader>Data de Cadastro</TableCell>
         <TableCell isHeader>Configurações</TableCell>
       </TableRow>
-      {users.map((user) => (
+      {appointments.map((user) => (
         <TableRow key={user.id}>
-          <TableCell>{user.id}</TableCell>
-          <TableCell>{user.nome}</TableCell>
-          <TableCell>{user.cpf}</TableCell>
-          <TableCell>{user.telefone}</TableCell>
-          <TableCell>{user.usuario}</TableCell>
+          <TableCell>{user.patient.name}</TableCell>
+          <TableCell>{user.patient.cpf}</TableCell>
+          <TableCell>{user.patient.phone}</TableCell>
+          <TableCell>{user.patient.userId}</TableCell>
           <TableCell>
-            {new Date(user.dataDeCadastro).toLocaleDateString('pt-BR', {
+            {new Date(user.createdAt).toLocaleDateString('pt-BR', {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
             })}
           </TableCell>
           <TableCell>
-            <TableActions id={user.id} />
+            <div className="flex justify-between items-center w-full">
+              <TableActions
+                id={user.id}
+                url={'detalhessolicitacao'}
+                icon={<TbReportSearch />}
+                color={'yellow'}
+                text={'white'}
+              />
+              <TableActions
+                id={user.id}
+                url={'editarsolicitacao'}
+                icon={<FaRegEdit />}
+                color={'green'}
+                text={'white'}
+              />
+              <TableActions
+                id={user.id}
+                url={'excluir'}
+                icon={<RiDeleteBin6Line />}
+                color={'red'}
+                text={'white'}
+              />
+            </div>
           </TableCell>
         </TableRow>
       ))}
