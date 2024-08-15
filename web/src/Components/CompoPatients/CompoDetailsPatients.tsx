@@ -57,9 +57,11 @@ export default function DetailsPatients() {
       <Container>
         <section>
           <div className="p-1 font-bold text-black">Dados Pessoais</div>
-          <div className="grid grid-cols-2 w-full p-3">
+          <div className="grid grid-cols-3 w-full p-3">
             <div className="flex flex-col gap-2">
               <span>Nome: {patient.name}</span>
+              <span>Gênero: {patient.gender}</span>
+
               <span>CPF: {patient.cpf}</span>
               <span>RG: {patient.rg}</span>
               <span>Cartão SUS: {patient.susCard}</span>
@@ -69,6 +71,14 @@ export default function DetailsPatients() {
               <span>Mãe: {patient.motherName}</span>
               <span>Logradouro: {patient.address}</span>
               <span>Cidade: {patient.city}</span>
+              <span>Estado: {patient.uf}</span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span>Estado: {patient.state}</span>
+              <span>Cep: {patient.cep}</span>
+              <span>Numero: {patient.number}</span>
+              <span>Bairro: {patient.district}</span>
+              <span>Complemento: {patient.complement}</span>
             </div>
           </div>
           <div className="p-1 text-black font-bold">Histórico</div>

@@ -8,14 +8,33 @@ import TableRow from '../Ux/table/TableRow'
 import { TbReportSearch } from 'react-icons/tb'
 import { FaRegEdit } from 'react-icons/fa'
 import { RiDeleteBin6Line } from 'react-icons/ri'
+import Alert from '../Ux/Alert/Alert'
 
 export default function PatientsTable() {
   const { patients, isLoading, isError } = usePatients()
 
-  if (isLoading) return <div>Loading...</div>
-  if (isError) return <div>Erro na requisição!</div>
+  if (isLoading)
+    return (
+      <div>
+        <Alert color={'green'} text={'white'} message={'Carregando...'} />
+      </div>
+    )
+  if (isError)
+    return (
+      <div>
+        <Alert color={'red'} text={'white'} message={'Erro na requisição!'} />
+      </div>
+    )
   if (!patients || !Array.isArray(patients))
-    return <div>Não é uma lista de array.</div>
+    return (
+      <div>
+        <Alert
+          color={'green'}
+          text={'white'}
+          message={'Não é uma lista de array.!'}
+        />
+      </div>
+    )
 
   return (
     <Table>
