@@ -7,26 +7,88 @@ import Label from '../Ux/Label/Label'
 import Loading from '../Ux/Loading/Loading'
 import Modal from '../Ux/Modal/Modal'
 import { useState, FormEvent } from 'react'
+import api from '../../Api'
 
 export default function RegisterPatients() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [name, setName] = useState<string>('')
+  const [cpf, setCpf] = useState<string>('')
+  const [rg, setRg] = useState<string>('')
+  const [phone, setPhone] = useState<string>('')
+  const [gender, setGender] = useState<string>('')
+  const [susCard, setSusCard] = useState<string>('')
+  const [birthDate, setBirthDate] = useState<string>('')
+  const [motherName, setMotherName] = useState<string>('')
+  const [number, setNumber] = useState<string>('')
+  const [complement, setComplement] = useState<string>('')
+  const [state, setState] = useState<string>('')
+  const [district, setDistrict] = useState<string>('')
+  const [city, setCity] = useState<string>('')
+  const [zipCode, setZipCode] = useState<string>('')
+  const [address, setAddress] = useState<string>('')
 
   function handleOpenModal() {
     setIsModalOpen(true)
   }
+
   function handleCloseModal() {
     setIsModalOpen(false)
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    setIsLoading(true)
 
-    setTimeout(() => {
+    console.log({
+      name,
+      gender,
+      cpf,
+      rg,
+      address,
+      number,
+      complement,
+      district,
+      city,
+      state,
+      zipCode,
+      phone,
+      susCard,
+      birthDate,
+      motherName,
+      active: true,
+    })
+
+    try {
+      setIsLoading(true)
+      const response = await api.post('patients', {
+        name,
+        gender,
+        cpf,
+        rg,
+        address,
+        number,
+        complement,
+        district,
+        city,
+        state,
+        zipCode,
+        phone,
+        susCard,
+        birthDate,
+        motherName,
+        active: true,
+      })
+    } catch (error) {
+      console.error(
+        'Erro ao enviar dados:',
+        error.response ? error.response.data.message : error.message,
+      )
+    } finally {
       setIsLoading(false)
-    }, 2000)
+      handleCloseModal()
+    }
   }
+
   return (
     <AdminToolbar>
       <Modal
@@ -35,206 +97,199 @@ export default function RegisterPatients() {
         title="Adicionar novo paciente"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="w-full flex ">
+          <div className="w-full flex">
             <div className="border-r-2 flex-1 p-3">
               <div>Dados Pessoais</div>
-              <div>
+              <div className="space-y-4">
                 <div>
-                  <Label label={'Nome'} />
+                  <Label label="Nome Completo" />
+                  <Input
+                    type="text"
+                    name="name"
+                    placeholder="Digite o nome completo"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
                 </div>
-                <div>
-                  <Input type="text" name="name" placeholder="Digite o nome" />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <div>
-                      <Label label={'CPF'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Digite o CPF"
-                      />
-                    </div>
+                    <Label label="CPF" />
+                    <Input
+                      type="text"
+                      name="cpf"
+                      placeholder="Digite o CPF"
+                      value={cpf}
+                      onChange={(e) => setCpf(e.target.value)}
+                    />
                   </div>
                   <div>
-                    <div>
-                      <Label label={'CPF'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Digite o CPF"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <Label label={'Telefone 1'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Telefone 1"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <Label label={'Genero '} />
-                    </div>
-                    <div>
-                      <Input type="number" name="name" placeholder="Genero" />
-                    </div>
+                    <Label label="RG" />
+                    <Input
+                      type="text"
+                      name="rg"
+                      placeholder="Digite o RG"
+                      value={rg}
+                      onChange={(e) => setRg(e.target.value)}
+                    />
                   </div>
                 </div>
-                <div>
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <div>
-                      <Label label={'SUS'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Digite o numero do SUS"
-                      />
-                    </div>
+                    <Label label="Telefone" />
+                    <Input
+                      type="text"
+                      name="phone"
+                      placeholder="Telefone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
                   </div>
                   <div>
-                    <div>
-                      <Label label={'Nascimento'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Nascimento"
-                      />
-                    </div>
+                    <Label label="Gênero" />
+                    <Input
+                      type="text"
+                      name="gender"
+                      placeholder="Gênero"
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label label="Número do SUS" />
+                    <Input
+                      type="text"
+                      name="susCard"
+                      placeholder="Digite o número do SUS"
+                      value={susCard}
+                      onChange={(e) => setSusCard(e.target.value)}
+                    />
                   </div>
                   <div>
-                    <div>
-                      <Label label={'Telefone 2'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Telefone 2"
-                      />
-                    </div>
+                    <Label label="Data de Nascimento" />
+                    <Input
+                      type="date"
+                      name="birthDate"
+                      placeholder="Data de Nascimento"
+                      value={birthDate}
+                      onChange={(e) => setBirthDate(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label label="Nome da Mãe" />
+                    <Input
+                      type="text"
+                      name="motherName"
+                      placeholder="Nome da Mãe"
+                      value={motherName}
+                      onChange={(e) => setMotherName(e.target.value)}
+                    />
                   </div>
                   <div>
-                    <div>
-                      <Label label={'Nome da mãe'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Nome da mãe"
-                      />
-                    </div>
+                    <Label label="Número" />
+                    <Input
+                      type="text"
+                      name="number"
+                      placeholder="Digite o número"
+                      value={number}
+                      onChange={(e) => setNumber(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label label="Complemento" />
+                    <Input
+                      type="text"
+                      name="complement"
+                      placeholder="Digite o complemento"
+                      value={complement}
+                      onChange={(e) => setComplement(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label label="Estado" />
+                    <Input
+                      type="text"
+                      name="state"
+                      placeholder="Digite o estado"
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label label="Bairro" />
+                    <Input
+                      type="text"
+                      name="district"
+                      placeholder="Digite o bairro"
+                      value={district}
+                      onChange={(e) => setDistrict(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label label="Cidade" />
+                    <Input
+                      type="text"
+                      name="city"
+                      placeholder="Digite a cidade"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <Label label="Endereço" />
+                    <Input
+                      type="text"
+                      name="address"
+                      placeholder="Digite o endereço"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label label="CEP" />
+                    <Input
+                      type="text"
+                      name="zipCode"
+                      placeholder="Digite o CEP"
+                      value={zipCode}
+                      onChange={(e) => setZipCode(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div>
                   <Button
                     icon={isLoading ? <Loading /> : <CiFloppyDisk />}
                     title="Salvar"
+                    type="submit"
+                    disabled={isLoading}
                   />
-                </div>
-              </div>
-            </div>
-            <div className="flex-1 p-3">
-              <div>Endereço</div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <div>
-                    <div>
-                      <Label label={'Numero'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Digite o numero"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <Label label={'Complemento'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Digite o Complemento"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <Label label={'Estado'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Digite o estado"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div>
-                    <div>
-                      <Label label={'Bairro'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Digite o Bairro"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <Label label={'Cidade'} />
-                    </div>
-                    <div>
-                      <Input
-                        type="number"
-                        name="name"
-                        placeholder="Digite a cidade"
-                      />
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </form>
       </Modal>
-      <div className="flex p-3 ">
+      <div className="flex p-3">
         <div className="w-full flex items-center gap-2">
           <span className="w-full">
             <Input type="text" name="search" placeholder="Pesquisar" />
           </span>
-          <span className=" bg-blue-600 text-white hover:bg-blue-500  p-3 rounded cursor-pointer ">
+          <span className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded cursor-pointer">
             <CiSearch />
           </span>
         </div>
         <div
           onClick={handleOpenModal}
-          className="ml-10 bg-blue-600 text-white hover:bg-blue-500 p-2 rounded flex items-center gap-2 cursor-pointer "
+          className="ml-10 bg-blue-600 text-white hover:bg-blue-500 p-2 rounded flex items-center gap-2 cursor-pointer"
         >
           <span>
             <RiUserAddLine />
