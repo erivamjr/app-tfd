@@ -8,6 +8,8 @@ import DetailsPatients from './Page/Patients/DetailsPatients'
 import Request from './Page/Request/Request'
 import { AuthContext, AuthProvider } from './Components/Context/Auth'
 import { useContext } from 'react'
+import User from './Page/User/User'
+import DetailsRequest from './Page/Request/DetailsRequest'
 
 export default function AppRouter() {
   const AdminPrivate = ({ children }) => {
@@ -21,7 +23,7 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <div className=" w-screen flex justify-center items-center h-screen">
+        <div className=" flex justify-center items-center h-screen">
           <Routes>
             <Route path="/auth" element={<Auth />} />
 
@@ -31,7 +33,7 @@ export default function AppRouter() {
                 <AdminPrivate>
                   <div className="flex w-full h-full">
                     <SideBar />
-                    <div className="w-full h-full flex flex-col p-16">
+                    <div className="w-full h-full flex flex-col p-8">
                       <Menu />
                       <Routes>
                         <Route path="/" element={<Home />} />
@@ -41,6 +43,11 @@ export default function AppRouter() {
                           element={<DetailsPatients />}
                         />
                         <Route path="/solicitacao" element={<Request />} />
+                        <Route
+                          path="/detalhessolicitacao/:id"
+                          element={<DetailsRequest />}
+                        />
+                        <Route path="/usuarios" element={<User />} />
                       </Routes>
                     </div>
                   </div>

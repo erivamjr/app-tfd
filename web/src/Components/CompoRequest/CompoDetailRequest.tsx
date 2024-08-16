@@ -3,50 +3,34 @@ import AdminToolbar from '../Ux/AdminToolbar/AdminToolbar'
 import { ImPrinter } from 'react-icons/im'
 import { IoReturnDownBack } from 'react-icons/io5'
 import Container from '../Ux/Container/Container'
-import DetailsTable from './DetailsTable'
-import usePatients from '../Hooks/Api/Patiens/Patiens'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import useAppointment from '../Hooks/Api/Appointments/Appointments'
+import DetailsRequestTable from './DetailsRequestTable'
 
-export default function DetailsPatients() {
+export default function CompoDetailsRequest() {
   const { id } = useParams()
-  const { patients, isLoading, isError } = usePatients()
   const { appointments, isLoadingPoint, isErrorPoint } = useAppointment()
 
-  const patient = patients.find((patient) => patient.id === id)
-  const appointment = appointments.find(
-    (appointment) => appointment.patientId === id,
-  )
+  const appointment = appointments.find((appointment) => appointment.id === id)
 
-  if (isLoading)
-    return <DisplayMessage message={'Carregando'} color="green" text="white" />
+  if (!appointment) {
+    return <DisplayMessage message="Agendamento não encontrado." />
+  }
 
-  if (isError)
-    return (
-      <DisplayMessage
-        message={'Erro na solicitação.'}
-        color="red"
-        text="white"
-      />
-    )
-
-  if (!patient)
-    return (
-      <DisplayMessage message={'Consultando ...'} color="yellow" text="white" />
-    )
+  const { patient } = appointment
 
   return (
     <div>
       <AdminToolbar>
         <div className="p-2 flex">
           <div className="font-bold text-black text-2xl flex flex-1 items-center justify-center">
-            Detalhes do Paciente
+            Detalhes da solicitação
           </div>
           <div className="flex gap-3">
             <div className="bg-blue-600 text-white p-3 text-2xl rounded">
               <ImPrinter />
             </div>
-            <Link to="/pacientes">
+            <Link to="/solicitacao">
               <div className="bg-blue-600 text-white p-3 text-2xl rounded">
                 <IoReturnDownBack />
               </div>
@@ -83,7 +67,7 @@ export default function DetailsPatients() {
           </div>
           <div className="p-1 text-black font-bold">Histórico</div>
         </section>
-        <DetailsTable
+        <DetailsRequestTable
           item={appointment}
           isErrorPoint={isErrorPoint}
           isLoadingPoint={isLoadingPoint}

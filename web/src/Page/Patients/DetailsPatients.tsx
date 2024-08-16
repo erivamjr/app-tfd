@@ -1,9 +1,10 @@
 import CompoDetailsPatients from '../../Components/CompoPatients/CompoDetailsPatients'
+import Container from '../../Components/Ux/Container/Container'
 
 export default function DetailsPatients() {
   return (
-    <div>
+    <Container>
       <CompoDetailsPatients />
-    </div>
+    </Container>
   )
 }
