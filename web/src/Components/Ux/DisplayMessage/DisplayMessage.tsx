@@ -15,7 +15,11 @@ const DisplayMessage: React.FC<DisplayMessageProps> = ({
 }) => {
   return (
     <div
-      className={`mt-5 rounded border bg-${color}-600 hover:bg-${color}-700 text-${text} p-3 text-1xl`}
+      style={{
+        backgroundColor: color,
+        color: text,
+      }}
+      className={`mt-5 rounded border opacity-75 p-3 text-1xl`}
     >
       {isLoading}
       {message}

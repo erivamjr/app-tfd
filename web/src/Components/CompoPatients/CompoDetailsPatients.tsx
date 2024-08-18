@@ -4,16 +4,17 @@ import { ImPrinter } from 'react-icons/im'
 import { IoReturnDownBack } from 'react-icons/io5'
 import Container from '../Ux/Container/Container'
 import DetailsTable from './DetailsTable'
-import usePatients from '../Hooks/Api/Patiens/Patiens'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import useAppointment from '../Hooks/Api/Appointments/Appointments'
+import usePatients from '../Hooks/Api/Patiens/Patients'
 
 export default function DetailsPatients() {
   const { id } = useParams()
-  const { patients, isLoading, isError } = usePatients()
+  const { patientsSearch, isLoading, isError } = usePatients()
   const { appointments, isLoadingPoint, isErrorPoint } = useAppointment()
 
-  const patient = patients.find((patient) => patient.id === id)
+  const patient = patientsSearch.find((patient) => patient.id === id)
+  console.log(patient)
   const appointment = appointments.find(
     (appointment) => appointment.patientId === id,
   )
@@ -32,7 +33,7 @@ export default function DetailsPatients() {
 
   if (!patient)
     return (
-      <DisplayMessage message={'Consultando ...'} color="yellow" text="white" />
+      <DisplayMessage message={'Nenhum paciente localizado'} text="orange" />
     )
 
   return (
