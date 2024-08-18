@@ -1,4 +1,11 @@
-export default function Input({ type, name, value, onChange, placeholder }) {
+export default function Input({
+  type,
+  name,
+  value,
+  onChange,
+  list,
+  placeholder,
+}) {
   return (
     <input
       placeholder={placeholder}
@@ -6,6 +13,7 @@ export default function Input({ type, name, value, onChange, placeholder }) {
       name={name}
       value={value}
       onChange={onChange}
+      list={list}
       className="mt-1 block w-full rounded-md p-2 border "
       required
     />
