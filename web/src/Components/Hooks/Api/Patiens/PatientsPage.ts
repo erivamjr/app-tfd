@@ -4,7 +4,7 @@ import api from '../../../../Api'
 import { Patient } from './TypePatiens'
 
 const usePatientsPage = (currentPage: number, itemsPerPage: number) => {
-  const [patients, setPatients] = useState<Patient[]>([])
+  const [patientsPage, setPatientsPage] = useState<Patient[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
   const [totalPages, setTotalPages] = useState<number>(0)
@@ -13,7 +13,7 @@ const usePatientsPage = (currentPage: number, itemsPerPage: number) => {
     const controller = new AbortController()
     const { signal } = controller
 
-    const fetchPatients = async () => {
+    const fetchPatientsPage = async () => {
       try {
         setIsLoading(true)
         const response = await api.get<{
@@ -22,7 +22,7 @@ const usePatientsPage = (currentPage: number, itemsPerPage: number) => {
           pageCount: number
         }>(`/patients?page=${currentPage}&limit=${itemsPerPage}`, { signal })
 
-        setPatients(response.data.data)
+        setPatientsPage(response.data.data)
         setTotalPages(response.data.pageCount)
       } catch (error) {
         if (axios.isAxiosError(error) && error.message === 'canceled') {
@@ -36,14 +36,14 @@ const usePatientsPage = (currentPage: number, itemsPerPage: number) => {
       }
     }
 
-    fetchPatients()
+    fetchPatientsPage()
 
     return () => {
       controller.abort()
     }
   }, [currentPage, itemsPerPage])
 
-  return { patients, isLoading, isError, totalPages }
+  return { patientsPage, isLoading, isError, totalPages }
 }
 
 export default usePatientsPage

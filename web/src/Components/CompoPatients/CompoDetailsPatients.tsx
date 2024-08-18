@@ -10,10 +10,10 @@ import usePatients from '../Hooks/Api/Patiens/Patients'
 
 export default function DetailsPatients() {
   const { id } = useParams()
-  const { patientsSearch, isLoading, isError } = usePatients()
+  const { patients, isLoading, isError } = usePatients()
   const { appointments, isLoadingPoint, isErrorPoint } = useAppointment()
 
-  const patient = patientsSearch.find((patient) => patient.id === id)
+  const patient = patients.find((patient) => patient.id === id)
   console.log(patient)
   const appointment = appointments.find(
     (appointment) => appointment.patientId === id,

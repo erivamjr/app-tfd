@@ -18,7 +18,7 @@ export default function PatientsTable() {
   const itemsPerPage = 15
   const [search, setSearch] = useState('')
 
-  const { patients, isLoading, isError, totalPages } = usePatientsPage(
+  const { patientsPage, isLoading, isError, totalPages } = usePatientsPage(
     currentPage,
     itemsPerPage,
   )
@@ -34,7 +34,7 @@ export default function PatientsTable() {
         <Alert color={'red'} text={'white'} message={'Erro na requisição!'} />
       </div>
     )
-  if (!patients || !Array.isArray(patients))
+  if (!patientsPage || !Array.isArray(patientsPage))
     return (
       <div>
         <Alert
@@ -70,14 +70,14 @@ export default function PatientsTable() {
             <TableCell isHeader>Data de Cadastro</TableCell>
             <TableCell isHeader>Configurações</TableCell>
           </TableRow>
-          {patients.map((patient) => (
-            <TableRow key={patient.id}>
-              <TableCell>{patient.name}</TableCell>
-              <TableCell>{patient.cpf}</TableCell>
-              <TableCell>{patient.phone}</TableCell>
-              <TableCell>{patient.usuario}</TableCell>
+          {patientsPage.map((patientPage) => (
+            <TableRow key={patientPage.id}>
+              <TableCell>{patientPage.name}</TableCell>
+              <TableCell>{patientPage.cpf}</TableCell>
+              <TableCell>{patientPage.phone}</TableCell>
+              <TableCell>{patientPage.usuario}</TableCell>
               <TableCell>
-                {new Date(patient.createdAt).toLocaleDateString('pt-BR', {
+                {new Date(patientPage.createdAt).toLocaleDateString('pt-BR', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
@@ -86,21 +86,21 @@ export default function PatientsTable() {
               <TableCell>
                 <div className="flex justify-between items-center w-full">
                   <TableActions
-                    id={patient.id}
+                    id={patientPage.id}
                     url={'detalhespaciente'}
                     icon={<TbReportSearch />}
                     color={'yellow'}
                     text={'white'}
                   />
                   <TableActions
-                    id={patient.id}
+                    id={patientPage.id}
                     url={'detalhespaciente'}
                     icon={<FaRegEdit />}
                     color={'green'}
                     text={'white'}
                   />
                   <TableActions
-                    id={patient.id}
+                    id={patientPage.id}
                     url={'detalhespaciente'}
                     icon={<RiDeleteBin6Line />}
                     color={'red'}
