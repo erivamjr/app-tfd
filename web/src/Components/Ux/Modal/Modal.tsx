@@ -12,7 +12,7 @@ export default function Modal({ isOpen, onClose, title, children }) {
         isOpen ? 'is-open' : ''
       }`}
     >
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl mx-2 p-4">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl mx-2 p-4 max-h-96 md:max-h-screen overflow-scroll">
         <div className="flex justify-between items-center border-b pb-2">
           <h2 className="text-xl font-semibold">{title}</h2>
           <button
