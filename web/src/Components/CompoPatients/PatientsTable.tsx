@@ -39,7 +39,6 @@ export default function PatientsTable() {
   return (
     <Table>
       <TableRow>
-        <TableCell isHeader>ID</TableCell>
         <TableCell isHeader>Nome</TableCell>
         <TableCell isHeader>CPF</TableCell>
         <TableCell isHeader>Telefone</TableCell>
@@ -49,7 +48,6 @@ export default function PatientsTable() {
       </TableRow>
       {patients.map((patient) => (
         <TableRow key={patient.id}>
-          <TableCell>{patient.id}</TableCell>
           <TableCell>{patient.name}</TableCell>
           <TableCell>{patient.cpf}</TableCell>
           <TableCell>{patient.phone}</TableCell>
