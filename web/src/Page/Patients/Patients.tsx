@@ -5,10 +5,12 @@ import Title from '../../Components/Ux/Title/Title'
 
 export default function Patients() {
   return (
-    <Container>
+    <div>
       <Title title={'Pacientes'} subTitle={'Lista de pacientes cadastrados'} />
       <RegisterPatients />
-      <PatientsTable />
-    </Container>
+      <Container>
+        <PatientsTable />
+      </Container>
+    </div>
   )
 }
