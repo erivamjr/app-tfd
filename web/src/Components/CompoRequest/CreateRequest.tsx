@@ -8,7 +8,7 @@ import Loading from '../Ux/Loading/Loading'
 import Modal from '../Ux/Modal/Modal'
 import { FormEvent, useState } from 'react'
 import api from '../../Api'
-import usePatientsSearch from '../Hooks/Api/Patiens/PatiensSearch'
+import usePatientsSearch from '../Hooks/Api/Patiens/Patients'
 import useSpecialties from '../Hooks/Api/Specialties/Specialties'
 
 export default function CreateRequest() {

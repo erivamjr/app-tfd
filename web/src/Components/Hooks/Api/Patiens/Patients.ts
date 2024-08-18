@@ -3,7 +3,7 @@ import axios from 'axios'
 import api from '../../../../Api'
 import { Patient } from './TypePatiens'
 
-const usePatientsSearch = () => {
+const usePatients = () => {
   const [patientsSearch, setPatientsSearch] = useState<Patient[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
@@ -42,4 +42,4 @@ const usePatientsSearch = () => {
   return { patientsSearch, isLoading, isError }
 }
 
-export default usePatientsSearch
+export default usePatients

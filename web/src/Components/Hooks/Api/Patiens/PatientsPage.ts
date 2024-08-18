@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import api from '../../../../Api'
-import { Patient } from './types'
+import { Patient } from './TypePatiens'
 
-const usePatients = (currentPage: number, itemsPerPage: number) => {
+const usePatientsPage = (currentPage: number, itemsPerPage: number) => {
   const [patients, setPatients] = useState<Patient[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
@@ -46,4 +46,4 @@ const usePatients = (currentPage: number, itemsPerPage: number) => {
   return { patients, isLoading, isError, totalPages }
 }
 
-export default usePatients
+export default usePatientsPage

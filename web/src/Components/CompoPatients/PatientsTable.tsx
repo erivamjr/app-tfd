@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Table from '../Ux/table/Table'
-import usePatients from '../Hooks/Api/Patiens/Patiens'
+import usePatients from '../Hooks/Api/Patiens/PatientsPage'
 import { Pagination } from '../Ux/table/Pagination '
 import { TableActions } from '../Ux/table/TableActions'
 import TableCell from '../Ux/table/TableCell'
@@ -11,12 +11,14 @@ import { RiDeleteBin6Line } from 'react-icons/ri'
 import Alert from '../Ux/Alert/Alert'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../Ux/Input/Input'
+import usePatientsPage from '../Hooks/Api/Patiens/PatientsPage'
 
 export default function PatientsTable() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 15
+  const [search, setSearch] = useState('')
 
-  const { patients, isLoading, isError, totalPages } = usePatients(
+  const { patients, isLoading, isError, totalPages } = usePatientsPage(
     currentPage,
     itemsPerPage,
   )
@@ -47,7 +49,12 @@ export default function PatientsTable() {
     <div>
       <div className="w-full flex items-center gap-2 mb-5">
         <span className="w-full">
-          <Input type="text" name="search" placeholder="Pesquisar" />
+          <Input
+            type="text"
+            name="search"
+            placeholder="Pesquisar"
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </span>
         <span className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded cursor-pointer">
           <CiSearch />
