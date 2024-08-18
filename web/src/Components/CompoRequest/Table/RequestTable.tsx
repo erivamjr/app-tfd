@@ -11,7 +11,7 @@ import useAppointment from '../../Hooks/Api/Appointments/Appointments'
 
 export default function RequestTable() {
   const { appointments, isLoading, isError } = useAppointment()
-  console.log(appointments)
+
   return (
     <Table>
       <TableRow>
