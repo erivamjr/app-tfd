@@ -6,6 +6,8 @@ import Container from '../Ux/Container/Container'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import useAppointment from '../Hooks/Api/Appointments/Appointments'
 import DetailsRequestTable from './DetailsRequestTable'
+import { CiSearch } from 'react-icons/ci'
+import Input from '../Ux/Input/Input'
 
 export default function CompoDetailsRequest() {
   const { id } = useParams()
@@ -21,6 +23,17 @@ export default function CompoDetailsRequest() {
 
   return (
     <div>
+      <div className="flex flex-1 items-center space-x-2">
+        <Input
+          type="text"
+          name="pesquisar"
+          placeholder="Pesquisar"
+          className="flex-1"
+        />
+        <button className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded">
+          <CiSearch />
+        </button>
+      </div>
       <AdminToolbar>
         <div className="p-2 flex">
           <div className="font-bold text-black text-2xl flex flex-1 items-center justify-center">

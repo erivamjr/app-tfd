@@ -70,7 +70,7 @@ export default function CreateRequest() {
   }
 
   return (
-    <AdminToolbar>
+    <div>
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -218,18 +218,7 @@ export default function CreateRequest() {
           </div>
         </form>
       </Modal>
-      <div className="flex p-3 space-x-4">
-        <div className="flex flex-1 items-center space-x-2">
-          <Input
-            type="text"
-            name="pesquisar"
-            placeholder="Pesquisar"
-            className="flex-1"
-          />
-          <button className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded">
-            <CiSearch />
-          </button>
-        </div>
+      <div className="flex justify-end p-3 space-x-4">
         <div
           onClick={handleOpenModal}
           className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded flex items-center space-x-2 cursor-pointer"
@@ -238,6 +227,6 @@ export default function CreateRequest() {
           <span>Nova Solicitação</span>
         </div>
       </div>
-    </AdminToolbar>
+    </div>
   )
 }

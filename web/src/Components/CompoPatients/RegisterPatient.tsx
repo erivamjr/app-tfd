@@ -90,7 +90,7 @@ export default function RegisterPatients() {
   }
 
   return (
-    <AdminToolbar>
+    <div>
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -278,15 +278,7 @@ export default function RegisterPatients() {
           </div>
         </form>
       </Modal>
-      <div className="flex p-3">
-        <div className="w-full flex items-center gap-2">
-          <span className="w-full">
-            <Input type="text" name="search" placeholder="Pesquisar" />
-          </span>
-          <span className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded cursor-pointer">
-            <CiSearch />
-          </span>
-        </div>
+      <div className="flex justify-end p-3">
         <div
           onClick={handleOpenModal}
           className="ml-10 bg-blue-600 text-white hover:bg-blue-500 p-2 rounded flex items-center gap-2 cursor-pointer"
@@ -297,6 +289,6 @@ export default function RegisterPatients() {
           <span>Cadastrar</span>
         </div>
       </div>
-    </AdminToolbar>
+    </div>
   )
 }

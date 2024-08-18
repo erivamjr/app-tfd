@@ -3,6 +3,8 @@ import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import Table from '../Ux/table/Table'
 import TableRow from '../Ux/table/TableRow'
 import TableCell from '../Ux/table/TableCell'
+import { CiSearch } from 'react-icons/ci'
+import Input from '../Ux/Input/Input'
 
 interface DetailsTableProps {
   item: any
@@ -34,6 +36,17 @@ export default function DetailsTable({
 
   return (
     <div className="mt-6">
+      <div className="mb-5 flex flex-1 items-center space-x-2">
+        <Input
+          type="text"
+          name="pesquisar"
+          placeholder="Pesquisar"
+          className="flex-1"
+        />
+        <button className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded">
+          <CiSearch />
+        </button>
+      </div>
       <Table>
         <TableRow>
           <TableCell isHeader>ID</TableCell>
