@@ -1,4 +1,8 @@
+import React from 'react'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
+import Table from '../Ux/table/Table'
+import TableRow from '../Ux/table/TableRow'
+import TableCell from '../Ux/table/TableCell'
 
 interface DetailsTableProps {
   item: any
@@ -22,7 +26,7 @@ export default function DetailsTable({
         text="white"
       />
     )
-  console.log(item)
+
   if (!item)
     return (
       <DisplayMessage message={'Consultando ...'} color="yellow" text="white" />
@@ -30,50 +34,48 @@ export default function DetailsTable({
 
   return (
     <div className="mt-6">
-      <div className="">
-        <div className="mb-5 ">
-          <div className="grid grid-cols-12 gap-2 rounded p-2 text-center bg-blue-600 text-white ">
-            <div>ID</div>
-            <div>Usuario</div>
-            <div>Prioridade</div>
-            <div>Diagnostico</div>
-            <div>Exame</div>
-            <div>Solicitação</div>
-            <div>CID</div>
-            <div>Médico</div>
-            <div>CRM</div>
-            <div>Agendamento</div>
-            <div>Status</div>
-          </div>
-        </div>
-        <div className="border mb-4 border-[#008BAD] p-3 rounded" key={item.id}>
-          <div className="grid grid-cols-12 gap-2 text-center">
-            <div>{item.id}</div>
-            <div>{item.patient.name}</div>
-            <div>{item.priority}</div>
-            <div>{item.diagnosis}</div>
-            <div>{item.specialty.name}</div>
-            <div>{new Date(item.appointmentDate).toLocaleDateString()}</div>
-            <div>{item.cid}</div>
-            <div>{item.requestingDoctor}</div>
-            <div>{item.crm}</div>
-            <div>{new Date(item.appointmentDate).toLocaleDateString()}</div>
-            <div>{item.status === 'InProgress' && 'Em andamento'}</div>
-          </div>
-        </div>
-      </div>
-      <div className="flex justify-center">
-        <div className=" ">
-          <div className="flex gap-3">
-            <a href="#">&laquo;</a>
-            <a className="" href="#">
-              1
-            </a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">&raquo;</a>
-          </div>
+      <Table>
+        <TableRow>
+          <TableCell isHeader>ID</TableCell>
+          <TableCell isHeader>Usuário</TableCell>
+          <TableCell isHeader>Prioridade</TableCell>
+          <TableCell isHeader>Diagnóstico</TableCell>
+          <TableCell isHeader>Exame</TableCell>
+          <TableCell isHeader>Solicitação</TableCell>
+          <TableCell isHeader>CID</TableCell>
+          <TableCell isHeader>Médico</TableCell>
+          <TableCell isHeader>CRM</TableCell>
+          <TableCell isHeader>Agendamento</TableCell>
+          <TableCell isHeader>Status</TableCell>
+        </TableRow>
+        <TableRow key={item.id}>
+          <TableCell>{item.id}</TableCell>
+          <TableCell>{item.patient.name}</TableCell>
+          <TableCell>{item.priority}</TableCell>
+          <TableCell>{item.diagnosis}</TableCell>
+          <TableCell>{item.specialty.name}</TableCell>
+          <TableCell>
+            {new Date(item.appointmentDate).toLocaleDateString()}
+          </TableCell>
+          <TableCell>{item.cid}</TableCell>
+          <TableCell>{item.requestingDoctor}</TableCell>
+          <TableCell>{item.crm}</TableCell>
+          <TableCell>
+            {new Date(item.appointmentDate).toLocaleDateString()}
+          </TableCell>
+          <TableCell>
+            {item.status === 'InProgress' ? 'Em andamento' : ''}
+          </TableCell>
+        </TableRow>
+      </Table>
+      <div className="flex justify-center mt-4">
+        <div className="flex gap-3">
+          <a href="#">&laquo;</a>
+          <a href="#">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <a href="#">&raquo;</a>
         </div>
       </div>
     </div>
