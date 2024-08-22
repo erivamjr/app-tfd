@@ -8,13 +8,13 @@ import Loading from '../Ux/Loading/Loading'
 import Modal from '../Ux/Modal/Modal'
 import { FormEvent, useState } from 'react'
 import api from '../../Api'
-import usePatientsSearch from '../Hooks/Api/Patiens/Patients'
 import useSpecialties from '../Hooks/Api/Specialties/Specialties'
+import usePatients from '../Hooks/Api/Patiens/Patients'
 
 export default function CreateRequest() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { patientsSearch } = usePatientsSearch()
+  const { patients } = usePatients()
   const { specialties } = useSpecialties()
 
   const [patientId, setPatientId] = useState<string>('')
@@ -90,7 +90,7 @@ export default function CreateRequest() {
                   onChange={(e) => setPatientId(e.target.value)}
                 />
                 <datalist id="patients-list">
-                  {patientsSearch.map((patient) => (
+                  {patients.map((patient) => (
                     <option key={patient.id} value={patient.id}>
                       {patient.name}
                     </option>

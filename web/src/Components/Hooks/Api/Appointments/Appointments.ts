@@ -6,6 +6,7 @@ import api from '../../../../Api'
 
 const useAppointment = () => {
   const [appointments, setAppointments] = useState<TypeAppointment[]>([])
+  console.log(appointments)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
 

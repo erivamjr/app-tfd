@@ -1,12 +1,24 @@
 import React from 'react'
 
-export default function Button({ title, onClick, type, icon, disabled }) {
+export default function Button({
+  title,
+  onClick,
+  type,
+  icon,
+  disabled,
+  backgroundColor,
+  color,
+}) {
   return (
     <button
+      style={{
+        background: backgroundColor,
+        color,
+      }}
       disabled={disabled}
       onClick={onClick}
       type={type}
-      className={` w-full flex items-center justify-center gap-2 bg-green-700 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4 cursor-pointer`}
+      className={`flex items-center justify-center font-bold p-2 rounded cursor-pointer`}
     >
       <span className="text-white text-2xl">{icon}</span>
       <span>{title}</span>

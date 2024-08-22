@@ -71,7 +71,7 @@ export default function CompoDetailsRequest() {
               <span>Estado: {patient.uf}</span>
             </div>
             <div className="flex flex-col gap-2">
-              <span>Estado: {patient.state}</span>
+              <span>Estado: {patient.uf}</span>
               <span>Cep: {patient.cep}</span>
               <span>Numero: {patient.number}</span>
               <span>Bairro: {patient.district}</span>

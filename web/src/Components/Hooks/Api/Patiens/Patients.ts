@@ -4,7 +4,7 @@ import api from '../../../../Api'
 import { Patient } from './TypePatiens'
 
 const usePatients = () => {
-  const [patientsSearch, setPatientsSearch] = useState<Patient[]>([])
+  const [patients, setPatients] = useState<Patient[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
 
@@ -12,14 +12,14 @@ const usePatients = () => {
     const controller = new AbortController()
     const { signal } = controller
 
-    const fetchPatientsSearch = async () => {
+    const fetchPatients = async () => {
       try {
         setIsLoading(true)
         const response = await api.get<{
           data: Patient[]
         }>(`/patients`, { signal })
 
-        setPatientsSearch(response.data.data)
+        setPatients(response.data.data)
       } catch (error) {
         if (axios.isAxiosError(error) && error.message === 'canceled') {
           console.log('Request cancelled')
@@ -32,14 +32,14 @@ const usePatients = () => {
       }
     }
 
-    fetchPatientsSearch()
+    fetchPatients()
 
     return () => {
       controller.abort()
     }
   }, [])
 
-  return { patientsSearch, isLoading, isError }
+  return { patients, isLoading, isError }
 }
 
 export default usePatients
