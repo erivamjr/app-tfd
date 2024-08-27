@@ -8,6 +8,7 @@ export class AppointmentsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(body: CreateAppointmentDto) {
+    await this.findBySpecialtyIdAndPatientId(body.specialtyId, body.patientId);
     return this.prisma.appointment.create({
       data: {
         ...body,
