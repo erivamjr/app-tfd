@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { SpecialtyService } from './specialty.service';
 import { CreateSpecialtyDto } from './dto/create-specialty.dto';
 import { UpdateSpecialtyDto } from './dto/update-specialty.dto';
@@ -23,7 +31,7 @@ export class SpecialtyController {
     return this.specialtyService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@ParamId() id: number, @Body() body: UpdateSpecialtyDto) {
     return this.specialtyService.update(id, body);
   }
@@ -31,5 +39,10 @@ export class SpecialtyController {
   @Delete(':id')
   remove(@ParamId() id: number) {
     return this.specialtyService.remove(id);
+  }
+
+  @Patch(':id')
+  updateActivate(@ParamId() id: number) {
+    return this.specialtyService.reactivate(id);
   }
 }
