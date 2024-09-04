@@ -23,7 +23,7 @@ export class SpecialtyService {
         );
       } else {
         throw new ConflictException(
-          `Specialty '${createSpecialtyDto.name}' with '${existingSpecialty.id}' exists but is inactive. Consider reactivating it.`,
+          `Specialty '${createSpecialtyDto.name}' with id = '${existingSpecialty.id}' exists but is inactive. Consider reactivating it.`,
         );
       }
     }
@@ -66,7 +66,7 @@ export class SpecialtyService {
 
     if (existingSpecialty) {
       throw new ConflictException(
-        `Specialty '${updateSpecialtyDto.name}' already exists.`,
+        `Specialty '${updateSpecialtyDto.name}' already exists in id = ${existingSpecialty.id}.`,
       );
     }
 
