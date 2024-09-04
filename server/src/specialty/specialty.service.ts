@@ -44,10 +44,12 @@ export class SpecialtyService {
       where: { id },
     });
 
-    if (!specialty || !specialty.active) {
-      throw new NotFoundException(
-        `Specialty with ID ${id} not found or inactive.`,
-      );
+    if (!specialty) {
+      throw new NotFoundException(`Specialty with ID ${id} not found.`);
+    }
+
+    if (!specialty.active) {
+      throw new NotFoundException(`Specialty with ID ${id} inactive.`);
     }
 
     return specialty;
