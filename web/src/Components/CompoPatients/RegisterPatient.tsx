@@ -39,25 +39,6 @@ export default function RegisterPatients() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
 
-    console.log({
-      name,
-      gender,
-      cpf,
-      rg,
-      address,
-      number,
-      complement,
-      district,
-      city,
-      state,
-      zipCode,
-      phone,
-      susCard,
-      birthDate,
-      motherName,
-      active: true,
-    })
-
     try {
       setIsLoading(true)
       const response = await api.post('patients', {

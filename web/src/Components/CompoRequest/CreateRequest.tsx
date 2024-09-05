@@ -54,10 +54,8 @@ export default function CreateRequest() {
       status,
       notes,
     }
-    console.log(respose)
     try {
       const response = await api.post('appointments', respose)
-      console.log('Resposta:', response.data)
     } catch (error) {
       console.error(
         'Erro ao enviar dados:',

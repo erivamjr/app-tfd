@@ -6,7 +6,6 @@ export default function Auth() {
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const mode = queryParams.get('mode') || 'login'
-  console.log('mode')
   return (
     <div className="w-screen">
       {mode === 'login' ? <CompoLogin /> : <CompoCreateAccount />}
