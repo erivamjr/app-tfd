@@ -13,15 +13,14 @@ export default function DetailsPatients() {
   const { patients, isLoading, isError } = usePatients()
   const { appointments, isLoadingPoint, isErrorPoint } = useAppointment()
 
-  const patient = patients.find((patient) => patient.id === id)
-  console.log(patient)
-  const appointment = appointments.find(
-    (appointment) => appointment.patientId === id,
-  )
-
   if (isLoading)
     return <DisplayMessage message={'Carregando'} color="green" text="white" />
 
+  const patient = patients && patients.find((patient) => patient.id === id)
+
+  const appointment = appointments
+    ? appointments.filter((appointment) => appointment.patientId === id)
+    : []
   if (isError)
     return (
       <DisplayMessage
@@ -30,12 +29,10 @@ export default function DetailsPatients() {
         text="white"
       />
     )
-
   if (!patient)
     return (
       <DisplayMessage message={'Nenhum paciente localizado'} text="orange" />
     )
-
   return (
     <div>
       <AdminToolbar>
@@ -62,7 +59,6 @@ export default function DetailsPatients() {
             <div className="flex flex-col gap-2">
               <span>Nome: {patient.name}</span>
               <span>Gênero: {patient.gender}</span>
-
               <span>CPF: {patient.cpf}</span>
               <span>RG: {patient.rg}</span>
               <span>Cartão SUS: {patient.susCard}</span>
