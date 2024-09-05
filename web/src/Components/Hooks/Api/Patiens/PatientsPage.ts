@@ -26,7 +26,6 @@ const usePatientsPage = (currentPage: number, itemsPerPage: number) => {
         setTotalPages(response.data.pageCount)
       } catch (error) {
         if (axios.isAxiosError(error) && error.message === 'canceled') {
-          console.log('Request cancelled')
         } else {
           console.error('Error fetching data:', error)
           setIsError(true)

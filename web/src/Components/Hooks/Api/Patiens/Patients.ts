@@ -22,7 +22,6 @@ const usePatients = () => {
         setPatients(response.data.data)
       } catch (error) {
         if (axios.isAxiosError(error) && error.message === 'canceled') {
-          console.log('Request cancelled')
         } else {
           console.error('Error fetching data:', error)
           setIsError(true)

@@ -6,7 +6,6 @@ import api from '../../../../Api'
 
 const useAppointment = () => {
   const [appointments, setAppointments] = useState<TypeAppointment[]>([])
-  console.log(appointments)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
 
@@ -24,7 +23,6 @@ const useAppointment = () => {
         setIsLoading(false)
       } catch (error) {
         if (axios.isCancel(error)) {
-          console.log('Request canceled', error.message)
         } else {
           setIsError(true)
         }
