@@ -10,16 +10,20 @@ import { FormEvent, useState } from 'react'
 import api from '../../Api'
 import useSpecialties from '../Hooks/Api/Specialties/Specialties'
 import usePatients from '../Hooks/Api/Patiens/Patients'
+import Alert from '../Ux/Alert/Alert'
 
 export default function CreateRequest() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { patients } = usePatients()
   const { specialties } = useSpecialties()
+  const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
+  const [type, setType] = useState<string>('')
+  const [alertMessage, setAlertMessage] = useState<string>('')
 
   const [patientId, setPatientId] = useState<string>('')
   const [specialtyId, setSpecialtyId] = useState<number | undefined>()
-  const [priority, setPriority] = useState<string>('')
+  const [priority, setPriority] = useState<string>('Normal')
   const [appointmentDate, setAppointmentDate] = useState<string>('')
   const [diagnosis, setDiagnosis] = useState<string>('')
   const [cid, setCid] = useState<string>('')
@@ -28,6 +32,8 @@ export default function CreateRequest() {
   const [requestCode, setRequestCode] = useState<string>('')
   const [status, setStatus] = useState<string>('InProgress')
   const [notes, setNotes] = useState<string>('')
+  const [userId] = useState<string>('84d6d27e-475c-4e83-a1ae-b477698e399e') // Exemplo de ID de usuário
+  const [requestDate] = useState<string>(new Date().toISOString()) // Data da solicitação no formato ISO
 
   function handleOpenModal() {
     setIsModalOpen(true)
@@ -41,9 +47,10 @@ export default function CreateRequest() {
     e.preventDefault()
     setIsLoading(true)
 
-    const respose = {
-      specialtyId: parseFloat(specialtyId),
+    const requestData = {
+      specialtyId: Number(specialtyId),
       patientId,
+      userId,
       priority,
       appointmentDate,
       diagnosis,
@@ -51,22 +58,45 @@ export default function CreateRequest() {
       requestingDoctor,
       crm,
       requestCode,
+      requestDate,
       status,
       notes,
     }
+
     try {
-      const response = await api.post('appointments', respose)
+      const response = await api.post('appointments', requestData)
+      setType('success')
+      setAlertMessage('Solicitação criada com sucesso!')
+      setIsAlertOpen(true)
+      setTimeout(() => {
+        setPatientId('')
+        setSpecialtyId(undefined)
+        setPriority('Normal')
+        setAppointmentDate('')
+        setDiagnosis('')
+        setCid('')
+        setRequestingDoctor('')
+        setCrm('')
+        setRequestCode('')
+        setStatus('InProgress')
+        setNotes('')
+        setType('')
+        setAlertMessage('')
+        setIsAlertOpen(false)
+      }, 3000)
     } catch (error) {
-      console.error(
-        'Erro ao enviar dados:',
-        error.response ? error.response.data.message : error.message,
-      )
+      setType('error')
+      setAlertMessage('Erro ao criar solicitação. Tente novamente.')
+      setIsAlertOpen(true)
+      setTimeout(() => {
+        setType('')
+        setAlertMessage('')
+        setIsAlertOpen(false)
+      }, 3000)
     } finally {
       setIsLoading(false)
-      handleCloseModal()
     }
   }
-
   return (
     <div>
       <Modal
@@ -75,12 +105,14 @@ export default function CreateRequest() {
         title="Nova Solicitação"
       >
         <form onSubmit={handleSubmit} className="space-y-4">
+          {isAlertOpen && <Alert type={type} message={alertMessage} />}
           <div className="flex flex-col md:flex-row">
             <div className="flex-1 p-4 rounded-lg">
               <div className="text-lg font-semibold mb-2">Dados Pessoais</div>
               <div>
                 <Label label="Nome do Paciente" />
-                <input
+
+                <Input
                   list="patients-list"
                   name="patientId"
                   placeholder="Selecione o paciente"
@@ -139,13 +171,16 @@ export default function CreateRequest() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label label="Especialidade" />
-                  <input
+
+                  <Input
                     list="specialties-list"
                     type="text"
                     name="specialtyId"
                     placeholder="Especialidade"
-                    value={specialtyId}
-                    onChange={(e) => setSpecialtyId(e.target.value)}
+                    value={
+                      specialtyId !== undefined ? specialtyId.toString() : ''
+                    }
+                    onChange={(e) => setSpecialtyId(Number(e.target.value))}
                   />
                   <datalist id="specialties-list">
                     {specialties.map((specialty) => (
@@ -170,9 +205,9 @@ export default function CreateRequest() {
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                   >
-                    <option value="InProgress">Em andamento</option>
-                    <option value="Pending">Pendente</option>
-                    <option value="Completed">Concluído</option>
+                    <option value="InProgress">InProgress</option>
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Completed">Completed</option>
                   </select>
                   <Label label="Data do Agendamento" />
                   <Input
@@ -189,8 +224,11 @@ export default function CreateRequest() {
                     value={priority}
                     onChange={(e) => setPriority(e.target.value)}
                   >
+                    <option value="Pregnant">Pregnant</option>
+                    <option value="Child">Child</option>
                     <option value="Normal">Normal</option>
-                    <option value="Urgent">Urgente</option>
+                    <option value="Elderly">Elderly</option>
+                    <option value="Emergency">Emergency</option>
                   </select>
                   <Label label="Observações" />
                   <textarea
@@ -211,7 +249,8 @@ export default function CreateRequest() {
             <Button
               icon={isLoading ? <Loading /> : <CiFloppyDisk />}
               title="Salvar"
-              className="bg-blue-600 text-white hover:bg-blue-500"
+              backgroundColor={'#007bff'}
+              color={'#fff'}
             />
           </div>
         </form>
@@ -221,9 +260,10 @@ export default function CreateRequest() {
           onClick={handleOpenModal}
           className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded flex items-center space-x-2 cursor-pointer"
         >
+          <span className="hidden md:block">Adicionar Solicitação</span>
           <RiUserAddLine />
-          <span>Nova Solicitação</span>
         </div>
+        <Button title="Buscar Solicitação" icon={<CiSearch />} />
       </div>
     </div>
   )
