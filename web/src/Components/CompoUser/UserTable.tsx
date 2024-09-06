@@ -40,7 +40,13 @@ export default function UserTable() {
           <TableCell>{user.role}</TableCell>
           <TableCell>{user.active ? 'Yes' : 'No'}</TableCell>
           <TableCell>
-            <TableActions />
+            <TableActions
+              id={user.id}
+              icon="edit"
+              url={`/users/${user.id}`}
+              color="blue"
+              text="Edit"
+            />
           </TableCell>
         </TableRow>
       ))}

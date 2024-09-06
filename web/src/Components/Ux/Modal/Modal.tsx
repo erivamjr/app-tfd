@@ -3,7 +3,19 @@ import ReactDOM from 'react-dom'
 import { IoMdClose } from 'react-icons/io'
 import './style.css'
 
-export default function Modal({ isOpen, onClose, title, children }) {
+interface ModalProps {
+  isOpen: boolean
+  onClose: () => void
+  title: string
+  children: React.ReactNode
+}
+
+export default function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
+}: ModalProps) {
   if (!isOpen) return null
 
   return ReactDOM.createPortal(
@@ -33,6 +45,6 @@ export default function Modal({ isOpen, onClose, title, children }) {
         </div>
       </div>
     </div>,
-    document.getElementById('root'),
+    document.getElementById('root') as HTMLElement,
   )
 }

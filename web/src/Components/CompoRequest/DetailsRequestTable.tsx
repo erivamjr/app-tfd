@@ -1,4 +1,3 @@
-import React from 'react'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import { Pagination } from '../Ux/table/Pagination '
 import Table from '../Ux/table/Table'

@@ -1,15 +1,24 @@
+import React, { useContext, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { IoMenu } from 'react-icons/io5'
 import { CiHome, CiLogout, CiMedicalCase } from 'react-icons/ci'
 import { IoIosClose } from 'react-icons/io'
-import Logo from '../Ux/Logo/Vector.png'
-
-import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { GoPeople } from 'react-icons/go'
 import { TbReportSearch } from 'react-icons/tb'
 import { RiCalendarScheduleLine } from 'react-icons/ri'
 import { GiBrain } from 'react-icons/gi'
 import { AuthContext } from '../Context/Auth'
+import Logo from '../Ux/Logo/Vector.png'
+
+interface MenuItemProps {
+  to: string
+  icon: React.ReactNode
+  label: string
+  currentPage: string
+  setPage: (page: string) => void
+  sideBar: boolean
+  onClick?: () => void
+}
 
 export default function SideBar() {
   const { logout } = useContext(AuthContext)
@@ -22,11 +31,13 @@ export default function SideBar() {
 
   return (
     <div
-      className={` ${sideBar ? 'w-16' : 'w-60'} h-screen flex flex-col bg-blue-600 text-white transition-width duration-300`}
+      className={`${
+        sideBar ? 'w-16' : 'w-60'
+      } h-screen flex flex-col bg-blue-600 text-white transition-width duration-300`}
     >
       <div
         onClick={handleSideBar}
-        className={`flex justify-end text-3xl cursor-pointer p-3 bg-blue-600`}
+        className="flex justify-end text-3xl cursor-pointer p-3 bg-blue-600"
       >
         {sideBar ? <IoMenu /> : <IoIosClose />}
       </div>
@@ -36,7 +47,9 @@ export default function SideBar() {
         </div>
       )}
       <div
-        className={`flex flex-col justify-between p-3 ${sideBar ? 'items-center' : 'items-start'}`}
+        className={`flex flex-col justify-between p-3 ${
+          sideBar ? 'items-center' : 'items-start'
+        }`}
       >
         <ul className="mt-20 w-full">
           <MenuItem
@@ -102,18 +115,30 @@ export default function SideBar() {
   )
 }
 
-function MenuItem({ to, icon, label, currentPage, setPage, sideBar, onClick }) {
+function MenuItem({
+  to,
+  icon,
+  label,
+  currentPage,
+  setPage,
+  sideBar,
+  onClick,
+}: MenuItemProps) {
   const isActive = currentPage === label
 
   const handleClick = () => {
-    if (onClick) onClick() // Executa o onClick se ele for passado
-    setPage(label) // Define a página atual
+    if (onClick) onClick() // Executes onClick if provided
+    setPage(label) // Sets the current page
   }
 
   return (
     <li
       onClick={handleClick}
-      className={`flex gap-1 items-center p-2 cursor-pointer ${isActive ? 'w-full bg-white rounded text-[#006A85]' : 'hover:text-blue-300'} ${sideBar ? 'justify-center' : ''}`}
+      className={`flex gap-1 items-center p-2 cursor-pointer ${
+        isActive
+          ? 'w-full bg-white rounded text-[#006A85]'
+          : 'hover:text-blue-300'
+      } ${sideBar ? 'justify-center' : ''}`}
     >
       <span>{icon}</span>
       {!sideBar && (
