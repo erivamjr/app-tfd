@@ -7,8 +7,64 @@ import TableRow from '../Ux/table/TableRow'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../Ux/Input/Input'
 
+// Use the previously defined AppointmentItem interface
+interface AppointmentItem {
+  id: string
+  specialtyId: number
+  patientId: string
+  userId: string
+  priority: 'Normal' | 'High' | 'Low'
+  appointmentDate: string
+  diagnosis: string
+  cid: string
+  requestingDoctor: string
+  crm: string
+  requestCode: string
+  requestDate: string
+  status: 'InProgress' | 'Completed' | 'Pending'
+  notes: string
+  active: boolean
+  createdAt: string
+  updatedAt: string
+  patient: {
+    id: string
+    name: string
+    gender: 'M' | 'F'
+    cpf: string
+    rg: string
+    address: string
+    number: string
+    complement: string
+    district: string
+    city: string
+    state: string
+    zipCode: string
+    phone: string
+    susCard: string
+    birthDate: string
+    motherName: string
+    active: boolean
+    createdAt: string
+    updatedAt: string
+    userId: string
+  }
+  specialty: { id: number; name: string; active: boolean }
+  user: {
+    id: string
+    name: string
+    phone: string
+    cpf: string
+    email: string
+    password: string
+    role: 'admin' | 'user'
+    createdAt: string
+    updatedAt: string
+    active: boolean
+  }
+}
+
 interface DetailsTableProps {
-  item: any
+  item: AppointmentItem | null // Adjusted type to match the defined interface
   isLoadingPoint: boolean
   isErrorPoint: boolean
 }
@@ -22,6 +78,7 @@ export default function DetailsRequestTable({
     return <DisplayMessage message={'Carregando'} color="green" text="white" />
   }
 
+  console.log(item)
   if (isErrorPoint) {
     return (
       <DisplayMessage
