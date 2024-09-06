@@ -1,14 +1,24 @@
 import React from 'react'
 
+interface ButtonProps {
+  title: string
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  type?: 'button' | 'submit' | 'reset'
+  icon?: React.ReactNode
+  disabled?: boolean
+  backgroundColor?: string
+  color?: string
+}
+
 export default function Button({
   title,
   onClick,
-  type,
+  type = 'button',
   icon,
-  disabled,
-  backgroundColor,
-  color,
-}) {
+  disabled = false,
+  backgroundColor = 'transparent',
+  color = 'black',
+}: ButtonProps) {
   return (
     <button
       style={{
@@ -18,9 +28,9 @@ export default function Button({
       disabled={disabled}
       onClick={onClick}
       type={type}
-      className={`flex items-center justify-center font-bold p-2 rounded cursor-pointer`}
+      className="flex items-center justify-center font-bold p-2 rounded cursor-pointer"
     >
-      <span className="text-white text-2xl">{icon}</span>
+      {icon && <span className="text-white text-2xl">{icon}</span>}
       <span>{title}</span>
     </button>
   )

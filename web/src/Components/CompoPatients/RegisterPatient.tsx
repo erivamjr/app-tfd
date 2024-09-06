@@ -1,6 +1,5 @@
-import { CiFloppyDisk, CiSearch } from 'react-icons/ci'
+import { CiFloppyDisk } from 'react-icons/ci'
 import { RiUserAddLine } from 'react-icons/ri'
-import AdminToolbar from '../Ux/AdminToolbar/AdminToolbar'
 import Button from '../Ux/Button/Button'
 import Input from '../Ux/Input/Input'
 import Label from '../Ux/Label/Label'
@@ -41,7 +40,7 @@ export default function RegisterPatients() {
 
     try {
       setIsLoading(true)
-      const response = await api.post('patients', {
+      await api.post('patients', {
         name,
         gender,
         cpf,
@@ -60,10 +59,7 @@ export default function RegisterPatients() {
         active: true,
       })
     } catch (error) {
-      console.error(
-        'Erro ao enviar dados:',
-        error.response ? error.response.data.message : error.message,
-      )
+      console.error('Error submitting patient data:', error)
     } finally {
       setIsLoading(false)
       handleCloseModal()
