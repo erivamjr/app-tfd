@@ -1,4 +1,3 @@
-import React from 'react'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import Table from '../Ux/table/Table'
 import TableRow from '../Ux/table/TableRow'
@@ -105,7 +104,8 @@ export default function DetailsTable({
           type="text"
           name="pesquisar"
           placeholder="Pesquisar"
-          className="flex-1"
+          value=""
+          onChange={() => {}}
         />
         <button className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded">
           <CiSearch />

@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-
 import { TypeAppointment } from './TypeAppointments'
 import api from '../../../../Api'
 
-const useAppointment = () => {
+// Definindo o tipo de retorno do hook
+type UseAppointmentReturn = {
+  appointments: TypeAppointment[]
+  isLoading: boolean
+  isError: boolean
+  countAppointments: number
+  countInProgress: number
+}
+
+const useAppointment = (): UseAppointmentReturn => {
   const [appointments, setAppointments] = useState<TypeAppointment[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
@@ -22,8 +30,7 @@ const useAppointment = () => {
         setAppointments(response.data)
         setIsLoading(false)
       } catch (error) {
-        if (axios.isCancel(error)) {
-        } else {
+        if (!axios.isCancel(error)) {
           setIsError(true)
         }
       } finally {
@@ -37,6 +44,7 @@ const useAppointment = () => {
       controller.abort()
     }
   }, [])
+
   const countAppointments = appointments.length
   const countInProgress = appointments.filter(
     (appointment) => appointment.status === 'InProgress',

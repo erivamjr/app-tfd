@@ -14,6 +14,12 @@ export interface PatientProps {
   createdAt: string
   updatedAt: string
   userId: string
+  uf: string
+  cep: string
+  district: string
+  complement: string
+  city: string
+  number: string
 }
 export interface SpecialtyProps {
   id: number

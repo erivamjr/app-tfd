@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom'
 import Input from '../../Components/Ux/Input/Input'
 import Logo from '../../Components/Ux/Logo/Vector.png'
-import Button from '../Ux/Button/Button'
-
 export default function CompoCreateAccount() {
   return (
     <div className="relative min-h-screen bg-gray-100">
@@ -64,7 +62,7 @@ export default function CompoCreateAccount() {
                 />
               </div>
               <div className="w-full">
-                <Button type="submit" title="Cadastrar" />
+                <button type="submit">Cadastrar</button>
               </div>
             </form>
             <Link to="/auth?mode=login" className="mt-4 text-sm text-gray-500">

@@ -1,6 +1,5 @@
 import React from 'react'
 import Table from '../../Ux/table/Table'
-import { Pagination } from '../../Ux/table/Pagination '
 import { TableActions } from '../../Ux/table/TableActions'
 import TableCell from '../../Ux/table/TableCell'
 import TableRow from '../../Ux/table/TableRow'
@@ -12,7 +11,12 @@ import { CiSearch } from 'react-icons/ci'
 import Input from '../../Ux/Input/Input'
 
 export default function RequestTable() {
-  const { appointments, isLoading, isError } = useAppointment()
+  const { appointments } = useAppointment()
+  const [searchValue, setSearchValue] = React.useState('')
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value)
+  }
 
   return (
     <div>
@@ -21,7 +25,8 @@ export default function RequestTable() {
           type="text"
           name="pesquisar"
           placeholder="Pesquisar"
-          className="flex-1"
+          value={searchValue}
+          onChange={handleSearchChange}
         />
         <button className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded">
           <CiSearch />

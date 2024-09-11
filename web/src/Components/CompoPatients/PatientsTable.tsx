@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Table from '../Ux/table/Table'
 import { Pagination } from '../Ux/table/Pagination '
 import { TableActions } from '../Ux/table/TableActions'
@@ -11,7 +11,6 @@ import Alert from '../Ux/Alert/Alert'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../Ux/Input/Input'
 import usePatientsPage from '../Hooks/Api/Patiens/PatientsPage'
-import Button from '../Ux/Button/Button'
 import usePatients from '../Hooks/Api/Patiens/Patients'
 import { BiTrash } from 'react-icons/bi'
 
@@ -24,7 +23,7 @@ export default function PatientsTable() {
     currentPage,
     itemsPerPage,
   )
-  const [searchPatients, setSearchPatients] = useState('')
+  const [searchPatients, setSearchPatients] = useState<any[]>([])
   useEffect(() => {
     setSearchPatients(patientsPage || [])
   }, [patientsPage])
@@ -32,23 +31,19 @@ export default function PatientsTable() {
   if (isLoading)
     return (
       <div>
-        <Alert color={'green'} text={'white'} message={'Carregando...'} />
+        <Alert type={'success'} message={'Carregando...'} />
       </div>
     )
   if (isError)
     return (
       <div>
-        <Alert color={'red'} text={'white'} message={'Erro na requisição!'} />
+        <Alert type={'error'} message={'Erro na requisição!'} />
       </div>
     )
   if (!patientsPage || !Array.isArray(patientsPage))
     return (
       <div>
-        <Alert
-          color={'green'}
-          text={'white'}
-          message={'Não é uma lista de array.!'}
-        />
+        <Alert type={'warning'} message={'Não é uma lista de array.!'} />
       </div>
     )
 
@@ -56,7 +51,7 @@ export default function PatientsTable() {
     const filtered = patients.filter((patient) =>
       patient.name.toLowerCase().includes(search.toLowerCase()),
     )
-    setSearchPatients(filtered as any)
+    setSearchPatients(filtered)
     setCurrentPage(1)
   }
   function handleBiTrash() {
@@ -82,16 +77,12 @@ export default function PatientsTable() {
             ))}
           </datalist>
         </span>
-        <Button
-          onClick={handleBiTrash}
-          icon={<BiTrash />}
-          backgroundColor={'blue'}
-        />
-        <Button
-          onClick={handleSearch}
-          icon={<CiSearch />}
-          backgroundColor={'blue'}
-        />
+        <button onClick={handleBiTrash}>
+          <BiTrash />
+        </button>
+        <button onClick={handleSearch}>
+          <CiSearch />
+        </button>
       </div>
       <div className="w-[100%] h-[350px] sm:h-[500px] overflow-scroll">
         <Table>

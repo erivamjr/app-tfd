@@ -8,20 +8,75 @@ import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import useAppointment from '../Hooks/Api/Appointments/Appointments'
 import usePatients from '../Hooks/Api/Patiens/Patients'
 
-export default function DetailsPatients() {
-  const { id } = useParams()
-  const { patients, isLoading, isError } = usePatients()
-  const { appointments, isLoadingPoint, isErrorPoint } = useAppointment()
+export interface PatientProps {
+  id: string
+  name: string
+  gender: string
+  cpf: string
+  rg: string
+  address: string
+  phone: string
+  susCard: string
+  birthDate: string
+  motherName: string
+  active: string
+  priority: string
+  createdAt: string
+  updatedAt: string
+  userId: string
+  uf: string
+  cep: string
+  district: string
+  complement: string
+  city: string
+  number: string
+}
 
-  if (isLoading)
+export interface SpecialtyProps {
+  id: number
+  specialtyName: string
+  specialtyActive: boolean
+}
+
+export interface TypeAppointment {
+  id: string
+  specialtyId: number
+  patientId: string
+  userId: string
+  priority: string
+  appointmentDate: string
+  diagnosis: string
+  cid: string
+  requestingDoctor: string
+  crm: string
+  requestCode: string
+  requestDate: string
+  status: string
+  notes: string
+  active: boolean
+  createdAt: string
+  updatedAt: string
+  patient: PatientProps
+  specialty: SpecialtyProps
+}
+
+export default function DetailsPatients() {
+  const { id } = useParams<{ id: string }>()
+  const {
+    patients,
+    isLoading: isPatientsLoading,
+    isError: isPatientsError,
+  } = usePatients()
+  const {
+    appointments,
+    isLoading: isAppointmentsLoading,
+    isError: isAppointmentsError,
+  } = useAppointment()
+
+  if (isPatientsLoading || isAppointmentsLoading)
     return <DisplayMessage message={'Carregando'} color="green" text="white" />
 
-  const patient = patients && patients.find((patient) => patient.id === id)
-
-  const appointment = appointments
-    ? appointments.filter((appointment) => appointment.patientId === id)
-    : []
-  if (isError)
+  if (isPatientsError || isAppointmentsError)
     return (
       <DisplayMessage
         message={'Erro na solicitação.'}
@@ -29,10 +84,17 @@ export default function DetailsPatients() {
         text="white"
       />
     )
+
+  const patient = patients?.find((patient) => patient.id === id)
+  const appointment = appointments
+    ? appointments.filter((appointment) => appointment.patientId === id)
+    : []
+
   if (!patient)
     return (
       <DisplayMessage message={'Nenhum paciente localizado'} text="orange" />
     )
+
   return (
     <div>
       <AdminToolbar>
@@ -58,7 +120,6 @@ export default function DetailsPatients() {
           <div className="grid grid-cols-3 w-full p-3">
             <div className="flex flex-col gap-2">
               <span>Nome: {patient.name}</span>
-              <span>Gênero: {patient.gender}</span>
               <span>CPF: {patient.cpf}</span>
               <span>RG: {patient.rg}</span>
               <span>Cartão SUS: {patient.susCard}</span>
@@ -68,22 +129,15 @@ export default function DetailsPatients() {
               <span>Mãe: {patient.motherName}</span>
               <span>Logradouro: {patient.address}</span>
               <span>Cidade: {patient.city}</span>
-              <span>Estado: {patient.uf}</span>
             </div>
-            <div className="flex flex-col gap-2">
-              <span>Estado: {patient.state}</span>
-              <span>Cep: {patient.cep}</span>
-              <span>Numero: {patient.number}</span>
-              <span>Bairro: {patient.district}</span>
-              <span>Complemento: {patient.complement}</span>
-            </div>
+            <div className="flex flex-col gap-2"></div>
           </div>
           <div className="p-1 text-black font-bold">Histórico</div>
         </section>
         <DetailsTable
           item={appointment}
-          isErrorPoint={isErrorPoint}
-          isLoadingPoint={isLoadingPoint}
+          isErrorPoint={isAppointmentsError}
+          isLoadingPoint={isAppointmentsLoading}
         />
       </Container>
     </div>
