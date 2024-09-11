@@ -1,6 +1,5 @@
 import { CiFloppyDisk } from 'react-icons/ci'
 import { RiUserAddLine } from 'react-icons/ri'
-import Button from '../Ux/Button/Button'
 import Input from '../Ux/Input/Input'
 import Label from '../Ux/Label/Label'
 import Loading from '../Ux/Loading/Loading'
@@ -243,12 +242,9 @@ export default function RegisterPatients() {
                   </div>
                 </div>
                 <div>
-                  <Button
-                    icon={isLoading ? <Loading /> : <CiFloppyDisk />}
-                    title="Salvar"
-                    type="submit"
-                    disabled={isLoading}
-                  />
+                  <button type="submit" disabled={isLoading}>
+                    {isLoading ? <Loading /> : <CiFloppyDisk />}
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,18 +1,16 @@
+import { CiSearch } from 'react-icons/ci'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
-import { Pagination } from '../Ux/table/Pagination '
+import Input from '../Ux/Input/Input'
 import Table from '../Ux/table/Table'
 import TableCell from '../Ux/table/TableCell'
 import TableRow from '../Ux/table/TableRow'
-import { CiSearch } from 'react-icons/ci'
-import Input from '../Ux/Input/Input'
 
-// Use the previously defined AppointmentItem interface
 interface AppointmentItem {
   id: string
   specialtyId: number
   patientId: string
   userId: string
-  priority: 'Normal' | 'High' | 'Low'
+  priority: string
   appointmentDate: string
   diagnosis: string
   cid: string
@@ -20,7 +18,7 @@ interface AppointmentItem {
   crm: string
   requestCode: string
   requestDate: string
-  status: 'InProgress' | 'Completed' | 'Pending'
+  status: string
   notes: string
   active: boolean
   createdAt: string
@@ -28,7 +26,7 @@ interface AppointmentItem {
   patient: {
     id: string
     name: string
-    gender: 'M' | 'F'
+    gender: string
     cpf: string
     rg: string
     address: string
@@ -55,7 +53,7 @@ interface AppointmentItem {
     cpf: string
     email: string
     password: string
-    role: 'admin' | 'user'
+    role: string
     createdAt: string
     updatedAt: string
     active: boolean
@@ -63,34 +61,29 @@ interface AppointmentItem {
 }
 
 interface DetailsTableProps {
-  item: AppointmentItem | null // Adjusted type to match the defined interface
+  item: AppointmentItem
   isLoadingPoint: boolean
   isErrorPoint: boolean
 }
 
-export default function DetailsRequestTable({
+const DetailsRequestTable = ({
   item,
   isLoadingPoint,
   isErrorPoint,
-}: DetailsTableProps) {
+}: DetailsTableProps) => {
   if (isLoadingPoint) {
-    return <DisplayMessage message={'Carregando'} color="green" text="white" />
+    return <DisplayMessage message="Carregando" color="green" text="white" />
   }
 
-  console.log(item)
   if (isErrorPoint) {
     return (
-      <DisplayMessage
-        message={'Erro na solicitação.'}
-        color="red"
-        text="white"
-      />
+      <DisplayMessage message="Erro na solicitação." color="red" text="white" />
     )
   }
 
   if (!item) {
     return (
-      <DisplayMessage message={'Consultando ...'} color="yellow" text="white" />
+      <DisplayMessage message="Consultando ..." color="yellow" text="white" />
     )
   }
 
@@ -99,9 +92,10 @@ export default function DetailsRequestTable({
       <div className="flex flex-1 items-center space-x-2">
         <Input
           type="text"
-          name="pesquisar"
+          name="search"
+          value=""
+          onChange={() => {}}
           placeholder="Pesquisar"
-          className="flex-1"
         />
         <button className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded">
           <CiSearch />
@@ -109,16 +103,16 @@ export default function DetailsRequestTable({
       </div>
 
       <Table>
-        <TableRow isHeader>
-          <TableCell>Prioridade</TableCell>
-          <TableCell>Diagnóstico</TableCell>
-          <TableCell>Exame</TableCell>
-          <TableCell>Solicitação</TableCell>
-          <TableCell>CID</TableCell>
-          <TableCell>Médico</TableCell>
-          <TableCell>CRM</TableCell>
-          <TableCell>Agendamento</TableCell>
-          <TableCell>Status</TableCell>
+        <TableRow>
+          <TableCell isHeader>Prioridade</TableCell>
+          <TableCell isHeader>Diagnóstico</TableCell>
+          <TableCell isHeader>Exame</TableCell>
+          <TableCell isHeader>Solicitação</TableCell>
+          <TableCell isHeader>CID</TableCell>
+          <TableCell isHeader>Médico</TableCell>
+          <TableCell isHeader>CRM</TableCell>
+          <TableCell isHeader>Agendamento</TableCell>
+          <TableCell isHeader>Status</TableCell>
         </TableRow>
         <TableRow>
           <TableCell>{item.priority}</TableCell>
@@ -134,11 +128,11 @@ export default function DetailsRequestTable({
             {new Date(item.appointmentDate).toLocaleDateString()}
           </TableCell>
           <TableCell>
-            {item.status === 'InProgress' && 'Em andamento'}
+            {item.status === 'InProgress' ? 'Em andamento' : item.status}
           </TableCell>
         </TableRow>
-        <Pagination />
       </Table>
     </div>
   )
 }
+export default DetailsRequestTable

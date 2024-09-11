@@ -1,4 +1,3 @@
-import React from 'react'
 import CardHome from '../../Components/Dashboard/CardHome/CardHome'
 
 export default function Home() {

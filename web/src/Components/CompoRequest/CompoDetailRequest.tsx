@@ -9,9 +9,75 @@ import DetailsRequestTable from './DetailsRequestTable'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../Ux/Input/Input'
 
+export interface PatientProps {
+  id: string
+  name: string
+  gender: string
+  cpf: string
+  rg: string
+  address: string
+  phone: string
+  susCard: string
+  birthDate: string
+  motherName: string
+  active: boolean
+  priority: string
+  createdAt: string
+  updatedAt: string
+  userId: string
+  uf: string
+  cep: string
+  district: string
+  complement: string
+  city: string
+  number: string
+}
+
+export interface SpecialtyProps {
+  id: number
+  specialtyName: string
+  specialtyActive: boolean
+}
+
+export interface UserProps {
+  id: string
+  name: string
+  phone: string
+  cpf: string
+  email: string
+  password: string
+  role: string
+  createdAt: string
+  updatedAt: string
+  active: boolean
+}
+
+export interface TypeAppointment {
+  id: string
+  specialtyId: number
+  patientId: string
+  userId: string
+  priority: 'Pregnant' | 'Child' | 'Normal' | 'Elderly' | 'Emergency'
+  appointmentDate: string
+  diagnosis: string
+  cid: string
+  requestingDoctor: string
+  crm: string
+  requestCode: string
+  requestDate: string
+  status: string
+  notes: string
+  active: boolean
+  createdAt: string
+  updatedAt: string
+  patient: PatientProps
+  specialty: SpecialtyProps
+  user: UserProps
+}
+
 export default function CompoDetailsRequest() {
-  const { id } = useParams()
-  const { appointments, isLoadingPoint, isErrorPoint } = useAppointment()
+  const { id } = useParams<{ id: string }>()
+  const { appointments, isLoading, isError } = useAppointment()
 
   const appointment = appointments.find((appointment) => appointment.id === id)
 
@@ -20,7 +86,6 @@ export default function CompoDetailsRequest() {
   }
 
   const { patient } = appointment
-
   return (
     <div>
       <div className="flex flex-1 items-center space-x-2">
@@ -28,7 +93,8 @@ export default function CompoDetailsRequest() {
           type="text"
           name="pesquisar"
           placeholder="Pesquisar"
-          className="flex-1"
+          value=""
+          onChange={() => {}}
         />
         <button className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded">
           <CiSearch />
@@ -58,7 +124,6 @@ export default function CompoDetailsRequest() {
             <div className="flex flex-col gap-2">
               <span>Nome: {patient.name}</span>
               <span>Gênero: {patient.gender}</span>
-
               <span>CPF: {patient.cpf}</span>
               <span>RG: {patient.rg}</span>
               <span>Cartão SUS: {patient.susCard}</span>
@@ -67,13 +132,11 @@ export default function CompoDetailsRequest() {
               <span>Telefone: {patient.phone}</span>
               <span>Mãe: {patient.motherName}</span>
               <span>Logradouro: {patient.address}</span>
-              <span>Cidade: {patient.city}</span>
               <span>Estado: {patient.uf}</span>
             </div>
             <div className="flex flex-col gap-2">
-              <span>Estado: {patient.uf}</span>
               <span>Cep: {patient.cep}</span>
-              <span>Numero: {patient.number}</span>
+              <span>Número: {patient.number}</span>
               <span>Bairro: {patient.district}</span>
               <span>Complemento: {patient.complement}</span>
             </div>
@@ -82,8 +145,8 @@ export default function CompoDetailsRequest() {
         </section>
         <DetailsRequestTable
           item={appointment}
-          isErrorPoint={isErrorPoint}
-          isLoadingPoint={isLoadingPoint}
+          isError={isError}
+          isLoading={isLoading}
         />
       </Container>
     </div>

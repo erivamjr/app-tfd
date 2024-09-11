@@ -1,7 +1,5 @@
 import { CiFloppyDisk, CiSearch } from 'react-icons/ci'
 import { RiUserAddLine } from 'react-icons/ri'
-import AdminToolbar from '../Ux/AdminToolbar/AdminToolbar'
-import Button from '../Ux/Button/Button'
 import Input from '../Ux/Input/Input'
 import Label from '../Ux/Label/Label'
 import Loading from '../Ux/Loading/Loading'
@@ -18,7 +16,9 @@ export default function CreateRequest() {
   const { patients } = usePatients()
   const { specialties } = useSpecialties()
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
-  const [type, setType] = useState<string>('')
+  const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>(
+    'info',
+  )
   const [alertMessage, setAlertMessage] = useState<string>('')
 
   const [patientId, setPatientId] = useState<string>('')
@@ -64,7 +64,7 @@ export default function CreateRequest() {
     }
 
     try {
-      const response = await api.post('appointments', requestData)
+      await api.post('appointments', requestData)
       setType('success')
       setAlertMessage('Solicitação criada com sucesso!')
       setIsAlertOpen(true)
@@ -80,7 +80,7 @@ export default function CreateRequest() {
         setRequestCode('')
         setStatus('InProgress')
         setNotes('')
-        setType('')
+        setType('info')
         setAlertMessage('')
         setIsAlertOpen(false)
       }, 3000)
@@ -89,7 +89,7 @@ export default function CreateRequest() {
       setAlertMessage('Erro ao criar solicitação. Tente novamente.')
       setIsAlertOpen(true)
       setTimeout(() => {
-        setType('')
+        setType('info')
         setAlertMessage('')
         setIsAlertOpen(false)
       }, 3000)
@@ -97,6 +97,7 @@ export default function CreateRequest() {
       setIsLoading(false)
     }
   }
+
   return (
     <div>
       <Modal
@@ -111,10 +112,8 @@ export default function CreateRequest() {
               <div className="text-lg font-semibold mb-2">Dados Pessoais</div>
               <div>
                 <Label label="Nome do Paciente" />
-
-                <Input
+                <input
                   list="patients-list"
-                  name="patientId"
                   placeholder="Selecione o paciente"
                   value={patientId}
                   onChange={(e) => setPatientId(e.target.value)}
@@ -246,12 +245,7 @@ export default function CreateRequest() {
             </div>
           </div>
           <div className="flex justify-end mt-4">
-            <Button
-              icon={isLoading ? <Loading /> : <CiFloppyDisk />}
-              title="Salvar"
-              backgroundColor={'#007bff'}
-              color={'#fff'}
-            />
+            <button>{isLoading ? <Loading /> : <CiFloppyDisk />}</button>
           </div>
         </form>
       </Modal>
@@ -263,7 +257,9 @@ export default function CreateRequest() {
           <span className="hidden md:block">Adicionar Solicitação</span>
           <RiUserAddLine />
         </div>
-        <Button title="Buscar Solicitação" icon={<CiSearch />} />
+        <button>
+          <CiSearch />
+        </button>
       </div>
     </div>
   )

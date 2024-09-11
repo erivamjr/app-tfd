@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom'
 import Input from '../../Components/Ux/Input/Input'
 import Logo from '../../Components/Ux/Logo/Vector.png'
-import Button from '../Ux/Button/Button'
 import { useContext, useState } from 'react'
 import { AuthContext } from '../Context/Auth'
 
 export default function CompoLogin() {
-  const { autenticado, login } = useContext(AuthContext)
+  const { login } = useContext(AuthContext)
 
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
@@ -40,7 +39,6 @@ export default function CompoLogin() {
                   name="email"
                   value={email}
                   onChange={(e) => {
-                    e.preventDefault()
                     setEmail(e.target.value)
                   }}
                   placeholder="Digite seu email"
@@ -48,19 +46,18 @@ export default function CompoLogin() {
               </div>
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Senha</label>
-                <Input
+                <input
                   type="password"
                   name="password"
                   value={password}
                   onChange={(e) => {
-                    e.preventDefault()
                     setPassword(e.target.value)
                   }}
                   placeholder="Digite sua senha"
                 />
               </div>
               <div className="w-full">
-                <Button onClick={handleSubmit} title="Entrar" />
+                <button onClick={handleSubmit}>Entrar</button>
               </div>
             </form>
             <a href="#" className="mt-4 text-sm text-gray-500">
