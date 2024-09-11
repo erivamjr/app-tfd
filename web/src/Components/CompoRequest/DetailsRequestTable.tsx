@@ -1,9 +1,9 @@
 import { CiSearch } from 'react-icons/ci'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import Input from '../Ux/Input/Input'
-import Table from '../Ux/table/Table'
-import TableCell from '../Ux/table/TableCell'
-import TableRow from '../Ux/table/TableRow'
+import TableCell from '../Ux/Table/TableCell'
+import TableRow from '../Ux/Table/TableRow'
+import Table from '../Ux/Table/Table'
 
 interface AppointmentItem {
   id: string

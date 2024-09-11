@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface DisplayMessageProps {
-  isLoading?: any
+  isLoading?: boolean
   message: string
   color?: string
   text?: string

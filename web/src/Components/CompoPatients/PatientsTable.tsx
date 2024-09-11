@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react'
-import Table from '../Ux/table/Table'
-import { Pagination } from '../Ux/table/Pagination '
-import { TableActions } from '../Ux/table/TableActions'
-import TableCell from '../Ux/table/TableCell'
-import TableRow from '../Ux/table/TableRow'
+
 import { TbReportSearch } from 'react-icons/tb'
 import { FaRegEdit } from 'react-icons/fa'
 import { RiDeleteBin6Line } from 'react-icons/ri'
@@ -13,6 +9,12 @@ import Input from '../Ux/Input/Input'
 import usePatientsPage from '../Hooks/Api/Patiens/PatientsPage'
 import usePatients from '../Hooks/Api/Patiens/Patients'
 import { BiTrash } from 'react-icons/bi'
+import { Pagination } from '../Ux/Table/Pagination '
+import Table from '../Ux/Table/Table'
+import { TableActions } from '../Ux/Table/TableActions'
+import TableCell from '../Ux/Table/TableCell'
+import TableRow from '../Ux/Table/TableRow'
+import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
 
 export default function PatientsTable() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -23,7 +25,7 @@ export default function PatientsTable() {
     currentPage,
     itemsPerPage,
   )
-  const [searchPatients, setSearchPatients] = useState<any[]>([])
+  const [searchPatients, setSearchPatients] = useState<Patient[]>([])
   useEffect(() => {
     setSearchPatients(patientsPage || [])
   }, [patientsPage])
@@ -102,11 +104,12 @@ export default function PatientsTable() {
                 <TableCell>{patient.phone}</TableCell>
                 <TableCell>{patient.usuario}</TableCell>
                 <TableCell>
-                  {new Date(patient.createdAt).toLocaleDateString('pt-BR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
+                  {patient.createdAt &&
+                    new Date(patient.createdAt).toLocaleDateString('pt-BR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-between items-center w-full">

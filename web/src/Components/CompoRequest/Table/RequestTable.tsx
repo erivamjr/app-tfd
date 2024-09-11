@@ -1,14 +1,15 @@
 import React from 'react'
-import Table from '../../Ux/table/Table'
-import { TableActions } from '../../Ux/table/TableActions'
-import TableCell from '../../Ux/table/TableCell'
-import TableRow from '../../Ux/table/TableRow'
+
 import { FaRegEdit } from 'react-icons/fa'
 import { RiDeleteBin6Line } from 'react-icons/ri'
 import { TbReportSearch } from 'react-icons/tb'
 import useAppointment from '../../Hooks/Api/Appointments/Appointments'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../../Ux/Input/Input'
+import Table from '../../Ux/Table/Table'
+import { TableActions } from '../../Ux/Table/TableActions'
+import TableCell from '../../Ux/Table/TableCell'
+import TableRow from '../../Ux/Table/TableRow'
 
 export default function RequestTable() {
   const { appointments } = useAppointment()

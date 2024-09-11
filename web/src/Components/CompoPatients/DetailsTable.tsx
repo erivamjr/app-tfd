@@ -1,9 +1,10 @@
-import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
-import Table from '../Ux/table/Table'
-import TableRow from '../Ux/table/TableRow'
-import TableCell from '../Ux/table/TableCell'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../Ux/Input/Input'
+import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
+import Table from '../Ux/Table/Table'
+import TableRow from '../Ux/Table/TableRow'
+import TableCell from '../Ux/Table/TableCell'
+
 interface Patient {
   id: string
   name: string

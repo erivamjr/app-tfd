@@ -1,7 +1,7 @@
-import Table from '../Ux/table/Table'
-import { TableActions } from '../Ux/table/TableActions'
-import TableCell from '../Ux/table/TableCell'
-import TableRow from '../Ux/table/TableRow'
+import Table from '../Ux/Table/Table'
+import { TableActions } from '../Ux/Table/TableActions'
+import TableCell from '../Ux/Table/TableCell'
+import TableRow from '../Ux/Table/TableRow'
 
 const userData = [
   {

@@ -1,4 +1,6 @@
 export interface Patient {
+  usuario?: string
+  createdAt?: string | number | Date
   id: string
   name: string
   cpf: string
