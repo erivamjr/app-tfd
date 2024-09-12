@@ -7,12 +7,14 @@ import { AuthContext } from '../Context/Auth'
 export default function CompoLogin() {
   const { login } = useContext(AuthContext)
 
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   function handleSubmit(e) {
     e.preventDefault()
-    login(email, password)
+    if (email && password) {
+      login(email, password)
+    }
   }
 
   return (

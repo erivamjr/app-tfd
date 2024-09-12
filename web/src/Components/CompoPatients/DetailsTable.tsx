@@ -51,7 +51,6 @@ interface item {
   patientId: string
   userId: string
   priority: string
-  itemDate: string
   diagnosis: string
   cid: string
   requestingDoctor: string
@@ -135,13 +134,13 @@ export default function DetailsTable({
             <TableCell>{itemData.diagnosis}</TableCell>
             <TableCell>{itemData.specialty.name}</TableCell>
             <TableCell>
-              {new Date(itemData.itemDate).toLocaleDateString()}
+              {new Date(itemData.createdAt).toLocaleDateString()}
             </TableCell>
             <TableCell>{itemData.cid}</TableCell>
             <TableCell>{itemData.requestingDoctor}</TableCell>
             <TableCell>{itemData.crm}</TableCell>
             <TableCell>
-              {new Date(itemData.itemDate).toLocaleDateString()}
+              {new Date(itemData.createdAt).toLocaleDateString()}
             </TableCell>
             <TableCell>{itemData.status}</TableCell>
           </TableRow>

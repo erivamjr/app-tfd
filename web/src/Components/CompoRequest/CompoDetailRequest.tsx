@@ -16,27 +16,26 @@ export interface PatientProps {
   cpf: string
   rg: string
   address: string
+  number: string
+  complement: string
+  district: string
+  city: string
+  state: string
+  zipCode: string
   phone: string
   susCard: string
   birthDate: string
   motherName: string
   active: boolean
-  priority: string
   createdAt: string
   updatedAt: string
   userId: string
-  uf: string
-  cep: string
-  district: string
-  complement: string
-  city: string
-  number: string
 }
 
 export interface SpecialtyProps {
   id: number
-  specialtyName: string
-  specialtyActive: boolean
+  name: string
+  active: boolean
 }
 
 export interface UserProps {
@@ -80,6 +79,7 @@ export default function CompoDetailsRequest() {
   const { appointments, isLoading, isError } = useAppointment()
 
   const appointment = appointments.find((appointment) => appointment.id === id)
+  console.log('CONSOLANDO', appointment)
 
   if (!appointment) {
     return <DisplayMessage message="Agendamento não encontrado." />
@@ -132,7 +132,7 @@ export default function CompoDetailsRequest() {
               <span>Telefone: {patient.phone}</span>
               <span>Mãe: {patient.motherName}</span>
               <span>Logradouro: {patient.address}</span>
-              <span>Estado: {patient.uf}</span>
+              <span>Estado: {patient.state}</span>
             </div>
             <div className="flex flex-col gap-2">
               <span>Cep: {patient.cep}</span>

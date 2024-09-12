@@ -62,20 +62,20 @@ interface AppointmentItem {
 
 interface DetailsTableProps {
   item: AppointmentItem
-  isLoadingPoint: boolean
-  isErrorPoint: boolean
+  isLoading: boolean
+  isError: boolean
 }
 
 const DetailsRequestTable = ({
   item,
-  isLoadingPoint,
-  isErrorPoint,
+  isLoading,
+  isError,
 }: DetailsTableProps) => {
-  if (isLoadingPoint) {
+  if (isLoading) {
     return <DisplayMessage message="Carregando" color="green" text="white" />
   }
 
-  if (isErrorPoint) {
+  if (isError) {
     return (
       <DisplayMessage message="Erro na solicitação." color="red" text="white" />
     )

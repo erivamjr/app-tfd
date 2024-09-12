@@ -1,3 +1,5 @@
+import { UserProps } from '../../../CompoRequest/CompoDetailRequest'
+
 export interface PatientProps {
   id: string
   name: string
@@ -9,12 +11,12 @@ export interface PatientProps {
   susCard: string
   birthDate: string
   motherName: string
-  active: string
-  priority: string
+  active: boolean
   createdAt: string
   updatedAt: string
   userId: string
-  uf: string
+  state: string
+  zipCode: string
   cep: string
   district: string
   complement: string
@@ -23,8 +25,8 @@ export interface PatientProps {
 }
 export interface SpecialtyProps {
   id: number
-  specialtyName: string
-  specialtyActive: boolean
+  name: string
+  active: boolean
 }
 
 export interface TypeAppointment {
@@ -47,4 +49,5 @@ export interface TypeAppointment {
   updatedAt: string
   patient: PatientProps
   specialty: SpecialtyProps
+  user: UserProps
 }

@@ -15,13 +15,12 @@ const useSpecialties = () => {
     const fetchSpecialties = async () => {
       try {
         setIsLoading(true)
-        const response = await api.get<{
-          data: specialties[]
-        }>(`/specialties`, { signal })
+        const response = await api.get(`/specialties`, { signal })
 
         setSpecialties(response.data)
       } catch (error) {
         if (axios.isAxiosError(error) && error.message === 'canceled') {
+          console.error('Error fetching data:', error) // without code
         } else {
           console.error('Error fetching data:', error)
           setIsError(true)
