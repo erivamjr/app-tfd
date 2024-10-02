@@ -41,6 +41,7 @@ export class PatientsService {
         where: {
           active: true,
         },
+        include: { user: true },
         skip: offset,
         take: limitt,
       }),
