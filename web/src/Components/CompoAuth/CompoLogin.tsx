@@ -19,10 +19,10 @@ export default function CompoLogin() {
 
   return (
     <div className=" w-screen relative min-h-screen bg-gray-100">
-      <div className="absolute z-10 h-screen w-1/2 bg-[#008BAD] flex items-center justify-center"></div>
+      <div className="absolute z-10 h-screen w-1/2 bg-blue-500 flex items-center justify-center"></div>
       <div className="relative z-20 flex items-center justify-center min-h-screen">
         <div className="flex w-[800px] shadow-lg">
-          <div className="flex items-center justify-center w-1/2 bg-[#008BAD]">
+          <div className="flex items-center justify-center w-1/2 bg-blue-500">
             <img
               src={Logo}
               alt="Logo"
@@ -35,7 +35,7 @@ export default function CompoLogin() {
             <h2 className="mb-6 text-2xl font-bold">Login</h2>
             <form className="w-full">
               <div className="space-y-2">
-                <label className="block text-sm font-medium">Email</label>
+                <label className="block text-sm font-medium my-2">Email</label>
                 <Input
                   type="email"
                   name="email"
@@ -47,8 +47,8 @@ export default function CompoLogin() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium">Senha</label>
-                <input
+                <label className="block text-sm font-medium  my-2">Senha</label>
+                <Input
                   type="password"
                   name="password"
                   value={password}
@@ -58,8 +58,13 @@ export default function CompoLogin() {
                   placeholder="Digite sua senha"
                 />
               </div>
-              <div className="w-full">
-                <button onClick={handleSubmit}>Entrar</button>
+              <div className="w-full py-2">
+                <button
+                  onClick={handleSubmit}
+                  className="bg-blue-500 py-2 my-2 px-8 rounded-md text-white hover:bg-blue-700 duration-300"
+                >
+                  Entrar
+                </button>
               </div>
             </form>
             <a href="#" className="mt-4 text-sm text-gray-500">
@@ -67,7 +72,7 @@ export default function CompoLogin() {
             </a>
             <Link
               to="/auth?mode=create-account"
-              className="mt-4 text-sm text-gray-500"
+              className="my-2 text-sm text-gray-500"
             >
               Não tem cadastro? Crie uma conta
             </Link>

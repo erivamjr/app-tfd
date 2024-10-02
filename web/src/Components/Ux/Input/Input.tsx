@@ -25,7 +25,7 @@ export default function Input({
       value={value}
       onChange={onChange}
       list={list}
-      className="mt-1 block w-full rounded-md p-2 border"
+      className="block w-full rounded-md p-2 border"
       required
     />
   )

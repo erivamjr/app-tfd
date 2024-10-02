@@ -4,10 +4,10 @@ import Logo from '../../Components/Ux/Logo/Vector.png'
 export default function CompoCreateAccount() {
   return (
     <div className="relative min-h-screen bg-gray-100">
-      <div className="absolute z-10 h-screen w-1/2 bg-[#008BAD] flex items-center justify-center"></div>
+      <div className="absolute z-10 h-screen w-1/2 bg-blue-500 flex items-center justify-center"></div>
       <div className="relative z-20 flex items-center justify-center min-h-screen">
         <div className="flex w-[800px] shadow-lg">
-          <div className="flex items-center justify-center w-1/2 bg-[#008BAD]">
+          <div className="flex items-center justify-center w-1/2 bg-blue-500">
             <img
               src={Logo}
               alt="Logo"
@@ -30,7 +30,7 @@ export default function CompoCreateAccount() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium">Email</label>
+                <label className="block text-sm font-medium my-2">Email</label>
                 <Input
                   type="email"
                   name="email"
@@ -40,7 +40,7 @@ export default function CompoCreateAccount() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium">Senha</label>
+                <label className="block text-sm font-medium my-2">Senha</label>
                 <Input
                   type="password"
                   name="password"
@@ -50,7 +50,7 @@ export default function CompoCreateAccount() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium">
+                <label className="block text-sm font-medium my-2">
                   Confirme a Senha
                 </label>
                 <Input
@@ -61,11 +61,16 @@ export default function CompoCreateAccount() {
                   placeholder="Confirme sua senha"
                 />
               </div>
-              <div className="w-full">
-                <button type="submit">Cadastrar</button>
+              <div className="w-full py-2">
+                <button
+                  type="submit"
+                  className="bg-blue-500 py-2 my-2 px-8 rounded-md text-white hover:bg-blue-700 duration-300"
+                >
+                  Cadastrar
+                </button>
               </div>
             </form>
-            <Link to="/auth?mode=login" className="mt-4 text-sm text-gray-500">
+            <Link to="/auth?mode=login" className="my-2 text-sm text-gray-500">
               Já tem uma conta? Entrar
             </Link>
           </div>
