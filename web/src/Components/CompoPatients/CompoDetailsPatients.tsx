@@ -61,7 +61,6 @@ export interface TypeAppointment {
 }
 
 export default function DetailsPatients() {
-  
   const { id } = useParams<{ id: string }>()
   console.log(id)
   const {
