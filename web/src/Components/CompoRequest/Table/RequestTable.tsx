@@ -1,4 +1,4 @@
-import React from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import { FaRegEdit } from 'react-icons/fa'
 import { RiDeleteBin6Line } from 'react-icons/ri'
@@ -13,9 +13,9 @@ import TableRow from '../../Ux/Table/TableRow'
 
 export default function RequestTable() {
   const { appointments } = useAppointment()
-  const [searchValue, setSearchValue] = React.useState('')
+  const [searchValue, setSearchValue] = useState('')
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
   }
 
@@ -38,7 +38,7 @@ export default function RequestTable() {
           <TableCell isHeader>Nome</TableCell>
           <TableCell isHeader>CPF</TableCell>
           <TableCell isHeader>Telefone</TableCell>
-          <TableCell isHeader>Usuario</TableCell>
+          <TableCell isHeader>Especialidade</TableCell>
           <TableCell isHeader>Data de Cadastro</TableCell>
           <TableCell isHeader>Configurações</TableCell>
         </TableRow>
@@ -48,7 +48,7 @@ export default function RequestTable() {
               <TableCell>{user.patient.name}</TableCell>
               <TableCell>{user.patient.cpf}</TableCell>
               <TableCell>{user.patient.phone}</TableCell>
-              <TableCell>{user.patient.userId}</TableCell>
+              <TableCell>{user.specialty.name}</TableCell>
               <TableCell>
                 {new Date(user.createdAt).toLocaleDateString('pt-BR', {
                   year: 'numeric',
