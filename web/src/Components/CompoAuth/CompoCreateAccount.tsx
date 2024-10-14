@@ -11,7 +11,7 @@ export default function CompoCreateAccount() {
             <img
               src={Logo}
               alt="Logo"
-              className="w-48 h-48"
+              className="w-48 h-48 rounded-md"
               width="200"
               height="200"
             />

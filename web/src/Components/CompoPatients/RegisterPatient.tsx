@@ -241,9 +241,16 @@ export default function RegisterPatients() {
                     />
                   </div>
                 </div>
-                <div>
+                <div className="flex justify-center">
                   <button type="submit" disabled={isLoading}>
-                    {isLoading ? <Loading /> : <CiFloppyDisk />}
+                    {isLoading ? (
+                      <Loading />
+                    ) : (
+                      <div className=" bg-blue-600 text-white hover:bg-blue-500 py-2 px-8 rounded flex items-center gap-2 cursor-pointer">
+                        <CiFloppyDisk size={24} fill="white" />
+                        Salvar
+                      </div>
+                    )}
                   </button>
                 </div>
               </div>

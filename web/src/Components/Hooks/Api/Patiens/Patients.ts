@@ -18,10 +18,12 @@ const usePatients = () => {
         const response = await api.get<{
           data: Patient[]
         }>(`/patients`, { signal })
+        console.log(response.data)
 
         setPatients(response.data.data)
       } catch (error) {
         if (axios.isAxiosError(error) && error.message === 'canceled') {
+          console.log('Request was canceled.')
         } else {
           console.error('Error fetching data:', error)
           setIsError(true)
