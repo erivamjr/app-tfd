@@ -75,7 +75,9 @@ export default function RegisterPatients() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="w-full flex">
             <div className="border-r-2 flex-1 p-3">
-              <div>Dados Pessoais</div>
+              <div>
+                <h1 className="text-bold text-2xl pb-2">Dados Pessoais</h1>
+              </div>
               <div className="space-y-4">
                 <div>
                   <Label label="Nome Completo" />
@@ -89,37 +91,16 @@ export default function RegisterPatients() {
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <Label label="CPF" />
+                    <Label label="Data de Nascimento" />
                     <Input
-                      type="text"
-                      name="cpf"
-                      placeholder="Digite o CPF"
-                      value={cpf}
-                      onChange={(e) => setCpf(e.target.value)}
+                      type="date"
+                      name="birthDate"
+                      placeholder="Data de Nascimento"
+                      value={birthDate}
+                      onChange={(e) => setBirthDate(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <Label label="RG" />
-                    <Input
-                      type="text"
-                      name="rg"
-                      placeholder="Digite o RG"
-                      value={rg}
-                      onChange={(e) => setRg(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label label="Telefone" />
-                    <Input
-                      type="text"
-                      name="phone"
-                      placeholder="Telefone"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                    />
-                  </div>
+
                   <div>
                     <Label label="Gênero" />
                     <Input
@@ -130,8 +111,29 @@ export default function RegisterPatients() {
                       onChange={(e) => setGender(e.target.value)}
                     />
                   </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
+
+                  <div>
+                    <Label label="CPF" />
+                    <Input
+                      type="text"
+                      name="cpf"
+                      placeholder="Digite o CPF"
+                      value={cpf}
+                      onChange={(e) => setCpf(e.target.value)}
+                    />
+                  </div>
+
+                  <div>
+                    <Label label="RG" />
+                    <Input
+                      type="text"
+                      name="rg"
+                      placeholder="Digite o RG"
+                      value={rg}
+                      onChange={(e) => setRg(e.target.value)}
+                    />
+                  </div>
+
                   <div>
                     <Label label="Número do SUS" />
                     <Input
@@ -142,18 +144,7 @@ export default function RegisterPatients() {
                       onChange={(e) => setSusCard(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <Label label="Data de Nascimento" />
-                    <Input
-                      type="date"
-                      name="birthDate"
-                      placeholder="Data de Nascimento"
-                      value={birthDate}
-                      onChange={(e) => setBirthDate(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
+
                   <div>
                     <Label label="Nome da Mãe" />
                     <Input
@@ -164,62 +155,18 @@ export default function RegisterPatients() {
                       onChange={(e) => setMotherName(e.target.value)}
                     />
                   </div>
+
                   <div>
-                    <Label label="Número" />
+                    <Label label="Telefone" />
                     <Input
                       type="text"
-                      name="number"
-                      placeholder="Digite o número"
-                      value={number}
-                      onChange={(e) => setNumber(e.target.value)}
+                      name="phone"
+                      placeholder="Telefone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
                     />
                   </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label label="Complemento" />
-                    <Input
-                      type="text"
-                      name="complement"
-                      placeholder="Digite o complemento"
-                      value={complement}
-                      onChange={(e) => setComplement(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <Label label="Estado" />
-                    <Input
-                      type="text"
-                      name="state"
-                      placeholder="Digite o estado"
-                      value={state}
-                      onChange={(e) => setState(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label label="Bairro" />
-                    <Input
-                      type="text"
-                      name="district"
-                      placeholder="Digite o bairro"
-                      value={district}
-                      onChange={(e) => setDistrict(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <Label label="Cidade" />
-                    <Input
-                      type="text"
-                      name="city"
-                      placeholder="Digite a cidade"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
+
                   <div>
                     <Label label="Endereço" />
                     <Input
@@ -230,6 +177,62 @@ export default function RegisterPatients() {
                       onChange={(e) => setAddress(e.target.value)}
                     />
                   </div>
+
+                  <div>
+                    <Label label="Número" />
+                    <Input
+                      type="text"
+                      name="number"
+                      placeholder="Digite o número"
+                      value={number}
+                      onChange={(e) => setNumber(e.target.value)}
+                    />
+                  </div>
+
+                  <div>
+                    <Label label="Complemento" />
+                    <Input
+                      type="text"
+                      name="complement"
+                      placeholder="Digite o complemento"
+                      value={complement}
+                      onChange={(e) => setComplement(e.target.value)}
+                    />
+                  </div>
+
+                  <div>
+                    <Label label="Bairro" />
+                    <Input
+                      type="text"
+                      name="district"
+                      placeholder="Digite o bairro"
+                      value={district}
+                      onChange={(e) => setDistrict(e.target.value)}
+                    />
+                  </div>
+
+                  <div>
+                    <Label label="Cidade" />
+                    <Input
+                      type="text"
+                      name="city"
+                      placeholder="Digite a cidade"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                    />
+                  </div>
+
+                  <div>
+                    <Label label="Estado" />
+                    <Input
+                      type="text"
+                      name="state"
+                      placeholder="Digite o estado"
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                    />
+                  </div>
+
                   <div>
                     <Label label="CEP" />
                     <Input
@@ -241,6 +244,7 @@ export default function RegisterPatients() {
                     />
                   </div>
                 </div>
+
                 <div className="flex justify-center">
                   <button type="submit" disabled={isLoading}>
                     {isLoading ? (
