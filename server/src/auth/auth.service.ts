@@ -100,7 +100,7 @@ export class AuthService {
         id: user.id,
       },
       {
-        expiresIn: '15 minutes',
+        expiresIn: '7 days', // was 15 minutes
         subject: String(user.id),
         issuer: 'forget',
         audience: this.audience,
