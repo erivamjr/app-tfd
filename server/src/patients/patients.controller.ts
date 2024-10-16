@@ -32,8 +32,18 @@ export class PatientsController {
   }
 
   @Get()
-  findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
-    return this.patientsService.findAll({ page, limit });
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('orderBy') orderBy: 'name' | 'date' = 'name',
+    @Query('orderDirection') orderDirection: 'asc' | 'desc' = 'asc',
+  ) {
+    return this.patientsService.findAll({
+      page,
+      limit,
+      orderBy,
+      orderDirection,
+    });
   }
 
   @Get('search')
