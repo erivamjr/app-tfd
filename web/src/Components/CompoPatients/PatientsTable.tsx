@@ -26,6 +26,7 @@ export default function PatientsTable() {
     itemsPerPage,
   )
   const [searchPatients, setSearchPatients] = useState<Patient[]>([])
+
   useEffect(() => {
     setSearchPatients(patientsPage || [])
   }, [patientsPage])

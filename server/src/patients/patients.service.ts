@@ -22,8 +22,13 @@ export class PatientsService {
     });
   }
 
-  async findAll(paginationParams: { page: number; limit: number }) {
-    const { page, limit } = paginationParams;
+  async findAll(paginationParams: {
+    page: number;
+    limit: number;
+    orderBy?: 'name' | 'date';
+    orderDirection?: 'asc' | 'desc';
+  }) {
+    const { page, limit, orderBy, orderDirection } = paginationParams;
 
     let paget = Number(page);
     let limitt = Number(limit);
@@ -36,6 +41,12 @@ export class PatientsService {
     }
     const offset = (paget - 1) * limitt;
 
+    // Configura a ordenação padrão
+    const orderCriteria =
+      orderBy === 'date'
+        ? { createdAt: orderDirection || 'asc' }
+        : { name: orderDirection || 'asc' };
+
     const [data, total] = await this.prisma.$transaction([
       this.prisma.patient.findMany({
         where: {
@@ -44,8 +55,13 @@ export class PatientsService {
         include: { user: true },
         skip: offset,
         take: limitt,
+        orderBy: orderCriteria, // Adiciona a ordenação
       }),
-      this.prisma.patient.count(),
+      this.prisma.patient.count({
+        where: {
+          active: true,
+        },
+      }),
     ]);
 
     return {

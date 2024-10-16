@@ -136,8 +136,8 @@ function MenuItem({
       onClick={handleClick}
       className={`flex gap-1 items-center p-2 cursor-pointer ${
         isActive
-          ? 'w-full bg-white rounded text-[#006A85]'
-          : 'hover:text-blue-300'
+          ? 'w-full bg-white rounded text-blue-600'
+          : 'hover:text-blue-200'
       } ${sideBar ? 'justify-center' : ''}`}
     >
       <span>{icon}</span>
