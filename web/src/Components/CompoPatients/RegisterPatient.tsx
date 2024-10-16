@@ -263,7 +263,7 @@ export default function RegisterPatients() {
         </form>
       </Modal>
       <div className="flex justify-end p-3">
-        <div
+        <button
           onClick={handleOpenModal}
           className="ml-10 bg-blue-600 text-white hover:bg-blue-500 p-2 rounded flex items-center gap-2 cursor-pointer"
         >
@@ -271,7 +271,7 @@ export default function RegisterPatients() {
             <RiUserAddLine />
           </span>
           <span>Cadastrar</span>
-        </div>
+        </button>
       </div>
     </div>
   )
