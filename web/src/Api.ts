@@ -1,6 +1,8 @@
-import axios from 'axios'
+import axios from "axios";
 const api = axios.create({
-  baseURL: 'https://app-tfd.onrender.com/',
-})
+  baseURL: "http://localhost:3000",
+});
 
-export default api
+// 'https://app-tfd.onrender.com/'
+
+export default api;
