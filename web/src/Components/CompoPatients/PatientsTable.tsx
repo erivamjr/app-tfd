@@ -118,21 +118,21 @@ export default function PatientsTable() {
                       id={patient.id}
                       url={'detalhespaciente'}
                       icon={<TbReportSearch />}
-                      color={'yellow'}
+                      color={'bg-blue-500 hover:bg-blue-700'}
                       text={'white'}
                     />
                     <TableActions
                       id={patient.id}
                       url={'detalhespaciente'}
                       icon={<FaRegEdit />}
-                      color={'green'}
+                      color={'bg-green-500 hover:bg-green-700'}
                       text={'white'}
                     />
                     <TableActions
                       id={patient.id}
                       url={'detalhespaciente'}
                       icon={<RiDeleteBin6Line />}
-                      color={'red'}
+                      color={'bg-red-500 hover:bg-red-700'}
                       text={'white'}
                     />
                   </div>

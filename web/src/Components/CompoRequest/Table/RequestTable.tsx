@@ -62,21 +62,21 @@ export default function RequestTable() {
                     id={user.id}
                     url={'detalhessolicitacao'}
                     icon={<TbReportSearch />}
-                    color={'yellow'}
+                    color={'bg-blue-500 hover:bg-blue-700'}
                     text={'white'}
                   />
                   <TableActions
                     id={user.id}
                     url={'editarsolicitacao'}
                     icon={<FaRegEdit />}
-                    color={'green'}
+                    color={'bg-green-500 hover:bg-green-700'}
                     text={'white'}
                   />
                   <TableActions
                     id={user.id}
                     url={'excluir'}
                     icon={<RiDeleteBin6Line />}
-                    color={'red'}
+                    color={'bg-red-500 hover:bg-red-700'}
                     text={'white'}
                   />
                 </div>
