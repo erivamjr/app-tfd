@@ -8,7 +8,6 @@ import { CiSearch } from 'react-icons/ci'
 import Input from '../Ux/Input/Input'
 import usePatientsPage from '../Hooks/Api/Patiens/PatientsPage'
 import usePatients from '../Hooks/Api/Patiens/Patients'
-import { BiTrash } from 'react-icons/bi'
 import { Pagination } from '../Ux/Table/Pagination '
 import Table from '../Ux/Table/Table'
 import { TableActions } from '../Ux/Table/TableActions'
@@ -31,6 +30,8 @@ export default function PatientsTable() {
     setSearchPatients(patientsPage || [])
   }, [patientsPage])
 
+  console.log(searchPatients)
+
   if (isLoading)
     return (
       <div>
@@ -50,21 +51,21 @@ export default function PatientsTable() {
       </div>
     )
 
-  function handleSearch() {
+  function handleSearch(event) {
+    event.preventDefault()
     const filtered = patients.filter((patient) =>
       patient.name.toLowerCase().includes(search.toLowerCase()),
     )
     setSearchPatients(filtered)
     setCurrentPage(1)
   }
-  function handleBiTrash() {
-    setSearchPatients(patientsPage)
-    setCurrentPage(1)
-    setSearch('')
-  }
+
   return (
     <div>
-      <div className="w-full flex items-center justify-center gap-2 mb-5">
+      <form
+        onSubmit={handleSearch}
+        className="w-full flex items-center justify-center gap-2 mb-5"
+      >
         <span className="w-full">
           <Input
             type="text"
@@ -74,20 +75,18 @@ export default function PatientsTable() {
             onChange={(e) => setSearch(e.target.value)}
             list="patients-list"
           />
-          <datalist id="patients-list">
-            {patients.map((patient) => (
-              <option key={patient.id} value={patient.name} />
-            ))}
-          </datalist>
         </span>
-        <button onClick={handleBiTrash}>
-          <BiTrash />
+
+        <button
+          type="submit"
+          className="flex gap-2 bg-blue-500 p-2 text-white rounded hover:bg-blue-600"
+        >
+          <CiSearch size={24} />
+          <p>Buscar</p>
         </button>
-        <button onClick={handleSearch}>
-          <CiSearch />
-        </button>
-      </div>
-      <div className="w-[100%] h-[350px] sm:h-[500px] overflow-scroll">
+      </form>
+
+      <div className="w-[100%] h-[350px] sm:h-[500px] overflow-hidden">
         <Table>
           <TableRow>
             <TableCell isHeader>Nome</TableCell>
@@ -140,7 +139,7 @@ export default function PatientsTable() {
               </TableRow>
             ))}
         </Table>
-        <div className=" mb-5 lg:absolute lg:bottom-5 ">
+        <div className=" mb-5 lg:bottom-5 ">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

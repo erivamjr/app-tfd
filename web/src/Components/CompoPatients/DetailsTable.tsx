@@ -148,7 +148,7 @@ export default function DetailsTable({
       </Table>
 
       {/* Seção de Paginação */}
-      <div className="flex justify-center mt-4">
+      <div className="flex self-start justify-center mt-4">
         <div className="flex gap-3">
           <a href="#">«</a>
           <a href="#">1</a>
