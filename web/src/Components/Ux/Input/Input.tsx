@@ -7,6 +7,7 @@ interface InputProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   list?: string
   placeholder?: string
+  required?: boolean
 }
 
 export default function Input({
@@ -16,6 +17,7 @@ export default function Input({
   onChange,
   list,
   placeholder,
+  required,
 }: InputProps) {
   return (
     <input
@@ -26,7 +28,7 @@ export default function Input({
       onChange={onChange}
       list={list}
       className="block w-full rounded-md p-2 border"
-      required
+      required={required}
     />
   )
 }

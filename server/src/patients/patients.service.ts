@@ -106,11 +106,8 @@ export class PatientsService {
           { cpf: { contains: cpf, mode: 'insensitive' } },
         ],
       },
+      include: { user: true },
     });
-
-    if (!patients.length) {
-      throw new NotFoundException('Patients not found');
-    }
 
     return patients;
   }

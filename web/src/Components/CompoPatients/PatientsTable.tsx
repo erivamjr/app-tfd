@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { TbReportSearch } from 'react-icons/tb'
 import { FaRegEdit } from 'react-icons/fa'
@@ -7,30 +7,23 @@ import Alert from '../Ux/Alert/Alert'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../Ux/Input/Input'
 import usePatientsPage from '../Hooks/Api/Patiens/PatientsPage'
-import usePatients from '../Hooks/Api/Patiens/Patients'
+
 import { Pagination } from '../Ux/Table/Pagination '
 import Table from '../Ux/Table/Table'
 import { TableActions } from '../Ux/Table/TableActions'
 import TableCell from '../Ux/Table/TableCell'
 import TableRow from '../Ux/Table/TableRow'
-import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
 
 export default function PatientsTable() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
   const [search, setSearch] = useState('')
-  const { patients } = usePatients()
+  const [searchTherm, setSearchTherm] = useState('')
   const { patientsPage, isLoading, isError, totalPages } = usePatientsPage(
     currentPage,
     itemsPerPage,
+    searchTherm,
   )
-  const [searchPatients, setSearchPatients] = useState<Patient[]>([])
-
-  useEffect(() => {
-    setSearchPatients(patientsPage || [])
-  }, [patientsPage])
-
-  console.log(searchPatients)
 
   if (isLoading)
     return (
@@ -44,6 +37,9 @@ export default function PatientsTable() {
         <Alert type={'error'} message={'Erro na requisição!'} />
       </div>
     )
+
+  console.log('NO COMPONENTE RESULTADO', patientsPage)
+
   if (!patientsPage || !Array.isArray(patientsPage))
     return (
       <div>
@@ -53,12 +49,12 @@ export default function PatientsTable() {
 
   function handleSearch(event) {
     event.preventDefault()
-    const filtered = patients.filter((patient) =>
-      patient.name.toLowerCase().includes(search.toLowerCase()),
-    )
-    setSearchPatients(filtered)
+    setSearchTherm(search)
+
     setCurrentPage(1)
   }
+
+  console.log('RESULTADO DE PACIENTES FILTRADO', patientsPage)
 
   return (
     <div>
@@ -72,8 +68,8 @@ export default function PatientsTable() {
             name="search"
             value={search}
             placeholder="Pesquisar"
+            required={false}
             onChange={(e) => setSearch(e.target.value)}
-            list="patients-list"
           />
         </span>
 
@@ -96,13 +92,13 @@ export default function PatientsTable() {
             <TableCell isHeader>Data de Cadastro</TableCell>
             <TableCell isHeader>Configurações</TableCell>
           </TableRow>
-          {searchPatients &&
-            searchPatients.map((patient) => (
+          {patientsPage &&
+            patientsPage.map((patient) => (
               <TableRow key={patient.id}>
                 <TableCell>{patient.name}</TableCell>
                 <TableCell>{patient.cpf}</TableCell>
                 <TableCell>{patient.phone}</TableCell>
-                <TableCell>{patient.user.name}</TableCell>
+                <TableCell>{patient.user?.name}</TableCell>
                 <TableCell>
                   {patient.createdAt &&
                     new Date(patient.createdAt).toLocaleDateString('pt-BR', {
