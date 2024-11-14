@@ -38,8 +38,6 @@ export default function PatientsTable() {
       </div>
     )
 
-  console.log('NO COMPONENTE RESULTADO', patientsPage)
-
   if (!patientsPage || !Array.isArray(patientsPage))
     return (
       <div>
@@ -53,8 +51,6 @@ export default function PatientsTable() {
 
     setCurrentPage(1)
   }
-
-  console.log('RESULTADO DE PACIENTES FILTRADO', patientsPage)
 
   return (
     <div>
@@ -75,7 +71,7 @@ export default function PatientsTable() {
 
         <button
           type="submit"
-          className="flex gap-2 bg-blue-500 p-2 text-white rounded hover:bg-blue-600"
+          className="flex gap-2 bg-blue-500 p-2 text-white rounded hover:bg-blue-700"
         >
           <CiSearch size={24} />
           <p>Buscar</p>
@@ -98,7 +94,7 @@ export default function PatientsTable() {
                 <TableCell>{patient.name}</TableCell>
                 <TableCell>{patient.cpf}</TableCell>
                 <TableCell>{patient.phone}</TableCell>
-                <TableCell>{patient.user?.name}</TableCell>
+                <TableCell>{patient.user.name}</TableCell>
                 <TableCell>
                   {patient.createdAt &&
                     new Date(patient.createdAt).toLocaleDateString('pt-BR', {
@@ -118,7 +114,7 @@ export default function PatientsTable() {
                     />
                     <TableActions
                       id={patient.id}
-                      url={'detalhespaciente'}
+                      url={'edit-patient'}
                       icon={<FaRegEdit />}
                       color={'bg-green-500 hover:bg-green-700'}
                       text={'white'}

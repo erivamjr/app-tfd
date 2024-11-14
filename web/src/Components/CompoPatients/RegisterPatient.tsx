@@ -265,7 +265,7 @@ export default function RegisterPatients() {
       <div className="flex justify-end p-3">
         <button
           onClick={handleOpenModal}
-          className="ml-10 bg-blue-600 text-white hover:bg-blue-500 p-2 rounded flex items-center gap-2 cursor-pointer"
+          className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer"
         >
           <span>
             <RiUserAddLine />
