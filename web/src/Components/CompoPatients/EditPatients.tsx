@@ -8,7 +8,6 @@ import AdminToolbar from '../Ux/AdminToolbar/AdminToolbar'
 import { IoReturnDownBack } from 'react-icons/io5'
 import Label from '../Ux/Label/Label'
 import api from '../../Api'
-import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
 
 export default function EditPatient() {
   const { id } = useParams<{ id: string }>()
