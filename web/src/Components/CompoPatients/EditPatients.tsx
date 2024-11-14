@@ -35,7 +35,15 @@ export default function EditPatient() {
   useEffect(() => {
     if (patients) {
       const patient = patients.find((p) => p.id === id)
+
       if (patient) {
+        const birthDateStr =
+          typeof patient.birthDate === 'object'
+            ? patient.birthDate.toISOString()
+            : patient.birthDate
+
+        const dateOnly = birthDateStr ? birthDateStr.split('T')[0] : ''
+
         setFormData({
           name: patient.name || '',
           cpf: patient.cpf || '',
@@ -43,7 +51,7 @@ export default function EditPatient() {
           phone: patient.phone || '',
           gender: patient.gender || '',
           susCard: patient.susCard || '',
-          birthDate: patient.birthDate ? patient.birthDate.toString() : '',
+          birthDate: dateOnly || '',
           motherName: patient.motherName || '',
           address: patient.address || '',
           number: patient.number ? String(patient.number) : '',
@@ -53,6 +61,8 @@ export default function EditPatient() {
           city: patient.city || '',
           zipCode: patient.zipCode?.toString() ?? '',
         })
+      } else {
+        console.log('Nenhum paciente encontrado com o ID fornecido.')
       }
     }
   }, [patients, id])
