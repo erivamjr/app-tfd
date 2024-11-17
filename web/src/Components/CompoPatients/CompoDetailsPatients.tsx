@@ -6,7 +6,9 @@ import Container from '../Ux/Container/Container'
 import DetailsTable from './DetailsTable'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import useAppointment from '../Hooks/Api/Appointments/Appointments'
-import usePatients from '../Hooks/Api/Patiens/Patients'
+import { useState, useEffect } from 'react'
+import api from '../../Api'
+import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
 
 export interface PatientProps {
   id: string
@@ -20,7 +22,6 @@ export interface PatientProps {
   birthDate: string
   motherName: string
   active: string
-  priority: string
   createdAt: string
   updatedAt: string
   userId: string
@@ -62,21 +63,42 @@ export interface TypeAppointment {
 
 export default function DetailsPatients() {
   const { id } = useParams<{ id: string }>()
-  const {
-    patients,
-    isLoading: isPatientsLoading,
-    isError: isPatientsError,
-  } = usePatients()
+  // const {
+  //   patients,
+  //   isLoading: isPatientsLoading,
+  //   isError: isPatientsError,
+  // } = usePatients()
   const {
     appointments,
     isLoading: isAppointmentsLoading,
     isError: isAppointmentsError,
   } = useAppointment()
 
-  if (isPatientsLoading || isAppointmentsLoading)
+  const [patient, setPatient] = useState<Patient>()
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isError, setIsError] = useState<boolean>(false)
+
+  useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        setIsLoading(true)
+        const response = await api.get(`/patients/${id}`)
+        setPatient(response.data)
+      } catch (error) {
+        console.error('Erro ao buscar paciente:', error)
+        setIsError(true)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchPatient()
+  }, [id])
+
+  if (isLoading || isAppointmentsLoading)
     return <DisplayMessage message={'Carregando'} color="green" text="white" />
 
-  if (isPatientsError || isAppointmentsError)
+  if (isError || isAppointmentsError)
     return (
       <DisplayMessage
         message={'Erro na solicitação.'}
@@ -85,9 +107,9 @@ export default function DetailsPatients() {
       />
     )
 
-  const patient = patients?.find((patient) => patient.id === id)
+  // const patient = patients?.find((patient) => patient.id === id)
   const appointment = appointments
-    ? appointments.filter((appointment) => appointment.patientId === id)
+    ? appointments.filter((appointment) => appointment.patient.id === id)
     : []
 
   if (!patient)
