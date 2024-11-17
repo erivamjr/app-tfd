@@ -47,6 +47,7 @@ export default function AppRouter() {
                           path="/edit-patient/:id"
                           element={<EditPatient />}
                         />
+
                         <Route path="/solicitacao" element={<Request />} />
                         <Route
                           path="/detalhessolicitacao/:id"

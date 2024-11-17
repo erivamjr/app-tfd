@@ -13,17 +13,28 @@ import Table from '../Ux/Table/Table'
 import { TableActions } from '../Ux/Table/TableActions'
 import TableCell from '../Ux/Table/TableCell'
 import TableRow from '../Ux/Table/TableRow'
+import Modal from '../Ux/Modal/Modal'
+import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
+import api from '../../Api'
 
 export default function PatientsTable() {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
   const [search, setSearch] = useState('')
   const [searchTherm, setSearchTherm] = useState('')
-  const { patientsPage, isLoading, isError, totalPages } = usePatientsPage(
-    currentPage,
-    itemsPerPage,
-    searchTherm,
-  )
+  const [patientDelete, setPatientDelete] = useState<Patient>()
+  const { patientsPage, isLoading, isError, totalPages, setPatientsPage } =
+    usePatientsPage(currentPage, itemsPerPage, searchTherm)
+
+  function handleOpenModal(patient) {
+    setIsModalOpen(true)
+    setPatientDelete(patient)
+  }
+
+  function handleCloseModal() {
+    setIsModalOpen(false)
+  }
 
   if (isLoading)
     return (
@@ -50,6 +61,21 @@ export default function PatientsTable() {
     setSearchTherm(search)
 
     setCurrentPage(1)
+  }
+
+  async function handleDelete(id: string | undefined) {
+    console.log(id)
+
+    try {
+      await api.delete(`/patients/${id}`)
+      alert('DELETADO COM SUCESSO!')
+      setIsModalOpen(false)
+      setPatientsPage((prevPatients) =>
+        prevPatients.filter((patient) => patient.id !== id),
+      )
+    } catch (err) {
+      console.error('Delete patient fail!')
+    }
   }
 
   return (
@@ -119,18 +145,50 @@ export default function PatientsTable() {
                       color={'bg-green-500 hover:bg-green-700'}
                       text={'white'}
                     />
-                    <TableActions
+                    {/* <TableActions
                       id={patient.id}
-                      url={'detalhespaciente'}
+                      url={'delete-patient'}
                       icon={<RiDeleteBin6Line />}
                       color={'bg-red-500 hover:bg-red-700'}
                       text={'white'}
-                    />
+                    /> */}
+
+                    <button
+                      className="text-white bg-red-500 hover:bg-red-700 flex gap-3 items-center justify-center text-2xl rounded p-3"
+                      onClick={() => handleOpenModal(patient)}
+                    >
+                      <RiDeleteBin6Line />
+                    </button>
                   </div>
                 </TableCell>
               </TableRow>
             ))}
         </Table>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          title="Deletar paciente"
+        >
+          <h1>
+            Tem certeza que quer deletar paciente{' '}
+            <span className="text-bold text-xl uppercase">
+              {patientDelete?.name}
+            </span>
+          </h1>
+          <button
+            className="text-white bg-red-500 hover:bg-red-700 p-2 px-4 rounded mr-2"
+            onClick={() => handleDelete(patientDelete?.id)}
+          >
+            <h1>Sim</h1>
+          </button>
+
+          <button
+            className="text-white bg-green-500 hover:bg-green-700 p-2 px-4 rounded"
+            onClick={() => setIsModalOpen(false)}
+          >
+            <h1>Não</h1>
+          </button>
+        </Modal>
         <div className=" mb-5 lg:bottom-5 ">
           <Pagination
             currentPage={currentPage}

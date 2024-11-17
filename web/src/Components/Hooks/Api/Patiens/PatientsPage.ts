@@ -66,7 +66,7 @@ const usePatientsPage = (
     }
   }, [currentPage, itemsPerPage, searchTerm])
 
-  return { patientsPage, isLoading, isError, totalPages }
+  return { patientsPage, setPatientsPage, isLoading, isError, totalPages }
 }
 
 export default usePatientsPage

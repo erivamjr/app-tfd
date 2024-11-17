@@ -6,6 +6,7 @@ import Loading from '../Ux/Loading/Loading'
 import Modal from '../Ux/Modal/Modal'
 import { useState, FormEvent } from 'react'
 import api from '../../Api'
+import { AxiosError } from 'axios'
 
 export default function RegisterPatients() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -32,6 +33,21 @@ export default function RegisterPatients() {
 
   function handleCloseModal() {
     setIsModalOpen(false)
+    setName('')
+    setCpf('')
+    setRg('')
+    setPhone('')
+    setGender('')
+    setSusCard('')
+    setBirthDate('')
+    setMotherName('')
+    setNumber('')
+    setComplement('')
+    setState('')
+    setDistrict('')
+    setCity('')
+    setZipCode('')
+    setAddress('')
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -58,6 +74,13 @@ export default function RegisterPatients() {
         active: true,
       })
     } catch (error) {
+      const axiosError = error as AxiosError
+      console.log('CODIGO DO ERRO = ', axiosError.request.status)
+      const { status } = axiosError.request
+
+      if (status === 409) {
+        alert('Paciente já cadastrado!')
+      }
       console.error('Error submitting patient data:', error)
     } finally {
       setIsLoading(false)
@@ -250,7 +273,7 @@ export default function RegisterPatients() {
                     {isLoading ? (
                       <Loading />
                     ) : (
-                      <div className=" bg-blue-600 text-white hover:bg-blue-500 py-2 px-8 rounded flex items-center gap-2 cursor-pointer">
+                      <div className=" bg-blue-500 text-white hover:bg-blue-700 py-2 px-8 rounded flex items-center gap-2 cursor-pointer">
                         <CiFloppyDisk size={24} fill="white" />
                         Salvar
                       </div>
