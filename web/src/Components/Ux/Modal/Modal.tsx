@@ -24,7 +24,7 @@ export default function Modal({
         isOpen ? 'is-open' : ''
       }`}
     >
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl mx-2 p-4 max-h-96 md:max-h-screen overflow-scroll">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl mx-2 p-4 max-h-screen ">
         <div className="flex justify-between items-center border-b pb-2">
           <h2 className="text-xl font-semibold">{title}</h2>
           <button
@@ -38,7 +38,7 @@ export default function Modal({
         <div className="mt-4 flex justify-end">
           <button
             onClick={onClose}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500"
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
           >
             Fechar
           </button>
