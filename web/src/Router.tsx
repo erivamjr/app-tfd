@@ -34,7 +34,7 @@ export default function AppRouter() {
                 <AdminPrivate>
                   <div className="flex w-full h-full">
                     <SideBar />
-                    <div className="w-full h-full flex flex-col p-8">
+                    <div className="w-full max-h-full flex flex-col p-8">
                       <Menu />
                       <Routes>
                         <Route path="/" element={<Home />} />

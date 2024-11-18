@@ -63,11 +63,7 @@ export interface TypeAppointment {
 
 export default function DetailsPatients() {
   const { id } = useParams<{ id: string }>()
-  // const {
-  //   patients,
-  //   isLoading: isPatientsLoading,
-  //   isError: isPatientsError,
-  // } = usePatients()
+
   const {
     appointments,
     isLoading: isAppointmentsLoading,
@@ -107,7 +103,6 @@ export default function DetailsPatients() {
       />
     )
 
-  // const patient = patients?.find((patient) => patient.id === id)
   const appointment = appointments
     ? appointments.filter((appointment) => appointment.patient.id === id)
     : []

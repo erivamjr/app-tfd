@@ -104,7 +104,7 @@ export default function PatientsTable() {
         </button>
       </form>
 
-      <div className="w-[100%] h-[350px] sm:h-[500px] overflow-hidden">
+      <div className="w-[100%]  overflow-hidden">
         <Table>
           <TableRow>
             <TableCell isHeader>Nome</TableCell>
@@ -164,6 +164,13 @@ export default function PatientsTable() {
               </TableRow>
             ))}
         </Table>
+        <div className=" mb-5 lg:bottom-5 ">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
@@ -189,13 +196,6 @@ export default function PatientsTable() {
             <h1>Não</h1>
           </button>
         </Modal>
-        <div className=" mb-5 lg:bottom-5 ">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
       </div>
     </div>
   )
