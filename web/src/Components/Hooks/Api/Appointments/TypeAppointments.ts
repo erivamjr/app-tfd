@@ -1,32 +1,56 @@
-import { UserProps } from '../../../CompoRequest/CompoDetailRequest'
-
 export interface PatientProps {
   id: string
   name: string
-  gender: string
+  gender?: string | null
   cpf: string
-  rg: string
-  address: string
-  phone: string
-  susCard: string
-  birthDate: string
-  motherName: string
-  active: boolean
-  createdAt: string
-  updatedAt: string
+  rg?: string | null
+  address?: string | null
+  number?: string | null
+  complement?: string | null
+  district?: string | null
+  city?: string | null
+  state?: string | null
+  zipCode?: string | null
+  phone?: string | null
+  susCard?: string | null
+  birthDate?: Date | null
+  motherName?: string | null
+  active?: boolean
+  createdAt: Date
+  updatedAt: Date
   userId: string
-  state: string
-  zipCode: string
-  cep: string
-  district: string
-  complement: string
-  city: string
-  number: string
 }
 export interface SpecialtyProps {
   id: number
   name: string
+  active?: boolean
+}
+
+export interface UserProps {
+  id: string
+  name: string
+  phone: string
+  cpf: string
+  email: string
+  password: string
+  role: string
+  createdAt: string
+  updatedAt: string
   active: boolean
+}
+
+export enum Priority {
+  Normal = 'Normal',
+  Elderly = 'Elderly',
+  Pregnant = 'Pregnant',
+  Child = 'Child',
+  Emergency = 'Emergency',
+}
+
+export enum Status {
+  InProgress = 'InProgress',
+  Scheduled = 'Scheduled',
+  Completed = 'Completed',
 }
 
 export interface TypeAppointment {
@@ -34,19 +58,18 @@ export interface TypeAppointment {
   specialtyId: number
   patientId: string
   userId: string
-  priority: string
-  appointmentDate: string
-  diagnosis: string
-  cid: string
-  requestingDoctor: string
-  crm: string
-  requestCode: string
-  requestDate: string
-  status: string
-  notes: string
+  priority: Priority
+  diagnosis?: string | null
+  cid?: string | null
+  requestingDoctor?: string | null
+  crm?: string | null
+  requestCode?: string | null
+  requestDate: string | Date
+  status: Status
+  notes?: string | null
   active: boolean
-  createdAt: string
-  updatedAt: string
+  createdAt: string | Date
+  updatedAt: string | Date
   patient: PatientProps
   specialty: SpecialtyProps
   user: UserProps

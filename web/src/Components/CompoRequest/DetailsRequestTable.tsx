@@ -4,64 +4,10 @@ import Input from '../Ux/Input/Input'
 import TableCell from '../Ux/Table/TableCell'
 import TableRow from '../Ux/Table/TableRow'
 import Table from '../Ux/Table/Table'
-
-interface AppointmentItem {
-  id: string
-  specialtyId: number
-  patientId: string
-  userId: string
-  priority: string
-  appointmentDate: string
-  diagnosis: string
-  cid: string
-  requestingDoctor: string
-  crm: string
-  requestCode: string
-  requestDate: string
-  status: string
-  notes: string
-  active: boolean
-  createdAt: string
-  updatedAt: string
-  patient: {
-    id: string
-    name: string
-    gender: string
-    cpf: string
-    rg: string
-    address: string
-    number: string
-    complement: string
-    district: string
-    city: string
-    state: string
-    zipCode: string
-    phone: string
-    susCard: string
-    birthDate: string
-    motherName: string
-    active: boolean
-    createdAt: string
-    updatedAt: string
-    userId: string
-  }
-  specialty: { id: number; name: string; active: boolean }
-  user: {
-    id: string
-    name: string
-    phone: string
-    cpf: string
-    email: string
-    password: string
-    role: string
-    createdAt: string
-    updatedAt: string
-    active: boolean
-  }
-}
+import { TypeAppointment } from '../Hooks/Api/Appointments/TypeAppointments'
 
 interface DetailsTableProps {
-  item: AppointmentItem
+  item: TypeAppointment
   isLoading: boolean
   isError: boolean
 }
@@ -118,15 +64,11 @@ const DetailsRequestTable = ({
           <TableCell>{item.priority}</TableCell>
           <TableCell>{item.diagnosis}</TableCell>
           <TableCell>{item.specialty.name}</TableCell>
-          <TableCell>
-            {new Date(item.appointmentDate).toLocaleDateString()}
-          </TableCell>
+          <TableCell>{new Date(item.createdAt).toLocaleDateString()}</TableCell>
           <TableCell>{item.cid}</TableCell>
           <TableCell>{item.requestingDoctor}</TableCell>
           <TableCell>{item.crm}</TableCell>
-          <TableCell>
-            {new Date(item.appointmentDate).toLocaleDateString()}
-          </TableCell>
+          <TableCell>{new Date(item.createdAt).toLocaleDateString()}</TableCell>
           <TableCell>
             {item.status === 'InProgress' ? 'Em andamento' : item.status}
           </TableCell>

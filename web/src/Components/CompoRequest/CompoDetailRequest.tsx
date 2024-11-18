@@ -9,71 +9,6 @@ import DetailsRequestTable from './DetailsRequestTable'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../Ux/Input/Input'
 
-export interface PatientProps {
-  id: string
-  name: string
-  gender: string
-  cpf: string
-  rg: string
-  address: string
-  number: string
-  complement: string
-  district: string
-  city: string
-  state: string
-  zipCode: string
-  phone: string
-  susCard: string
-  birthDate: string
-  motherName: string
-  active: boolean
-  createdAt: string
-  updatedAt: string
-  userId: string
-}
-
-export interface SpecialtyProps {
-  id: number
-  name: string
-  active: boolean
-}
-
-export interface UserProps {
-  id: string
-  name: string
-  phone: string
-  cpf: string
-  email: string
-  password: string
-  role: string
-  createdAt: string
-  updatedAt: string
-  active: boolean
-}
-
-export interface TypeAppointment {
-  id: string
-  specialtyId: number
-  patientId: string
-  userId: string
-  priority: 'Pregnant' | 'Child' | 'Normal' | 'Elderly' | 'Emergency'
-  appointmentDate: string
-  diagnosis: string
-  cid: string
-  requestingDoctor: string
-  crm: string
-  requestCode: string
-  requestDate: string
-  status: string
-  notes: string
-  active: boolean
-  createdAt: string
-  updatedAt: string
-  patient: PatientProps
-  specialty: SpecialtyProps
-  user: UserProps
-}
-
 export default function CompoDetailsRequest() {
   const { id } = useParams<{ id: string }>()
   const { appointments, isLoading, isError } = useAppointment()
@@ -135,7 +70,7 @@ export default function CompoDetailsRequest() {
               <span>Estado: {patient.state}</span>
             </div>
             <div className="flex flex-col gap-2">
-              <span>Cep: {patient.cep}</span>
+              <span>Cep: {patient.zipCode}</span>
               <span>Número: {patient.number}</span>
               <span>Bairro: {patient.district}</span>
               <span>Complemento: {patient.complement}</span>
