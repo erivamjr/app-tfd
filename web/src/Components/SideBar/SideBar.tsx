@@ -33,7 +33,7 @@ export default function SideBar() {
     <div
       className={`${
         sideBar ? 'w-16' : 'w-60'
-      } h-screen flex flex-col bg-blue-600 text-white transition-width duration-300`}
+      } h-full flex flex-col bg-blue-600 text-white transition-width duration-300`}
     >
       <div
         onClick={handleSideBar}
