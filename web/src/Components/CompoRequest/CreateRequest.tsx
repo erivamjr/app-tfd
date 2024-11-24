@@ -4,12 +4,13 @@ import Input from '../Ux/Input/Input'
 import Label from '../Ux/Label/Label'
 import Loading from '../Ux/Loading/Loading'
 import Modal from '../Ux/Modal/Modal'
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useState } from 'react'
 import api from '../../Api'
 import useSpecialties from '../Hooks/Api/Specialties/Specialties'
 import Alert from '../Ux/Alert/Alert'
 import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
 import CreatableSelect from 'react-select/creatable'
+import Autocomplete from '../Ux/SugestionList'
 
 export default function CreateRequest() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -34,9 +35,7 @@ export default function CreateRequest() {
   const [notes, setNotes] = useState<string>('')
   const [userId] = useState<string>('84d6d27e-475c-4e83-a1ae-b477698e399e') // Exemplo de ID de usuário
   const [requestDate] = useState<string>(new Date().toISOString()) // Data da solicitação no formato ISO
-  const [search, setSearch] = useState<string>('')
-  const [suggestedPatients, setSuggestedPatients] = useState<Patient[]>([])
-  const [isSearching, setIsSearching] = useState(false)
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
   function handleOpenModal() {
     setIsModalOpen(true)
   }
@@ -48,14 +47,14 @@ export default function CreateRequest() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
 
-    if (!suggestedPatients[0].id) {
+    if (!specialtyId) {
       setType('warning')
       setAlertMessage('Por favor, selecione uma especialidade.')
       setIsAlertOpen(true)
       return
     }
 
-    if (!suggestedPatients[0].name) {
+    if (!patientId) {
       setType('warning')
       setAlertMessage('Por favor, selecione um paciente.')
       setIsAlertOpen(true)
@@ -133,12 +132,11 @@ export default function CreateRequest() {
     }
 
     setIsLoadingPatient(true)
-    console.log(suggestedPatients)
 
     const specialty = specialties.find((s) => s.id === specialtyId)
     console.log(specialty)
 
-    if (!suggestedPatients[0] || !specialty) {
+    if (!patientId || !specialty) {
       setType('warning')
       setAlertMessage('Paciente ou especialidade não encontrados.')
       setIsAlertOpen(true)
@@ -200,34 +198,14 @@ export default function CreateRequest() {
     }
   }
 
-  const searchPatients = async (searchTerm) => {
-    try {
-      setIsSearching(true)
-      const response = await api.get<Patient[]>(
-        `/patients/search?name=${searchTerm}`,
-      )
-      setSuggestedPatients(response.data)
-    } catch (error) {
-      console.error('Erro ao buscar pacientes:', error)
-    } finally {
-      setIsSearching(false)
-    }
-  }
-  console.log('suggestedPatients', suggestedPatients)
-  useEffect(() => {
-    if (search.length > 0) {
-      searchPatients(search)
-    } else {
-      setSuggestedPatients([])
-    }
-  }, [search])
-
   const handleSpecialtyChange = (selectedOption) => {
-    // setSelectedSpecialty(selectedOption)
-    // Você pode querer definir specialtyId com base no valor selecionado
     setSpecialtyId(selectedOption ? selectedOption.value : undefined)
   }
 
+  const handlePatientSelect = (patient: Patient) => {
+    setSelectedPatient(patient)
+    setPatientId(patient.id)
+  }
   return (
     <div>
       <Modal
@@ -242,36 +220,14 @@ export default function CreateRequest() {
               <div className="text-lg font-semibold mb-2">Dados Pessoais</div>
               <div>
                 <Label label="Nome do Paciente" />
-                <Input
-                  type="text"
-                  name="search"
-                  value={search}
-                  placeholder="Pesquisar"
-                  required={false}
-                  onChange={(e) => {
-                    setSearch(e.target.value)
-                  }}
-                  list="patients-list"
+                <Autocomplete
+                  placeholder="Digite o nome do paciente"
+                  onSelect={handlePatientSelect}
                 />
-                {/* Lista de pacientes sugeridos */}
-                {isSearching ? (
-                  <div className="text-center text-white bg-blue-500 p-2 mt-2">
-                    Loading...
+                {selectedPatient && (
+                  <div className="mt-2 text-sm text-gray-600">
+                    <span>Selecionado: {selectedPatient.name}</span>
                   </div>
-                ) : suggestedPatients.length > 0 ? (
-                  <datalist id="patients-list" className="w-full">
-                    {suggestedPatients.map((patient) => (
-                      <option key={patient.id} value={patient.name}>
-                        {patient.name}
-                      </option>
-                    ))}
-                  </datalist>
-                ) : (
-                  search && (
-                    <div className="text-center text-gray-500 mt-2">
-                      Nenhum paciente encontrado.
-                    </div>
-                  )
                 )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
