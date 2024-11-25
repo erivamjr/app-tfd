@@ -9,13 +9,10 @@ const useSpecialties = () => {
   const [isError, setIsError] = useState<boolean>(false)
 
   useEffect(() => {
-    const controller = new AbortController()
-    const { signal } = controller
-
     const fetchSpecialties = async () => {
       try {
         setIsLoading(true)
-        const response = await api.get(`/specialties`, { signal })
+        const response = await api.get(`/specialties`)
 
         setSpecialties(response.data)
       } catch (error) {
@@ -33,6 +30,7 @@ const useSpecialties = () => {
     fetchSpecialties()
 
     return () => {
+      const controller = new AbortController()
       controller.abort()
     }
   }, [])

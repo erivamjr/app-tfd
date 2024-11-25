@@ -1,4 +1,4 @@
-import { CiFloppyDisk, CiSearch } from 'react-icons/ci'
+import { CiFloppyDisk } from 'react-icons/ci'
 import { RiUserAddLine } from 'react-icons/ri'
 import Input from '../Ux/Input/Input'
 import Label from '../Ux/Label/Label'
@@ -7,14 +7,15 @@ import Modal from '../Ux/Modal/Modal'
 import { FormEvent, useState } from 'react'
 import api from '../../Api'
 import useSpecialties from '../Hooks/Api/Specialties/Specialties'
-import usePatients from '../Hooks/Api/Patiens/Patients'
 import Alert from '../Ux/Alert/Alert'
+import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
+import CreatableSelect from 'react-select/creatable'
+import Autocomplete from '../Ux/SugestionList'
 
 export default function CreateRequest() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { patients } = usePatients()
-  const { specialties } = useSpecialties()
+  const [isLoadingPatient, setIsLoadingPatient] = useState<boolean>(false)
+  const { specialties, isLoading } = useSpecialties()
   const [isAlertOpen, setIsAlertOpen] = useState<boolean>(false)
   const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>(
     'info',
@@ -34,7 +35,7 @@ export default function CreateRequest() {
   const [notes, setNotes] = useState<string>('')
   const [userId] = useState<string>('84d6d27e-475c-4e83-a1ae-b477698e399e') // Exemplo de ID de usuário
   const [requestDate] = useState<string>(new Date().toISOString()) // Data da solicitação no formato ISO
-
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
   function handleOpenModal() {
     setIsModalOpen(true)
   }
@@ -45,7 +46,105 @@ export default function CreateRequest() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    setIsLoading(true)
+
+    if (!specialtyId) {
+      setType('warning')
+      setAlertMessage('Por favor, selecione uma especialidade.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!patientId) {
+      setType('warning')
+      setAlertMessage('Por favor, selecione um paciente.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!appointmentDate) {
+      setType('warning')
+      setAlertMessage('Por favor, selecione uma data.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!diagnosis) {
+      setType('warning')
+      setAlertMessage('Por favor, insira o diagnóstico.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!cid) {
+      setType('warning')
+      setAlertMessage('Por favor, insira o CID.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!requestingDoctor) {
+      setType('warning')
+      setAlertMessage('Por favor, insira o nome do médico solicitante.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!crm) {
+      setType('warning')
+      setAlertMessage('Por favor, insira o CRM do médico solicitante.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!requestCode) {
+      setType('warning')
+      setAlertMessage('Por favor, insira o código da solicitação.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!status) {
+      setType('warning')
+      setAlertMessage('Por favor, selecione o status da solicitação.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!notes) {
+      setType('warning')
+      setAlertMessage('Por favor, insira as notas da solicitação.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!requestDate) {
+      setType('warning')
+      setAlertMessage('Por favor, insira a data da solicitação.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    if (!userId) {
+      setType('warning')
+      setAlertMessage('Por favor, insira o ID do usuário.')
+      setIsAlertOpen(true)
+      return
+    }
+
+    setIsLoadingPatient(true)
+
+    const specialty = specialties.find((s) => s.id === specialtyId)
+    console.log(specialty)
+
+    if (!patientId || !specialty) {
+      setType('warning')
+      setAlertMessage('Paciente ou especialidade não encontrados.')
+      setIsAlertOpen(true)
+      setIsLoadingPatient(false)
+      return
+    }
+
+    setIsLoadingPatient(false)
 
     const requestData = {
       specialtyId: Number(specialtyId),
@@ -62,9 +161,10 @@ export default function CreateRequest() {
       status,
       notes,
     }
+    console.log(requestData)
 
     try {
-      await api.post('appointments', requestData)
+      await api.post('/appointments', requestData)
       setType('success')
       setAlertMessage('Solicitação criada com sucesso!')
       setIsAlertOpen(true)
@@ -94,10 +194,18 @@ export default function CreateRequest() {
         setIsAlertOpen(false)
       }, 3000)
     } finally {
-      setIsLoading(false)
+      setIsLoadingPatient(false)
     }
   }
 
+  const handleSpecialtyChange = (selectedOption) => {
+    setSpecialtyId(selectedOption ? selectedOption.value : undefined)
+  }
+
+  const handlePatientSelect = (patient: Patient) => {
+    setSelectedPatient(patient)
+    setPatientId(patient.id)
+  }
   return (
     <div>
       <Modal
@@ -112,19 +220,15 @@ export default function CreateRequest() {
               <div className="text-lg font-semibold mb-2">Dados Pessoais</div>
               <div>
                 <Label label="Nome do Paciente" />
-                <input
-                  list="patients-list"
-                  placeholder="Selecione o paciente"
-                  value={patientId}
-                  onChange={(e) => setPatientId(e.target.value)}
+                <Autocomplete
+                  placeholder="Digite o nome do paciente"
+                  onSelect={handlePatientSelect}
                 />
-                <datalist id="patients-list">
-                  {patients.map((patient) => (
-                    <option key={patient.id} value={patient.id}>
-                      {patient.name}
-                    </option>
-                  ))}
-                </datalist>
+                {selectedPatient && (
+                  <div className="mt-2 text-sm text-gray-600">
+                    <span>Selecionado: {selectedPatient.name}</span>
+                  </div>
+                )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 <div>
@@ -169,25 +273,51 @@ export default function CreateRequest() {
               <div className="text-lg font-semibold mb-2">Processo</div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label label="Especialidade" />
-
-                  <Input
-                    list="specialties-list"
-                    type="text"
-                    name="specialtyId"
-                    placeholder="Especialidade"
-                    value={
-                      specialtyId !== undefined ? specialtyId.toString() : ''
-                    }
-                    onChange={(e) => setSpecialtyId(Number(e.target.value))}
-                  />
-                  <datalist id="specialties-list">
-                    {specialties.map((specialty) => (
-                      <option key={specialty.id} value={specialty.id}>
-                        {specialty.name}
-                      </option>
-                    ))}
-                  </datalist>
+                  <div>
+                    <Label label="Especialidade" />
+                    {isLoading ? (
+                      <Loading />
+                    ) : (
+                      <CreatableSelect
+                        isClearable
+                        options={specialties.map((specialty) => ({
+                          value: specialty.id,
+                          label: specialty.name,
+                        }))}
+                        onChange={handleSpecialtyChange}
+                        styles={{
+                          control: (provided, state) => ({
+                            ...provided,
+                            borderColor: state.isFocused
+                              ? '#121212'
+                              : '#d9d9d9',
+                            boxShadow: state.isFocused
+                              ? '0 0 0 1px #121212'
+                              : 'none',
+                            '&:hover': {
+                              borderColor: '#121212',
+                            },
+                          }),
+                          menu: (base) => ({
+                            ...base,
+                            marginTop: '0.5rem',
+                            borderRadius: '0.25rem',
+                            boxShadow:
+                              '0 0 0 1px rgba(0, 0, 0, 0.05), 0 4px 11px rgba(0, 0, 0, 0.1)',
+                          }),
+                          option: (base, state) => ({
+                            ...base,
+                            backgroundColor: state.isSelected
+                              ? '#e0e0e0'
+                              : 'white',
+                            ':hover': {
+                              backgroundColor: '#f0f0f0',
+                            },
+                          }),
+                        }}
+                      />
+                    )}
+                  </div>
                   <Label label="Código da Solicitação" />
                   <Input
                     type="text"
@@ -200,13 +330,19 @@ export default function CreateRequest() {
                   <select
                     name="status"
                     id="status"
-                    className="rounded-md p-2 w-full"
+                    className={`rounded-md p-2 w-full ${status === 'InProgress' ? 'bg-yellow-100' : status === 'Scheduled' ? 'bg-green-100' : 'bg-red-100'}`}
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                   >
-                    <option value="InProgress">InProgress</option>
-                    <option value="Scheduled">Scheduled</option>
-                    <option value="Completed">Completed</option>
+                    <option value="InProgress" className="bg-yellow-100">
+                      Em Andamento
+                    </option>
+                    <option value="Scheduled" className="bg-green-100">
+                      Agendado
+                    </option>
+                    <option value="Completed" className="bg-red-100">
+                      Finalizado
+                    </option>
                   </select>
                   <Label label="Data do Agendamento" />
                   <Input
@@ -223,11 +359,11 @@ export default function CreateRequest() {
                     value={priority}
                     onChange={(e) => setPriority(e.target.value)}
                   >
-                    <option value="Pregnant">Pregnant</option>
-                    <option value="Child">Child</option>
                     <option value="Normal">Normal</option>
-                    <option value="Elderly">Elderly</option>
-                    <option value="Emergency">Emergency</option>
+                    <option value="Elderly">Idoso</option>
+                    <option value="Emergency">Urgencia</option>
+                    <option value="Pregnant">Gestante</option>
+                    <option value="Child">Criança</option>
                   </select>
                   <Label label="Observações" />
                   <textarea
@@ -244,8 +380,17 @@ export default function CreateRequest() {
               </div>
             </div>
           </div>
-          <div className="flex justify-end mt-4">
-            <button>{isLoading ? <Loading /> : <CiFloppyDisk />}</button>
+          <div className="flex justify-center">
+            <button>
+              {isLoadingPatient ? (
+                <Loading />
+              ) : (
+                <div className=" bg-blue-500 text-white hover:bg-blue-700 py-2 px-8 rounded flex items-center gap-2 cursor-pointer">
+                  <CiFloppyDisk size={24} fill="white" />
+                  Salvar
+                </div>
+              )}
+            </button>
           </div>
         </form>
       </Modal>
@@ -257,9 +402,6 @@ export default function CreateRequest() {
           <span className="hidden md:block">Adicionar Solicitação</span>
           <RiUserAddLine />
         </div>
-        <button>
-          <CiSearch />
-        </button>
       </div>
     </div>
   )

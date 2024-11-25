@@ -4,70 +4,10 @@ import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import Table from '../Ux/Table/Table'
 import TableRow from '../Ux/Table/TableRow'
 import TableCell from '../Ux/Table/TableCell'
+import { TypeAppointment } from '../Hooks/Api/Appointments/TypeAppointments'
 
-interface Patient {
-  id: string
-  name: string
-  gender: string
-  cpf: string
-  rg: string
-  address: string
-  number: string
-  complement: string
-  district: string
-  city: string
-  state: string
-  zipCode: string
-  phone: string
-  susCard: string
-  birthDate: string
-  motherName: string
-  active: boolean
-  createdAt: string
-  updatedAt: string
-  userId: string
-}
-
-interface Specialty {
-  id: number
-  name: string
-  active: boolean
-}
-interface User {
-  id: string
-  name: string
-  phone: string
-  cpf: string
-  email: string
-  password: string
-  role: string
-  createdAt: string
-  updatedAt: string
-  active: boolean
-}
-interface item {
-  id: string
-  specialtyId: number
-  patientId: string
-  userId: string
-  priority: string
-  diagnosis: string
-  cid: string
-  requestingDoctor: string
-  crm: string
-  requestCode: string
-  requestDate: string
-  status: string
-  notes: string
-  active: boolean
-  createdAt: string
-  updatedAt: string
-  patient: Patient
-  specialty: Specialty
-  user: User
-}
 interface DetailsTableProps {
-  item: item[]
+  item: TypeAppointment[]
   isLoadingPoint: boolean
   isErrorPoint: boolean
 }
@@ -114,7 +54,6 @@ export default function DetailsTable({
 
       <Table>
         <TableRow>
-          <TableCell isHeader>ID</TableCell>
           <TableCell isHeader>Usuário</TableCell>
           <TableCell isHeader>Prioridade</TableCell>
           <TableCell isHeader>Diagnóstico</TableCell>
@@ -128,7 +67,6 @@ export default function DetailsTable({
         </TableRow>
         {item.map((itemData) => (
           <TableRow key={itemData.id}>
-            <TableCell>{itemData.id}</TableCell>
             <TableCell>{itemData.patient.name}</TableCell>
             <TableCell>{itemData.priority}</TableCell>
             <TableCell>{itemData.diagnosis}</TableCell>
