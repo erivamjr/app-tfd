@@ -10,7 +10,7 @@ import useSpecialties from '../Hooks/Api/Specialties/Specialties'
 import Alert from '../Ux/Alert/Alert'
 import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
 import CreatableSelect from 'react-select/creatable'
-import Autocomplete from '../Ux/SugestionList'
+import Autocomplete from '../Ux/Autocomplete'
 
 export default function CreateRequest() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -208,6 +208,15 @@ export default function CreateRequest() {
   }
   return (
     <div>
+      <div className="flex justify-end mb-4">
+        <div
+          onClick={handleOpenModal}
+          className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer"
+        >
+          <span className="hidden md:block">Adicionar Solicitação</span>
+          <RiUserAddLine />
+        </div>
+      </div>
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -394,15 +403,6 @@ export default function CreateRequest() {
           </div>
         </form>
       </Modal>
-      <div className="flex justify-end p-3 space-x-4">
-        <div
-          onClick={handleOpenModal}
-          className="bg-blue-600 text-white hover:bg-blue-500 p-3 rounded flex items-center space-x-2 cursor-pointer"
-        >
-          <span className="hidden md:block">Adicionar Solicitação</span>
-          <RiUserAddLine />
-        </div>
-      </div>
     </div>
   )
 }
