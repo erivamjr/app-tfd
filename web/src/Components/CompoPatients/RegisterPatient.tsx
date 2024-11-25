@@ -90,6 +90,17 @@ export default function RegisterPatients() {
 
   return (
     <div>
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={handleOpenModal}
+          className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer"
+        >
+          <span>
+            <RiUserAddLine />
+          </span>
+          <span>Cadastrar</span>
+        </button>
+      </div>
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -285,17 +296,6 @@ export default function RegisterPatients() {
           </div>
         </form>
       </Modal>
-      <div className="flex justify-end p-3">
-        <button
-          onClick={handleOpenModal}
-          className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer"
-        >
-          <span>
-            <RiUserAddLine />
-          </span>
-          <span>Cadastrar</span>
-        </button>
-      </div>
     </div>
   )
 }

@@ -56,7 +56,7 @@ export default function Autocomplete({
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         onFocus={() => setIsFocused(true)}
-        className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
       />
 
       {/* Lista de sugestões */}
