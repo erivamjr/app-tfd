@@ -85,7 +85,7 @@ export default function RequestTable() {
                 />
                 <TableActions
                   id={appointment.id}
-                  url={'editarsolicitacao'}
+                  url={'edit-request'}
                   icon={<FaRegEdit />}
                   color={'bg-green-500 hover:bg-green-700'}
                   text={'white'}
