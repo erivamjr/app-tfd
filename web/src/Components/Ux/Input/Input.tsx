@@ -8,6 +8,7 @@ interface InputProps {
   list?: string
   placeholder?: string
   required?: boolean
+  autocomplete?: string
 }
 
 export default function Input({
@@ -18,6 +19,7 @@ export default function Input({
   list,
   placeholder,
   required,
+  autocomplete,
 }: InputProps) {
   return (
     <input
@@ -29,6 +31,7 @@ export default function Input({
       list={list}
       className="block w-full rounded-md p-2 border"
       required={required}
+      autoComplete={autocomplete}
     />
   )
 }

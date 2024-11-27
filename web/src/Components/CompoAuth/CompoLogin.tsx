@@ -40,6 +40,7 @@ export default function CompoLogin() {
                   type="email"
                   name="email"
                   value={email}
+                  autocomplete="email"
                   onChange={(e) => {
                     setEmail(e.target.value)
                   }}
@@ -52,6 +53,7 @@ export default function CompoLogin() {
                   type="password"
                   name="password"
                   value={password}
+                  autocomplete="password"
                   onChange={(e) => {
                     setPassword(e.target.value)
                   }}
