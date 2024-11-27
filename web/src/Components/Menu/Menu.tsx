@@ -1,11 +1,10 @@
+import { useContext } from 'react'
+import { AuthContext } from '../Context/Auth'
 import UserProfile from '../UserProfile/UserProfile'
-import imgProfile from './perfil.png'
 
 export default function Menu() {
-  const user = {
-    name: 'Taynara Camara Pacheco',
-    avatar: imgProfile,
-  }
+  const { user } = useContext(AuthContext)
+  console.log(user)
   return (
     <div>
       <UserProfile user={user} />
