@@ -2,17 +2,19 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Input from '../Ux/Input/Input'
 import Alert from '../Ux/Alert/Alert'
-import usePatients from '../Hooks/Api/Patiens/Patients'
 import Container from '../Ux/Container/Container'
 import AdminToolbar from '../Ux/AdminToolbar/AdminToolbar'
 import { IoReturnDownBack } from 'react-icons/io5'
 import Label from '../Ux/Label/Label'
 import api from '../../Api'
+import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
 
 export default function EditPatient() {
   const { id } = useParams<{ id: string }>()
-  const { patients, isLoading, isError } = usePatients()
   const navigate = useNavigate()
+  const [patient, setPatient] = useState<Patient>()
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isError, setIsError] = useState<boolean>(false)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -33,39 +35,52 @@ export default function EditPatient() {
   })
 
   useEffect(() => {
-    if (patients) {
-      const patient = patients.find((p) => p.id === id)
-
-      if (patient) {
-        const birthDateStr =
-          typeof patient.birthDate === 'object'
-            ? patient.birthDate.toISOString()
-            : patient.birthDate
-
-        const dateOnly = birthDateStr ? birthDateStr.split('T')[0] : ''
-
-        setFormData({
-          name: patient.name || '',
-          cpf: patient.cpf || '',
-          rg: patient.rg || '',
-          phone: patient.phone || '',
-          gender: patient.gender || '',
-          susCard: patient.susCard || '',
-          birthDate: dateOnly || '',
-          motherName: patient.motherName || '',
-          address: patient.address || '',
-          number: patient.number ? String(patient.number) : '',
-          complement: patient.complement || '',
-          state: patient.state || '',
-          district: patient.district || '',
-          city: patient.city || '',
-          zipCode: patient.zipCode?.toString() ?? '',
-        })
-      } else {
-        console.log('Nenhum paciente encontrado com o ID fornecido.')
+    const fetchPatient = async () => {
+      try {
+        setIsLoading(true)
+        const response = await api.get(`/patients/${id}`)
+        setPatient(response.data)
+      } catch (error) {
+        console.error('Erro ao buscar paciente:', error)
+        setIsError(true)
+      } finally {
+        setIsLoading(false)
       }
     }
-  }, [patients, id])
+
+    fetchPatient()
+  }, [id])
+
+  useEffect(() => {
+    if (patient) {
+      const birthDateStr =
+        typeof patient.birthDate === 'object'
+          ? patient.birthDate.toISOString()
+          : patient.birthDate
+
+      const dateOnly = birthDateStr ? birthDateStr.split('T')[0] : ''
+
+      setFormData({
+        name: patient.name || '',
+        cpf: patient.cpf || '',
+        rg: patient.rg || '',
+        phone: patient.phone || '',
+        gender: patient.gender || '',
+        susCard: patient.susCard || '',
+        birthDate: dateOnly || '',
+        motherName: patient.motherName || '',
+        address: patient.address || '',
+        number: patient.number ? String(patient.number) : '',
+        complement: patient.complement || '',
+        state: patient.state || '',
+        district: patient.district || '',
+        city: patient.city || '',
+        zipCode: patient.zipCode?.toString() ?? '',
+      })
+    } else {
+      console.log('Nenhum paciente encontrado com o ID fornecido.')
+    }
+  }, [patient, id])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
