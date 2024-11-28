@@ -9,6 +9,7 @@ interface InputProps {
   placeholder?: string
   required?: boolean
   autocomplete?: string
+  disabled?: boolean
 }
 
 export default function Input({
@@ -20,6 +21,7 @@ export default function Input({
   placeholder,
   required,
   autocomplete,
+  disabled,
 }: InputProps) {
   return (
     <input
@@ -29,9 +31,14 @@ export default function Input({
       value={value}
       onChange={onChange}
       list={list}
-      className="block w-full rounded-md p-2 border"
+      className={
+        disabled
+          ? 'cursor-not-allowed w-full border border-gray-300 rounded-md p-2 bg-gray-100 text-gray-500'
+          : 'w-full border border-gray-300 rounded-md p-2'
+      }
       required={required}
       autoComplete={autocomplete}
+      disabled={disabled}
     />
   )
 }
