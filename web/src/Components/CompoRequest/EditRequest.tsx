@@ -96,7 +96,7 @@ export default function EditRequest() {
     }
 
     fetchAppointment()
-  }, [id])
+  }, [id, users])
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -143,35 +143,38 @@ export default function EditRequest() {
       <Container>
         <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-2 p-5">
           <div>
-            <Label label="Especialidade ID" />
+            <Label label="Especialidade" />
             <Input
               type="text"
-              placeholder="Especialidade ID"
+              placeholder="Especialidade"
               name="specialtyId"
               value={formData.specialtyName}
               onChange={handleChange}
+              disabled
             />
           </div>
 
           <div>
-            <Label label="Paciente ID" />
+            <Label label="Paciente" />
             <Input
               type="text"
-              placeholder="Paciente ID"
+              placeholder="Paciente"
               name="patientId"
               value={formData.patientName}
               onChange={handleChange}
+              disabled
             />
           </div>
 
           <div>
-            <Label label="Usuário ID" />
+            <Label label="Usuário" />
             <Input
               type="text"
-              placeholder="Usuário ID"
+              placeholder="Usuário"
               name="userId"
               value={formData.userName}
               onChange={handleChange}
+              disabled
             />
           </div>
 
