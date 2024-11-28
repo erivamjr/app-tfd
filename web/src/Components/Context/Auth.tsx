@@ -1,7 +1,10 @@
 import { createContext, useState, ReactNode, useEffect } from 'react'
-import { createSession } from '../Hooks/Api/Auth/Auth'
-import api from '../../Api'
+import { createSession, dataUser } from '../Hooks/Api/Auth/Auth'
+
 import { useNavigate } from 'react-router-dom'
+import { UserProps } from '../Hooks/Api/Appointments/TypeAppointments'
+import { AxiosError } from 'axios'
+import api from '../../Api'
 
 interface AuthProviderProps {
   children: ReactNode
@@ -9,7 +12,7 @@ interface AuthProviderProps {
 
 interface AuthContextData {
   authenticated: boolean
-  user: string | null
+  user: UserProps | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
   authError: string | null
@@ -18,17 +21,18 @@ interface AuthContextData {
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<string | null>(null)
+  const [user, setUser] = useState<UserProps | null>(null)
   const [loading, setLoading] = useState(true)
   const [authError, setAuthError] = useState<string | null>(null)
   const navigate = useNavigate()
 
+  // console.log('ENTROU NO USEEFFECT', user)
   useEffect(() => {
-    const recoveredUser = localStorage.getItem('user')
+    // const recoveredUser = localStorage.getItem('user')
     const recoveredToken = localStorage.getItem('token')
 
-    if (recoveredUser && recoveredToken) {
-      setUser(JSON.parse(recoveredUser))
+    if (recoveredToken) {
+      // setUser(JSON.parse(recoveredUser))
       api.defaults.headers.Authorization = `Bearer ${recoveredToken}`
     }
 
@@ -40,28 +44,36 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const response = await createSession(email, password)
 
       if (response.data && response.data.accessToken) {
-        const loggedUser = response.data
-        const token = loggedUser.accessToken
+        const token = response.data.accessToken
 
-        localStorage.setItem('user', JSON.stringify(loggedUser))
         localStorage.setItem('token', token)
-
-        setUser(loggedUser)
         api.defaults.headers.Authorization = `Bearer ${token}`
         setAuthError(null)
+
+        const userData = await dataUser()
+        setUser(userData.data.user)
 
         navigate('/')
       } else {
         throw new Error('Login falhou')
       }
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 404) {
+          setAuthError('Rota não encontrada. Verifique a URL no backend.')
+        } else if (error.response?.status === 401) {
+          setAuthError('Credenciais inválidas. Verifique seu email e senha.')
+        } else {
+          setAuthError('Erro inesperado. Tente novamente mais tarde.')
+        }
+      } else {
+        setAuthError('Erro inesperado. Tente novamente mais tarde.')
+      }
       console.error('Erro ao fazer login:', error)
-      setAuthError('Credenciais inválidas. Verifique seu email e senha.')
     }
   }
 
   const logout = () => {
-    localStorage.removeItem('user')
     localStorage.removeItem('token')
     setUser(null)
     navigate('/auth')

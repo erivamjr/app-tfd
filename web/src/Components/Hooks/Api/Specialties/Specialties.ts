@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import api from '../../../../Api'
-import { specialties } from './TypeSpecialties'
+import { SpecialtyProps } from '../Appointments/TypeAppointments'
 
 const useSpecialties = () => {
-  const [specialties, setSpecialties] = useState<specialties[]>([])
+  const [specialties, setSpecialties] = useState<SpecialtyProps[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isError, setIsError] = useState<boolean>(false)
 

@@ -280,7 +280,7 @@ export default function CreateRequest() {
             </div>
             <div className="flex-1 p-4 rounded-lg">
               <div className="text-lg font-semibold mb-2">Processo</div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1  gap-4">
                 <div>
                   <div>
                     <Label label="Especialidade" />

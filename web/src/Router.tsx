@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router-dom'
 import Home from './Page/Home/Home'
 import Auth from './Page/Auth/Auth'
 import SideBar from './Components/SideBar/SideBar'
@@ -7,17 +13,29 @@ import Patients from './Page/Patients/Patients'
 import DetailsPatients from './Page/Patients/DetailsPatients'
 import Request from './Page/Request/Request'
 import { AuthContext, AuthProvider } from './Components/Context/Auth'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import User from './Page/User/User'
 import DetailsRequest from './Page/Request/DetailsRequest'
 import EditPatient from './Components/CompoPatients/EditPatients'
+import EditRequest from './Components/CompoRequest/EditRequest'
+import Alert from './Components/Ux/Alert/Alert'
 
 export default function AppRouter() {
   const AdminPrivate = ({ children }) => {
     const { authenticated } = useContext(AuthContext)
+    const location = useLocation()
+    useEffect(() => {
+      if (!authenticated) {
+        Alert({ type: 'error', message: 'Voce precisa estar logado' })
+      } else {
+        Alert({ type: 'success', message: 'Voce esta logado' })
+      }
+    }, [authenticated, location])
+
     if (!authenticated) {
-      return <Navigate to="/auth" />
+      return <Navigate to="/auth" state={{ from: location }} />
     }
+
     return children
   }
 
@@ -46,6 +64,10 @@ export default function AppRouter() {
                         <Route
                           path="/edit-patient/:id"
                           element={<EditPatient />}
+                        />
+                        <Route
+                          path="/edit-request/:id"
+                          element={<EditRequest />}
                         />
 
                         <Route path="/solicitacao" element={<Request />} />
