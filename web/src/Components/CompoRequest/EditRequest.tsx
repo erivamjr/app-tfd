@@ -110,7 +110,20 @@ export default function EditRequest() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      await api.put(`/appointments/${id}`, formData)
+      await api.patch(`/appointments/${id}`, {
+        specialtyId: formData.specialtyId,
+        patientId: formData.patientId,
+        userId: formData.userId,
+        priority: formData.priority,
+        appointmentDate: formData.appointmentDate,
+        diagnosis: formData.diagnosis,
+        cid: formData.cid,
+        requestingDoctor: formData.requestingDoctor,
+        crm: formData.crm,
+        requestCode: formData.requestCode,
+        status: formData.status,
+        notes: formData.notes,
+      })
       alert('Agendamento atualizado com sucesso!')
       navigate('/solicitacao')
     } catch (error) {
@@ -218,6 +231,7 @@ export default function EditRequest() {
               placeholder="Data do Agendamento"
               name="appointmentDate"
               value={formData.appointmentDate}
+              disabled
               onChange={handleChange}
             />
           </div>
