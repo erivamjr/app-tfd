@@ -5,20 +5,28 @@ import { IoReturnDownBack } from 'react-icons/io5'
 import Container from '../Ux/Container/Container'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
 import useAppointment from '../Hooks/Api/Appointments/Appointments'
-import DetailsRequestTable from './DetailsRequestTable'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../Ux/Input/Input'
 
 export default function CompoDetailsRequest() {
   const { id } = useParams<{ id: string }>()
-  const { appointments, isLoading, isError } = useAppointment()
+  const { appointments } = useAppointment()
 
   const appointment = appointments.find((appointment) => appointment.id === id)
-  console.log('CONSOLANDO', appointment)
+  appointment && console.log('CONSOLANDO', appointment)
 
   if (!appointment) {
     return <DisplayMessage message="Agendamento não encontrado." />
   }
+  const appointmentDate = new Date(appointment.createdAt)
+  const formattedDate = appointmentDate.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })
 
   const { patient } = appointment
   return (
@@ -76,13 +84,35 @@ export default function CompoDetailsRequest() {
               <span>Complemento: {patient.complement}</span>
             </div>
           </div>
-          <div className="p-1 text-black font-bold">Histórico</div>
+
+          <hr className="my-4" />
+
+          <div className="p-1 text-black font-bold">
+            Detalhes do Agendamento
+          </div>
+
+          <div className="grid grid-cols-3 w-full p-3">
+            <div className="flex flex-col gap-2">
+              <span>Especialidade: {appointment.specialty.name}</span>
+              <span>Prioridade: {appointment.priority}</span>
+              <span>CID: {appointment.cid}</span>
+              <span>Diagnóstico: {appointment.diagnosis}</span>
+              <span>Estatus: {appointment.status}</span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span>Médico: {appointment.requestingDoctor}</span>
+              <span>CRM: {appointment.crm}</span>
+              <span>Código de Solicitação: {appointment.requestCode}</span>
+              <span>Data da Solicitação: {formattedDate}</span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span>Usuario de Solicitação: {appointment.user.name}</span>
+              <span className="bg-yellow-100  p-2 rounded-md">
+                Observação: {appointment.notes}
+              </span>
+            </div>
+          </div>
         </section>
-        <DetailsRequestTable
-          item={appointment}
-          isError={isError}
-          isLoading={isLoading}
-        />
       </Container>
     </div>
   )

@@ -10,6 +10,9 @@ import { FaRegEdit } from 'react-icons/fa'
 import { RiDeleteBin6Line } from 'react-icons/ri'
 import { TbReportSearch } from 'react-icons/tb'
 import { Pagination } from '../../Ux/Table/Pagination '
+import api from '../../../Api'
+import Modal from '../../Ux/Modal/Modal'
+import { TypeAppointment } from '../../Hooks/Api/Appointments/TypeAppointments'
 
 export default function RequestTable() {
   const { appointments } = useAppointment()
@@ -17,6 +20,28 @@ export default function RequestTable() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
   const totalPages = Math.ceil((appointments?.length || 0) / itemsPerPage)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [appointmentsDelete, setAppointmentsDelete] =
+    useState<TypeAppointment>()
+
+  function handleOpenModal(appintments) {
+    setIsModalOpen(true)
+    setAppointmentsDelete(appintments)
+  }
+
+  function handleCloseModal() {
+    setIsModalOpen(false)
+  }
+
+  async function handleDelete(id: string | undefined) {
+    try {
+      await api.delete(`/patients/${id}`)
+      alert('DELETADO COM SUCESSO!')
+      setIsModalOpen(false)
+    } catch (err) {
+      console.error('Delete patient fail!')
+    }
+  }
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
@@ -90,13 +115,19 @@ export default function RequestTable() {
                   color={'bg-green-500 hover:bg-green-700'}
                   text={'white'}
                 />
-                <TableActions
+                {/* <TableActions
                   id={appointment.id}
                   url={'excluir'}
                   icon={<RiDeleteBin6Line />}
                   color={'bg-red-500 hover:bg-red-700'}
                   text={'white'}
-                />
+                /> */}
+                <button
+                  className="text-white bg-red-500 hover:bg-red-700 flex gap-3 items-center justify-center text-2xl rounded p-3"
+                  onClick={() => handleOpenModal(appointment)}
+                >
+                  <RiDeleteBin6Line />
+                </button>
               </div>
             </TableCell>
           </TableRow>
@@ -107,6 +138,35 @@ export default function RequestTable() {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title="Deletar paciente"
+      >
+        <h1>
+          Tem certeza que quer deletar o agendamento com a especialidade{' '}
+          <span className="text-bold text-xl uppercase">
+            {appointmentsDelete?.specialty.name}
+          </span>{' '}
+          de{' '}
+          <span className="text-bold text-xl uppercase">
+            {appointmentsDelete?.patient.name}
+          </span>
+        </h1>
+        <button
+          className="text-white bg-red-500 hover:bg-red-700 p-2 px-4 rounded mr-2"
+          onClick={() => handleDelete(appointmentsDelete?.id)}
+        >
+          <h1>Sim</h1>
+        </button>
+
+        <button
+          className="text-white bg-green-500 hover:bg-green-700 p-2 px-4 rounded"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <h1>Não</h1>
+        </button>
+      </Modal>
     </div>
   )
 }

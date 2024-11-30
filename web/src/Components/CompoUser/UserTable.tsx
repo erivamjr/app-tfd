@@ -1,27 +1,20 @@
+import { useContext } from 'react'
 import Table from '../Ux/Table/Table'
 import { TableActions } from '../Ux/Table/TableActions'
 import TableCell from '../Ux/Table/TableCell'
 import TableRow from '../Ux/Table/TableRow'
 
-const userData = [
-  {
-    id: 'ed5c416c-46a0-4e93-9484-d555c70af284',
-    name: 'Geiza',
-    email: 'geizaportel@gmail.com',
-    phone: '91991782007',
-    cpf: '777.777.555-05',
-    role: 'user',
-    active: true,
-    createdAt: '2024-07-31T23:38:40.141Z',
-    updatedAt: '2024-07-31T23:38:40.141Z',
-  },
-]
+import { AuthContext } from '../Context/Auth'
+import { DataContext } from '../Context/DataContext'
 
 export default function UserTable() {
-  return (
+  const { user } = useContext(AuthContext)
+  console.log('CONSOLANDO USER DO CONTEXT', user)
+  const { users } = useContext(DataContext)
+
+  return user?.role === 'admin' ? (
     <Table>
       <TableRow>
-        <TableCell isHeader>ID</TableCell>
         <TableCell isHeader>Name</TableCell>
         <TableCell isHeader>Email</TableCell>
         <TableCell isHeader>Phone</TableCell>
@@ -30,9 +23,9 @@ export default function UserTable() {
         <TableCell isHeader>Active</TableCell>
         <TableCell isHeader>Configurações</TableCell>
       </TableRow>
-      {userData.map((user) => (
+
+      {users.map((user) => (
         <TableRow key={user.id}>
-          <TableCell>{user.id}</TableCell>
           <TableCell>{user.name}</TableCell>
           <TableCell>{user.email}</TableCell>
           <TableCell>{user.phone}</TableCell>
@@ -51,5 +44,9 @@ export default function UserTable() {
         </TableRow>
       ))}
     </Table>
+  ) : (
+    <h1 className="text-center text-2xl font-bold">
+      Voce nao tem permissao para acessar essa area
+    </h1>
   )
 }
