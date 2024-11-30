@@ -12,7 +12,7 @@
 //   city: string
 // }
 
-export interface UserPatientProps {
+export interface UserProps {
   id: string
   name: string
   phone?: string | null
@@ -45,5 +45,5 @@ export interface Patient {
   createdAt: Date
   updatedAt: Date
   userId: string
-  user: UserPatientProps
+  user: UserProps
 }
