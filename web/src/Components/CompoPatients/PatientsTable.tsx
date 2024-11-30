@@ -64,8 +64,6 @@ export default function PatientsTable() {
   }
 
   async function handleDelete(id: string | undefined) {
-    console.log(id)
-
     try {
       await api.delete(`/patients/${id}`)
       alert('DELETADO COM SUCESSO!')
