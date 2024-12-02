@@ -20,11 +20,11 @@ export default function Modal({
 
   return ReactDOM.createPortal(
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50  max-h-screen ${
         isOpen ? 'is-open' : ''
       }`}
     >
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl mx-2 p-4 max-h-screen ">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl mx-2 p-4">
         <div className="flex justify-between items-center border-b pb-2">
           <h2 className="text-xl font-semibold">{title}</h2>
           <button

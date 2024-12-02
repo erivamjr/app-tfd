@@ -85,7 +85,7 @@ export default function SideBar() {
             sideBar={sideBar}
           />
           <MenuItem
-            to="/especialidades"
+            to="/specialties"
             icon={<CiMedicalCase />}
             label="Especialidades"
             currentPage={page}

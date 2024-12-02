@@ -12,8 +12,10 @@ interface DataContextProps {
   specialties: SpecialtyProps[]
   appointments: TypeAppointment[]
   users: UserProps[]
-  addSpecialty: (newSpecialty: SpecialtyProps) => void
+  addSpecialty: (newSpecialty: string) => void
   fetchAppointments: () => void
+  updateSpecialty: (id: number, name: string) => void
+  deleteSpecialty: (id: number) => void
 }
 
 export const DataContext = createContext({} as DataContextProps)
@@ -23,12 +25,35 @@ export const DataProvider = ({ children }) => {
   const [appointments, setAppointments] = useState<TypeAppointment[]>([])
   const [users, setUsers] = useState([])
 
-  const addSpecialty = async (newSpecialty: SpecialtyProps) => {
+  const addSpecialty = async (newSpecial: string) => {
+    const newSpecialty = { name: newSpecial }
     try {
-      await api.post('/specialties', newSpecialty)
-      setSpecialties((prevSpecialties) => [...prevSpecialties, newSpecialty])
+      const response = await api.post('/specialties', newSpecialty)
+      setSpecialties((prevSpecialties) => [...prevSpecialties, response.data])
     } catch (error) {
       console.error('Erro ao adicionar nova especialidade:', error)
+    }
+  }
+
+  const updateSpecialty = async (id: number, name: string) => {
+    try {
+      await api.put(`/specialties/${id}`, { name })
+      setSpecialties(
+        specialties.map((specialty) =>
+          specialty.id === id ? { ...specialty, name } : specialty,
+        ),
+      )
+    } catch (error) {
+      console.error('Erro ao atualizar especialidade:', error)
+    }
+  }
+
+  const deleteSpecialty = async (id: number) => {
+    try {
+      await api.delete(`/specialties/${id}`)
+      setSpecialties(specialties.filter((specialty) => specialty.id !== id))
+    } catch (error) {
+      console.error('Erro ao deletar especialidade:', error)
     }
   }
 
@@ -44,7 +69,10 @@ export const DataProvider = ({ children }) => {
   const fetchSpecialties = async () => {
     try {
       const response = await api.get('/specialties')
-      setSpecialties(response.data)
+      const sortedSpecialties: SpecialtyProps[] = response.data.sort((a, b) =>
+        a.name.localeCompare(b.name),
+      )
+      setSpecialties(sortedSpecialties)
     } catch (error) {
       console.error('Erro ao buscar especialidades:', error)
     }
@@ -58,10 +86,11 @@ export const DataProvider = ({ children }) => {
       console.error('Erro ao buscar usuários:', error)
     }
   }
+
   useEffect(() => {
     fetchSpecialties()
     fetchUsers()
-    fetchAppointments() // Buscar agendamentos quando o componente montar
+    fetchAppointments()
   }, [])
 
   return (
@@ -72,6 +101,8 @@ export const DataProvider = ({ children }) => {
         users,
         addSpecialty,
         fetchAppointments,
+        updateSpecialty,
+        deleteSpecialty,
       }}
     >
       {children}
