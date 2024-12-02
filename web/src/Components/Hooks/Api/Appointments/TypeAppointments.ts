@@ -23,7 +23,7 @@ export interface PatientProps {
 export interface SpecialtyProps {
   id: number
   name: string
-  active?: boolean
+  active: boolean
 }
 
 export interface UserProps {

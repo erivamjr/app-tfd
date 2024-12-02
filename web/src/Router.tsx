@@ -19,6 +19,7 @@ import DetailsRequest from './Page/Request/DetailsRequest'
 import EditPatient from './Components/CompoPatients/EditPatients'
 import EditRequest from './Components/CompoRequest/EditRequest'
 import Alert from './Components/Ux/Alert/Alert'
+import { Specialties } from './Page/Specialties/Specialties'
 
 export default function AppRouter() {
   const AdminPrivate = ({ children }) => {
@@ -71,6 +72,7 @@ export default function AppRouter() {
                         />
 
                         <Route path="/solicitacao" element={<Request />} />
+                        <Route path="/specialties" element={<Specialties />} />
                         <Route
                           path="/detalhessolicitacao/:id"
                           element={<DetailsRequest />}

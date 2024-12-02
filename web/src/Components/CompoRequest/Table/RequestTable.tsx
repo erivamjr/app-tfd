@@ -13,6 +13,7 @@ import { Pagination } from '../../Ux/Table/Pagination '
 import api from '../../../Api'
 import Modal from '../../Ux/Modal/Modal'
 import { TypeAppointment } from '../../Hooks/Api/Appointments/TypeAppointments'
+import CreatableSelect from 'react-select/creatable'
 
 export default function RequestTable() {
   const { appointments } = useAppointment()
@@ -23,6 +24,18 @@ export default function RequestTable() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [appointmentsDelete, setAppointmentsDelete] =
     useState<TypeAppointment>()
+  const [selectedSpecialty, setSelectedSpecialty] = useState('')
+  const [selectedStatus, setSelectedStatus] = useState('')
+  const [selectedPriority, setSelectedPriority] = useState('')
+
+  const filteredAppointments = appointments.filter((appointment) => {
+    return (
+      (!selectedSpecialty ||
+        appointment.specialty.name === selectedSpecialty) &&
+      (!selectedStatus || appointment.status === selectedStatus) &&
+      (!selectedPriority || appointment.priority === selectedPriority)
+    )
+  })
 
   function handleOpenModal(appintments) {
     setIsModalOpen(true)
@@ -48,13 +61,39 @@ export default function RequestTable() {
     // Se você tiver uma lógica de pesquisa, coloque-a aqui
   }
 
-  // Função para exibir os compromissos da página atual
+  const handleSpecialtyChange = (selectedOption) => {
+    setSelectedSpecialty(selectedOption ? selectedOption.value : '')
+  }
+
+  const specialtyOptions = [
+    ...new Set(appointments.map((appointment) => appointment.specialty.name)),
+  ].map((name) => ({
+    value: name,
+    label: name,
+  }))
+
+  const compareDates = (a: TypeAppointment, b: TypeAppointment) => {
+    const dateA = new Date(a.createdAt).getTime() // Converte para timestamp
+    const dateB = new Date(b.createdAt).getTime() // Converte para timestamp
+    return dateA - dateB // Comparação numérica para ordenação decrescente
+  }
+
   const displayAppointments = () => {
-    if (!appointments) return []
+    if (!filteredAppointments) return []
+
+    const sortedAppointments = filteredAppointments.slice().sort(compareDates)
+
+    const searchLower = searchValue.toLowerCase()
+    const searchedAppointments = sortedAppointments.filter((appointment) => {
+      return appointment.patient.name.toLowerCase().includes(searchLower)
+    })
 
     const startIndex = (currentPage - 1) * itemsPerPage
-    const endIndex = Math.min(startIndex + itemsPerPage, appointments.length)
-    return appointments.slice(startIndex, endIndex)
+    const endIndex = Math.min(
+      startIndex + itemsPerPage,
+      searchedAppointments.length,
+    )
+    return searchedAppointments.slice(startIndex, endIndex)
   }
 
   // Event listener para mudar de página
@@ -62,8 +101,91 @@ export default function RequestTable() {
     setCurrentPage(page)
   }
 
+  const priorityEmojis = {
+    Emergency: '🔴',
+    Elderly: '🟡',
+    Pregnant: '🟠',
+    Normal: '🟢',
+    Child: '🟠',
+  }
+
   return (
     <div>
+      <div className="mb-5 grid grid-cols-4 gap-4">
+        <CreatableSelect
+          placeholder="Todas Especialidades"
+          isClearable
+          options={specialtyOptions}
+          value={
+            selectedSpecialty
+              ? { value: selectedSpecialty, label: selectedSpecialty }
+              : null
+          }
+          onChange={handleSpecialtyChange}
+          styles={{
+            control: (provided, state) => ({
+              ...provided,
+              borderColor: state.isFocused ? '#121212' : '#d9d9d9',
+              boxShadow: state.isFocused ? '0 0 0 1px #121212' : 'none',
+              '&:hover': {
+                borderColor: '#121212',
+              },
+            }),
+            menu: (base) => ({
+              ...base,
+              marginTop: '0.5rem',
+              borderRadius: '0.25rem',
+              boxShadow:
+                '0 0 0 1px rgba(0, 0, 0, 0.05), 0 4px 11px rgba(0, 0, 0, 0.1)',
+            }),
+            option: (base, state) => ({
+              ...base,
+              backgroundColor: state.isSelected ? '#e0e0e0' : 'white',
+              ':hover': {
+                backgroundColor: '#f0f0f0',
+              },
+            }),
+          }}
+        />
+
+        <select
+          value={selectedStatus}
+          onChange={(e) => setSelectedStatus(e.target.value)}
+          className="border rounded p-2 mr-2"
+        >
+          <option value="">Todos os status</option>
+          {appointments
+            .map((appointment) => appointment.status)
+            .filter(
+              (status, index, statuses) => statuses.indexOf(status) === index,
+            )
+            .map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
+        </select>
+
+        <select
+          value={selectedPriority}
+          onChange={(e) => setSelectedPriority(e.target.value)}
+          className="border rounded p-2 mr-2"
+        >
+          <option value="">Todas as prioridades</option>
+          {appointments
+            .map((appointment) => appointment.priority)
+            .filter(
+              (priority, index, priorities) =>
+                priorities.indexOf(priority) === index,
+            )
+            .map((priority) => (
+              <option key={priority} value={priority}>
+                {priority}
+              </option>
+            ))
+            .sort()}
+        </select>
+      </div>
       <div className="mb-5 flex flex-1 items-center space-x-2">
         <Input
           type="text"
@@ -80,6 +202,7 @@ export default function RequestTable() {
       <Table>
         <TableRow>
           <TableCell isHeader>Nome</TableCell>
+          <TableCell isHeader>P</TableCell>
           <TableCell isHeader>CPF</TableCell>
           <TableCell isHeader>Telefone</TableCell>
           <TableCell isHeader>Especialidade</TableCell>
@@ -89,6 +212,7 @@ export default function RequestTable() {
         {displayAppointments().map((appointment) => (
           <TableRow key={appointment.id}>
             <TableCell>{appointment.patient.name}</TableCell>
+            <TableCell>{priorityEmojis[appointment.priority] || ''}</TableCell>
             <TableCell>{appointment.patient.cpf}</TableCell>
             <TableCell>{appointment.patient.phone}</TableCell>
             <TableCell>{appointment.specialty.name}</TableCell>

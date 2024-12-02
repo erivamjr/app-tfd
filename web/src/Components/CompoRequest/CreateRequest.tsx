@@ -1,5 +1,4 @@
 import { CiFloppyDisk } from 'react-icons/ci'
-import { RiUserAddLine } from 'react-icons/ri'
 import Input from '../Ux/Input/Input'
 import Label from '../Ux/Label/Label'
 import Loading from '../Ux/Loading/Loading'
@@ -11,6 +10,7 @@ import Alert from '../Ux/Alert/Alert'
 import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
 import CreatableSelect from 'react-select/creatable'
 import Autocomplete from '../Ux/Autocomplete'
+import { TfiAgenda } from 'react-icons/tfi'
 
 export default function CreateRequest() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -214,7 +214,7 @@ export default function CreateRequest() {
           className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer"
         >
           <span className="hidden md:block">Adicionar Solicitação</span>
-          <RiUserAddLine />
+          <TfiAgenda />
         </div>
       </div>
       <Modal
