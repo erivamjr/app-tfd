@@ -9,7 +9,6 @@ import { DataContext } from '../Context/DataContext'
 
 export default function UserTable() {
   const { user } = useContext(AuthContext)
-  console.log('CONSOLANDO USER DO CONTEXT', user)
   const { users } = useContext(DataContext)
 
   return user?.role === 'admin' ? (
