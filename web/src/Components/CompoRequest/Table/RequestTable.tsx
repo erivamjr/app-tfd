@@ -101,6 +101,20 @@ export default function RequestTable() {
     setCurrentPage(page)
   }
 
+  // const priorityTranslations = {
+  //   [Priority.Normal]: 'Normal',
+  //   [Priority.Elderly]: 'Idoso',
+  //   [Priority.Pregnant]: 'Gestante',
+  //   [Priority.Child]: 'Criança',
+  //   [Priority.Emergency]: 'Emergência',
+  // }
+
+  // const statusTranslations = {
+  //   [Status.InProgress]: 'Em Andamento',
+  //   [Status.Scheduled]: 'Agendado',
+  //   [Status.Completed]: 'Completado',
+  // }
+
   const priorityEmojis = {
     Emergency: '🔴',
     Elderly: '🟡',
