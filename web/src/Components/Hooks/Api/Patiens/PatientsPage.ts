@@ -18,27 +18,20 @@ const usePatientsPage = (
     const { signal } = controller
 
     const fetchPatientsPage = async () => {
-      if (searchTerm) {
-        try {
-          setIsLoading(true)
-          setIsError(false)
+      setIsLoading(true)
+      setIsError(false)
 
-          const response = await api.get<Patient[]>(
+      try {
+        let response
+
+        if (searchTerm) {
+          response = await api.get<Patient[]>(
             `/patients/search?name=${searchTerm}`,
             { signal },
           )
-          console.log('TESTANDO USEPACIENTES', response.data)
-
           setPatientsPage(response.data)
-        } catch (error) {
-          setIsError(true)
-        } finally {
-          setIsLoading(false)
-        }
-      } else {
-        try {
-          setIsLoading(true)
-          const response = await api.get<{
+        } else {
+          response = await api.get<{
             data: Patient[]
             total: number
             pageCount: number
@@ -46,16 +39,17 @@ const usePatientsPage = (
 
           setPatientsPage(response.data.data)
           setTotalPages(response.data.pageCount)
-        } catch (error) {
-          if (axios.isAxiosError(error) && error.message === 'canceled') {
-            console.log('Request was canceled.')
-          } else {
-            console.error('Error fetching data:', error)
-            setIsError(true)
-          }
-        } finally {
-          setIsLoading(false)
         }
+      } catch (error) {
+        if (axios.isCancel(error)) {
+          // Log opcional para fins de debug
+          return
+        } else {
+          console.error('Error fetching data:', error)
+          setIsError(true)
+        }
+      } finally {
+        setIsLoading(false)
       }
     }
 
