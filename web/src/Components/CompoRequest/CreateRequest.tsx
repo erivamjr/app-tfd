@@ -3,7 +3,7 @@ import Input from '../Ux/Input/Input'
 import Label from '../Ux/Label/Label'
 import Loading from '../Ux/Loading/Loading'
 import Modal from '../Ux/Modal/Modal'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useContext, useState } from 'react'
 import api from '../../Api'
 import useSpecialties from '../Hooks/Api/Specialties/Specialties'
 import Alert from '../Ux/Alert/Alert'
@@ -11,6 +11,7 @@ import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
 import CreatableSelect from 'react-select/creatable'
 import Autocomplete from '../Ux/Autocomplete'
 import { TfiAgenda } from 'react-icons/tfi'
+import { AuthContext } from '../Context/Auth'
 
 export default function CreateRequest() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -33,9 +34,11 @@ export default function CreateRequest() {
   const [requestCode, setRequestCode] = useState<string>('')
   const [status, setStatus] = useState<string>('InProgress')
   const [notes, setNotes] = useState<string>('')
-  const [userId] = useState<string>('84d6d27e-475c-4e83-a1ae-b477698e399e') // Exemplo de ID de usuário
   const [requestDate] = useState<string>(new Date().toISOString()) // Data da solicitação no formato ISO
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
+  const { user } = useContext(AuthContext)
+  // const { setAppointments } = useContext(DataContext)
+
   function handleOpenModal() {
     setIsModalOpen(true)
   }
@@ -124,7 +127,7 @@ export default function CreateRequest() {
       return
     }
 
-    if (!userId) {
+    if (!user?.id) {
       setType('warning')
       setAlertMessage('Por favor, insira o ID do usuário.')
       setIsAlertOpen(true)
@@ -149,7 +152,7 @@ export default function CreateRequest() {
     const requestData = {
       specialtyId: Number(specialtyId),
       patientId,
-      userId,
+      userId: user.id,
       priority,
       appointmentDate,
       diagnosis,
@@ -168,6 +171,7 @@ export default function CreateRequest() {
       setType('success')
       setAlertMessage('Solicitação criada com sucesso!')
       setIsAlertOpen(true)
+
       setTimeout(() => {
         setPatientId('')
         setSpecialtyId(undefined)
