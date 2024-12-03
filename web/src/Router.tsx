@@ -5,87 +5,76 @@ import {
   Navigate,
   useLocation,
 } from 'react-router-dom'
+import { useContext, useEffect } from 'react'
+import { AuthProvider, AuthContext } from './Components/Context/Auth'
+import Alert from './Components/Ux/Alert/Alert'
 import Home from './Page/Home/Home'
 import Auth from './Page/Auth/Auth'
-import SideBar from './Components/SideBar/SideBar'
-import Menu from './Components/Menu/Menu'
 import Patients from './Page/Patients/Patients'
 import DetailsPatients from './Page/Patients/DetailsPatients'
-import Request from './Page/Request/Request'
-import { AuthContext, AuthProvider } from './Components/Context/Auth'
-import { useContext, useEffect } from 'react'
-import User from './Page/User/User'
-import DetailsRequest from './Page/Request/DetailsRequest'
 import EditPatient from './Components/CompoPatients/EditPatients'
+import Request from './Page/Request/Request'
+import DetailsRequest from './Page/Request/DetailsRequest'
 import EditRequest from './Components/CompoRequest/EditRequest'
-import Alert from './Components/Ux/Alert/Alert'
+import User from './Page/User/User'
 import { Specialties } from './Page/Specialties/Specialties'
+import { MainLayout } from './Components/MainLayout/MainLayout'
 
-export default function AppRouter() {
-  const AdminPrivate = ({ children }) => {
-    const { authenticated } = useContext(AuthContext)
-    const location = useLocation()
-    useEffect(() => {
-      if (!authenticated) {
-        Alert({ type: 'error', message: 'Voce precisa estar logado' })
-      } else {
-        Alert({ type: 'success', message: 'Voce esta logado' })
-      }
-    }, [authenticated, location])
+function AdminPrivate({ children }: { children: JSX.Element }) {
+  const { authenticated } = useContext(AuthContext)
+  const location = useLocation()
 
+  useEffect(() => {
     if (!authenticated) {
-      return <Navigate to="/auth" state={{ from: location }} />
+      Alert({ type: 'error', message: 'Você precisa estar logado' })
+    } else {
+      Alert({ type: 'success', message: 'Você está logado' })
     }
+  }, [authenticated, location])
 
-    return children
+  if (!authenticated) {
+    return <Navigate to="/auth" state={{ from: location }} />
   }
 
+  return children
+}
+
+export default function AppRouter() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <div className=" flex justify-center items-center h-screen">
-          <Routes>
-            <Route path="/auth" element={<Auth />} />
+        <Routes>
+          {/* Rotas públicas */}
+          <Route path="/auth" element={<Auth />} />
 
-            <Route
-              path="/*"
-              element={
-                <AdminPrivate>
-                  <div className="flex w-full h-full">
-                    <SideBar />
-                    <div className="w-full max-h-full flex flex-col p-8">
-                      <Menu />
-                      <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/pacientes" element={<Patients />} />
-                        <Route
-                          path="/detalhespaciente/:id"
-                          element={<DetailsPatients />}
-                        />
-                        <Route
-                          path="/edit-patient/:id"
-                          element={<EditPatient />}
-                        />
-                        <Route
-                          path="/edit-request/:id"
-                          element={<EditRequest />}
-                        />
-
-                        <Route path="/solicitacao" element={<Request />} />
-                        <Route path="/specialties" element={<Specialties />} />
-                        <Route
-                          path="/detalhessolicitacao/:id"
-                          element={<DetailsRequest />}
-                        />
-                        <Route path="/usuarios" element={<User />} />
-                      </Routes>
-                    </div>
-                  </div>
-                </AdminPrivate>
-              }
-            />
-          </Routes>
-        </div>
+          {/* Rotas privadas */}
+          <Route
+            path="/*"
+            element={
+              <AdminPrivate>
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/pacientes" element={<Patients />} />
+                    <Route
+                      path="/detalhespaciente/:id"
+                      element={<DetailsPatients />}
+                    />
+                    <Route path="/edit-patient/:id" element={<EditPatient />} />
+                    <Route path="/edit-request/:id" element={<EditRequest />} />
+                    <Route path="/solicitacao" element={<Request />} />
+                    <Route path="/specialties" element={<Specialties />} />
+                    <Route
+                      path="/detalhessolicitacao/:id"
+                      element={<DetailsRequest />}
+                    />
+                    <Route path="/usuarios" element={<User />} />
+                  </Routes>
+                </MainLayout>
+              </AdminPrivate>
+            }
+          />
+        </Routes>
       </AuthProvider>
     </BrowserRouter>
   )
