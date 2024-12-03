@@ -101,19 +101,19 @@ export default function RequestTable() {
     setCurrentPage(page)
   }
 
-  // const priorityTranslations = {
-  //   [Priority.Normal]: 'Normal',
-  //   [Priority.Elderly]: 'Idoso',
-  //   [Priority.Pregnant]: 'Gestante',
-  //   [Priority.Child]: 'Criança',
-  //   [Priority.Emergency]: 'Emergência',
-  // }
+  const priorityTranslations = {
+    Emergency: 'Emergência',
+    Elderly: 'Idoso',
+    Pregnant: 'Gestante',
+    Normal: 'Normal',
+    Child: 'Criança',
+  }
 
-  // const statusTranslations = {
-  //   [Status.InProgress]: 'Em Andamento',
-  //   [Status.Scheduled]: 'Agendado',
-  //   [Status.Completed]: 'Completado',
-  // }
+  const statusTranslations = {
+    InProgress: 'Em Andamento',
+    Scheduled: 'Agendado',
+    Completed: 'Completado',
+  }
 
   const priorityEmojis = {
     Emergency: '🔴',
@@ -175,7 +175,7 @@ export default function RequestTable() {
             )
             .map((status) => (
               <option key={status} value={status}>
-                {status}
+                {statusTranslations[status] || status}
               </option>
             ))}
         </select>
@@ -194,10 +194,9 @@ export default function RequestTable() {
             )
             .map((priority) => (
               <option key={priority} value={priority}>
-                {priority}
+                {priorityTranslations[priority] || priority}
               </option>
-            ))
-            .sort()}
+            ))}
         </select>
       </div>
       <div className="mb-5 flex flex-1 items-center space-x-2">
@@ -253,13 +252,7 @@ export default function RequestTable() {
                   color={'bg-green-500 hover:bg-green-700'}
                   text={'white'}
                 />
-                {/* <TableActions
-                  id={appointment.id}
-                  url={'excluir'}
-                  icon={<RiDeleteBin6Line />}
-                  color={'bg-red-500 hover:bg-red-700'}
-                  text={'white'}
-                /> */}
+
                 <button
                   className="text-white bg-red-500 hover:bg-red-700 flex gap-3 items-center justify-center text-2xl rounded p-3"
                   onClick={() => handleOpenModal(appointment)}

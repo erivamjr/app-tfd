@@ -1,7 +1,11 @@
-import { createContext, useState, useEffect } from 'react'
+import {
+  createContext,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from 'react'
 import api from '../../Api'
-
-// Supondo que essas interfaces estão definidas em outro lugar
 import {
   SpecialtyProps,
   TypeAppointment,
@@ -12,86 +16,95 @@ interface DataContextProps {
   specialties: SpecialtyProps[]
   appointments: TypeAppointment[]
   users: UserProps[]
-  addSpecialty: (newSpecialty: string) => void
-  fetchAppointments: () => void
-  updateSpecialty: (id: number, name: string) => void
-  deleteSpecialty: (id: number) => void
+  addSpecialty: (newSpecialty: string) => Promise<void>
+  fetchAppointments: () => Promise<void>
+  updateSpecialty: (id: number, name: string) => Promise<void>
+  deleteSpecialty: (id: number) => Promise<void>
 }
 
 export const DataContext = createContext({} as DataContextProps)
 
-export const DataProvider = ({ children }) => {
+interface DataProviderProps {
+  children: ReactNode
+}
+
+export const DataProvider = ({ children }: DataProviderProps) => {
   const [specialties, setSpecialties] = useState<SpecialtyProps[]>([])
   const [appointments, setAppointments] = useState<TypeAppointment[]>([])
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState<UserProps[]>([])
 
-  const addSpecialty = async (newSpecial: string) => {
-    const newSpecialty = { name: newSpecial }
+  const handleError = (error: unknown, message: string) => {
+    console.error(message, error)
+  }
+
+  const fetchSpecialties = useCallback(async () => {
     try {
-      const response = await api.post('/specialties', newSpecialty)
-      setSpecialties((prevSpecialties) => [...prevSpecialties, response.data])
+      const { data } = await api.get('/specialties')
+      setSpecialties(
+        data.sort((a: SpecialtyProps, b: SpecialtyProps) =>
+          a.name.localeCompare(b.name),
+        ),
+      )
     } catch (error) {
-      console.error('Erro ao adicionar nova especialidade:', error)
+      handleError(error, 'Erro ao buscar especialidades.')
+    }
+  }, [])
+
+  const fetchUsers = useCallback(async () => {
+    try {
+      const { data } = await api.get('/users')
+      setUsers(data)
+    } catch (error) {
+      handleError(error, 'Erro ao buscar usuários.')
+    }
+  }, [])
+
+  const fetchAppointments = useCallback(async () => {
+    try {
+      const { data } = await api.get('/appointments')
+      setAppointments(data)
+    } catch (error) {
+      handleError(error, 'Erro ao buscar agendamentos.')
+    }
+  }, [])
+
+  const addSpecialty = async (newSpecialty: string) => {
+    try {
+      const { data } = await api.post('/specialties', { name: newSpecialty })
+      setSpecialties((prev) => [...prev, data])
+    } catch (error) {
+      handleError(error, 'Erro ao adicionar nova especialidade.')
     }
   }
 
   const updateSpecialty = async (id: number, name: string) => {
     try {
       await api.put(`/specialties/${id}`, { name })
-      setSpecialties(
-        specialties.map((specialty) =>
+      setSpecialties((prev) =>
+        prev.map((specialty) =>
           specialty.id === id ? { ...specialty, name } : specialty,
         ),
       )
     } catch (error) {
-      console.error('Erro ao atualizar especialidade:', error)
+      handleError(error, 'Erro ao atualizar especialidade.')
     }
   }
 
   const deleteSpecialty = async (id: number) => {
     try {
       await api.delete(`/specialties/${id}`)
-      setSpecialties(specialties.filter((specialty) => specialty.id !== id))
+      setSpecialties((prev) => prev.filter((specialty) => specialty.id !== id))
     } catch (error) {
-      console.error('Erro ao deletar especialidade:', error)
-    }
-  }
-
-  const fetchAppointments = async () => {
-    try {
-      const response = await api.get('/appointments')
-      setAppointments(response.data)
-    } catch (error) {
-      console.error('Erro ao buscar agendamentos:', error)
-    }
-  }
-
-  const fetchSpecialties = async () => {
-    try {
-      const response = await api.get('/specialties')
-      const sortedSpecialties: SpecialtyProps[] = response.data.sort((a, b) =>
-        a.name.localeCompare(b.name),
-      )
-      setSpecialties(sortedSpecialties)
-    } catch (error) {
-      console.error('Erro ao buscar especialidades:', error)
-    }
-  }
-
-  const fetchUsers = async () => {
-    try {
-      const response = await api.get('/users')
-      setUsers(response.data)
-    } catch (error) {
-      console.error('Erro ao buscar usuários:', error)
+      handleError(error, 'Erro ao deletar especialidade.')
     }
   }
 
   useEffect(() => {
-    fetchSpecialties()
-    fetchUsers()
-    fetchAppointments()
-  }, [])
+    const fetchData = async () => {
+      await Promise.all([fetchSpecialties(), fetchUsers(), fetchAppointments()])
+    }
+    fetchData()
+  }, [fetchSpecialties, fetchUsers, fetchAppointments])
 
   return (
     <DataContext.Provider
