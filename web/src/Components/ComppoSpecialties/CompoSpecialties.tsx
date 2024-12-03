@@ -1,92 +1,91 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState, useMemo } from 'react'
 import { DataContext } from '../Context/DataContext'
 import { RiDeleteBin6Line } from 'react-icons/ri'
 import { FaRegEdit } from 'react-icons/fa'
 import { CiSearch } from 'react-icons/ci'
-import Input from '../Ux/Input/Input'
 import { LiaNotesMedicalSolid } from 'react-icons/lia'
-import { SpecialtyProps } from '../Hooks/Api/Appointments/TypeAppointments'
+import Input from '../Ux/Input/Input'
 import ModalSpecialties from './ModalSpecialties'
+import { SpecialtyProps } from '../Hooks/Api/Appointments/TypeAppointments'
+import { Pagination } from '../Ux/Table/Pagination '
 
 export function CompoSpecialties() {
   const { specialties, addSpecialty, updateSpecialty, deleteSpecialty } =
     useContext(DataContext)
-  const [search, setSearch] = useState<string>('')
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [specialtyName, setSpecialtyName] = useState<string>('')
-  const [modalAction, setModalAction] = useState('')
-  const [selectedSpecialty, setSelectedSpecialty] = useState(
-    {} as SpecialtyProps,
-  )
-  const [filteredSpecialties, setFilteredSpecialties] = useState<
-    SpecialtyProps[]
-  >([])
 
-  const openModal = (action, specialty?: SpecialtyProps) => {
-    setIsModalOpen(true)
+  const [search, setSearch] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalAction, setModalAction] = useState<'add' | 'edit' | 'delete'>(
+    'add',
+  )
+  const [specialtyName, setSpecialtyName] = useState('')
+  const [selectedSpecialty, setSelectedSpecialty] =
+    useState<SpecialtyProps | null>(null)
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const specialtiesPerPage = 5
+
+  const filteredSpecialties = useMemo(() => {
+    const lowerCaseSearch = search.toLowerCase()
+    return specialties.filter((specialty) =>
+      specialty.name.toLowerCase().includes(lowerCaseSearch),
+    )
+  }, [search, specialties])
+
+  const currentSpecialties = useMemo(() => {
+    const startIndex = (currentPage - 1) * specialtiesPerPage
+    const endIndex = startIndex + specialtiesPerPage
+    return filteredSpecialties.slice(startIndex, endIndex)
+  }, [filteredSpecialties, currentPage])
+
+  const totalPages = useMemo(
+    () => Math.ceil(filteredSpecialties.length / specialtiesPerPage),
+    [filteredSpecialties],
+  )
+
+  const openModal = (
+    action: 'add' | 'edit' | 'delete',
+    specialty?: SpecialtyProps,
+  ) => {
     setModalAction(action)
+    setIsModalOpen(true)
     if (specialty) {
       setSelectedSpecialty(specialty)
-
-      if (action === 'edit') {
-        setSpecialtyName(specialty.name)
-      }
+      if (action === 'edit') setSpecialtyName(specialty.name)
     }
   }
 
   const closeModal = () => {
     setIsModalOpen(false)
     setSpecialtyName('')
+    setSelectedSpecialty(null)
   }
 
-  const handleAddSpecialty = () => {
-    setSpecialtyName('')
-    openModal('add')
-  }
-
-  const handleEditSpecialty = () => {
-    updateSpecialty(selectedSpecialty.id, specialtyName)
+  const handleConfirmAction = () => {
+    if (modalAction === 'add') {
+      addSpecialty(specialtyName)
+    } else if (modalAction === 'edit' && selectedSpecialty) {
+      updateSpecialty(selectedSpecialty.id, specialtyName)
+    } else if (modalAction === 'delete' && selectedSpecialty) {
+      deleteSpecialty(selectedSpecialty.id)
+    }
     closeModal()
   }
 
-  const handleDeleteSpecialty = () => {
-    deleteSpecialty(selectedSpecialty.id)
-    closeModal()
-  }
-
-  const handleConfirmAddSpecialty = () => {
-    addSpecialty(specialtyName) // Adiciona a nova especialidade com o nome atual
-    closeModal() // Fecha o modal após a adição
-  }
-
-  useEffect(() => {
-    setFilteredSpecialties(specialties)
-  }, [specialties])
-
-  const handleSearchChange = (event) => {
-    const searchValue = event.target.value
-    setSearch(searchValue)
-    filterSpecialties(searchValue)
-  }
-
-  const filterSpecialties = (searchValue) => {
-    const lowerCaseSearch = searchValue.toLowerCase()
-    const filtered = specialties.filter((specialty) =>
-      specialty.name.toLowerCase().includes(lowerCaseSearch),
-    )
-    setFilteredSpecialties(filtered)
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value)
   }
 
   return (
     <section className="flex flex-col gap-2">
       <div className="flex justify-end mb-4">
-        <div
-          onClick={() => handleAddSpecialty()}
+        <button
+          onClick={() => openModal('add')}
           className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer"
         >
           <span className="hidden md:block">Adicionar Especialidade</span>
           <LiaNotesMedicalSolid />
-        </div>
+        </button>
       </div>
 
       <div className="mb-5 flex flex-1 items-center space-x-2">
@@ -103,7 +102,7 @@ export function CompoSpecialties() {
         </button>
       </div>
 
-      {filteredSpecialties.map((specialty) => (
+      {currentSpecialties.map((specialty) => (
         <div
           key={specialty.id}
           className="flex flex-row items-center justify-between p-2 border border-gray-300 rounded-md hover:bg-gray-100"
@@ -138,7 +137,12 @@ export function CompoSpecialties() {
                 : 'Excluir Especialidade'
           }
           content={
-            modalAction === 'add' || modalAction === 'edit' ? (
+            modalAction === 'delete' ? (
+              <p>
+                Tem certeza que deseja excluir a especialidade &quot;
+                {selectedSpecialty?.name}&quot;?
+              </p>
+            ) : (
               <Input
                 type="text"
                 name="name"
@@ -146,20 +150,9 @@ export function CompoSpecialties() {
                 onChange={(e) => setSpecialtyName(e.target.value)}
                 placeholder="Digite o nome da especialidade"
               />
-            ) : (
-              <p>
-                Tem certeza que deseja excluir a especialidade &quot;
-                {selectedSpecialty.name}&quot; ?
-              </p>
             )
           }
-          confirmAction={
-            modalAction === 'add'
-              ? handleConfirmAddSpecialty
-              : modalAction === 'edit'
-                ? handleEditSpecialty
-                : handleDeleteSpecialty
-          }
+          confirmAction={handleConfirmAction}
           confirmText={
             modalAction === 'add'
               ? 'Adicionar'
@@ -167,8 +160,15 @@ export function CompoSpecialties() {
                 ? 'Salvar'
                 : 'Excluir'
           }
+          isDeleteAction={modalAction === 'delete'}
         />
       )}
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </section>
   )
 }

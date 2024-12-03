@@ -33,7 +33,7 @@ export default function SideBar() {
     <div
       className={`${
         sideBar ? 'w-16' : 'w-60'
-      } h-full flex flex-col bg-blue-600 text-white transition-width duration-300`}
+      }  flex flex-col bg-blue-600 text-white transition-width duration-300`}
     >
       <div
         onClick={handleSideBar}
@@ -140,12 +140,13 @@ function MenuItem({
           : 'hover:text-blue-200'
       } ${sideBar ? 'justify-center' : ''}`}
     >
-      <span>{icon}</span>
-      {!sideBar && (
-        <Link to={to}>
-          <span>{label}</span>
-        </Link>
-      )}
+      <Link
+        to={to}
+        className={`flex items-center gap-1 ${sideBar ? 'justify-center' : ''}`}
+      >
+        <span>{icon}</span>
+        {!sideBar && <span>{label}</span>}
+      </Link>
     </li>
   )
 }

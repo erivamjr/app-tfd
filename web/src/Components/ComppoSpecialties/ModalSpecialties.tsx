@@ -5,12 +5,9 @@ const ModalSpecialties = ({
   content,
   confirmAction,
   confirmText,
+  isDeleteAction,
 }) => {
   if (!isOpen) return null
-
-  const confirmButtonClass = confirmAction // verificar depois para continuar alteraçao
-    ? 'bg-blue-500 hover:bg-blue-700'
-    : 'bg-gray-500 hover:bg-gray-700'
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
@@ -29,7 +26,7 @@ const ModalSpecialties = ({
           </button>
           <button
             onClick={confirmAction}
-            className={`text-white p-2 rounded ${confirmButtonClass}`}
+            className={`text-white p-2 rounded ${isDeleteAction ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'}`}
           >
             {confirmText}
           </button>
