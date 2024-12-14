@@ -217,8 +217,8 @@ export default function CreateRequest() {
           onClick={handleOpenModal}
           className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer"
         >
-          <span className="hidden md:block">Adicionar Solicitação</span>
           <TfiAgenda />
+          <span className="hidden md:block">Adicionar Solicitação</span>
         </div>
       </div>
       <Modal

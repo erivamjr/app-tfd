@@ -46,13 +46,15 @@ export default function UserTable() {
           </TableCell>
           <TableCell>{user.active ? 'Yes' : 'No'}</TableCell>
           <TableCell>
-            <button className="bg-green-300 p-1 rounded border m-1">
+            <button className="bg-green-300 hover:bg-green-400 p-1 rounded border m-1">
               admin
             </button>
-            <button className="bg-yellow-300 p-1 rounded border m-1">
+            <button className="bg-yellow-300 hover:bg-yellow-400 p-1 rounded border m-1">
               user
             </button>
-            <button className="bg-red-300 p-1 rounded border m-1">guest</button>
+            <button className="bg-red-300 hover:bg-red-400 p-1 rounded border m-1">
+              guest
+            </button>
           </TableCell>
         </TableRow>
       ))}
