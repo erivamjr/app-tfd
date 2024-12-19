@@ -3,13 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx",
-    "lint:fix": "eslint . --ext ts,tsx --fix",
-    "preview": "vite preview"
-  },
+"scripts": {
+  "dev": "VITE_API_URL=http://localhost:3000 vite",
+  "build": "tsc -b && vite build",
+  "lint": "eslint . --ext ts,tsx",
+  "lint:fix": "eslint . --ext ts,tsx --fix",
+  "preview": "vite preview"
+},
   "dependencies": {
     "apexcharts": "^3.52.0",
     "axios": "^1.7.3",
