@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsNotEmpty,
   Length,
+  IsUrl,
 } from 'class-validator';
 import { Role } from '../../enums/role.enum';
 import { IsCpf } from '../../decorators/validate-cpf.decorator';
@@ -45,4 +46,8 @@ export class CreateUserDto {
   @IsOptional()
   @IsEnum(Role)
   role: string;
+
+  @IsOptional()
+  @IsUrl()
+  profileUrlImage: string;
 }

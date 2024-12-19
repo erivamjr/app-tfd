@@ -110,7 +110,12 @@ export const DataProvider = ({ children }: DataProviderProps) => {
 
   // Nova função para atualizar usuário
   const updateUser = async (userId: string, data: UpdateUserData) => {
-    console.log('verificando o que esta vindo!', data)
+    console.log(
+      'verificando userId',
+      userId,
+      'verificando o que esta vindo!',
+      data,
+    )
     try {
       await api.patch(`/users/${userId}`, data)
       setUsers((prev) =>

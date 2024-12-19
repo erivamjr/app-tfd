@@ -35,6 +35,8 @@ async function main() {
         role: 'user',
         name: 'geiza',
         workLocation: 'UBS-Centro',
+        profileUrlImage:
+          'https://i.pravatar.cc/150?u=ed5c416c-46a0-4e93-9484-d555c70af284',
         createdAt: '2024-07-31T23:38:40.141Z',
         updatedAt: '2024-07-31T23:38:40.141Z',
       },
@@ -63,6 +65,8 @@ async function main() {
         role: 'user',
         name: 'Jose Erivam',
         workLocation: 'UBS-Cidade Nova',
+        profileUrlImage:
+          'https://i.pravatar.cc/150?u=ed5c416c-46a0-4e93-9484-d555c70af284',
         createdAt: '2024-08-02T11:47:59.357Z',
         updatedAt: '2024-08-03T18:43:44.114Z',
       },
@@ -77,6 +81,8 @@ async function main() {
         role: 'user',
         name: 'Taynara Pacheco',
         workLocation: 'TFD-Centro',
+        profileUrlImage:
+          'https://i.pravatar.cc/150?u=ed5c416c-46a0-4e93-9484-d555c70af284',
         createdAt: '2024-08-02T11:47:59.357Z',
         updatedAt: '2024-08-03T18:43:44.114Z',
       },
