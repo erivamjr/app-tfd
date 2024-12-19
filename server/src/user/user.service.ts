@@ -52,15 +52,31 @@ export class UserService {
 
   async update(id: string, body: UpdateUserDto) {
     await this.uuidExists(id);
-    await this.userExistsUpdate(id, body.cpf, body.email);
 
-    const salt = await bcrypt.genSalt();
+    // Verifica se o objeto body contém a propriedade password e se ela não está vazia
+    let hashedPassword: string;
+    if (body.password !== undefined && body.password !== '') {
+      const salt = await bcrypt.genSalt();
+      hashedPassword = await bcrypt.hash(body.password, salt);
+    } else {
+      // Se a senha não foi incluída ou é uma string vazia, não altere a senha
+      hashedPassword = body.password; // Isso manterá a senha antiga se não houver uma nova senha
+    }
 
-    body.password = await bcrypt.hash(body.password, salt);
+    // Remove a propriedade password do body se ela não for alterada
+    const dataToUpdate = {
+      ...body,
+      password: hashedPassword, // Use o hashedPassword que foi definido acima
+    };
+
+    // Exclua a propriedade password se ela não foi alterada
+    if (hashedPassword === body.password) {
+      delete dataToUpdate.password;
+    }
 
     return this.prisma.user.update({
       where: { id },
-      data: body,
+      data: dataToUpdate,
     });
   }
 

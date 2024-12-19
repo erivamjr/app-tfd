@@ -32,6 +32,7 @@ export interface UserProps {
   phone: string
   cpf: string
   email: string
+  workLocation: string
   password: string
   role: string
   createdAt: string
