@@ -12,6 +12,12 @@ import {
   UserProps,
 } from '../Hooks/Api/Appointments/TypeAppointments'
 
+// Novo tipo para atualização de usuário
+interface UpdateUserData {
+  role?: 'admin' | 'user' | 'guest'
+  active?: boolean
+}
+
 interface DataContextProps {
   specialties: SpecialtyProps[]
   appointments: TypeAppointment[]
@@ -20,6 +26,9 @@ interface DataContextProps {
   fetchAppointments: () => Promise<void>
   updateSpecialty: (id: number, name: string) => Promise<void>
   deleteSpecialty: (id: number) => Promise<void>
+  // Novas funções para gerenciamento de usuários
+  updateUser: (userId: string, data: UpdateUserData) => Promise<void>
+  fetchUsers: () => Promise<void>
 }
 
 export const DataContext = createContext({} as DataContextProps)
@@ -99,6 +108,20 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     }
   }
 
+  // Nova função para atualizar usuário
+  const updateUser = async (userId: string, data: UpdateUserData) => {
+    console.log('verificando o que esta vindo!', data)
+    try {
+      await api.patch(`/users/${userId}`, data)
+      setUsers((prev) =>
+        prev.map((user) => (user.id === userId ? { ...user, ...data } : user)),
+      )
+    } catch (error) {
+      handleError(error, 'Erro ao atualizar usuário.')
+      throw error // Propagar erro para tratamento no componente
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       await Promise.all([fetchSpecialties(), fetchUsers(), fetchAppointments()])
@@ -116,6 +139,8 @@ export const DataProvider = ({ children }: DataProviderProps) => {
         fetchAppointments,
         updateSpecialty,
         deleteSpecialty,
+        updateUser,
+        fetchUsers,
       }}
     >
       {children}
