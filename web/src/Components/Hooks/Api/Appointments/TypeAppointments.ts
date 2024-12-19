@@ -33,6 +33,7 @@ export interface UserProps {
   cpf: string
   email: string
   workLocation: string
+  profileUrlImage: string
   password: string
   role: string
   createdAt: string
