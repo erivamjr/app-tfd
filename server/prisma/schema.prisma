@@ -14,19 +14,20 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(uuid())
-  name         String
-  phone        String?
-  cpf          String        @unique
-  email        String        @unique
-  password     String
-  role         String        @default("user")
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  active       Boolean       @default(true)
-  workLocation String?
-  patients     Patient[]
-  appointments Appointment[]
+  id              String        @id @default(uuid())
+  name            String
+  phone           String?
+  cpf             String        @unique
+  email           String        @unique
+  password        String
+  role            String        @default("user")
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  active          Boolean       @default(true)
+  workLocation    String?
+  profileUrlImage String?       @default("https://i.pinimg.com/originals/03/ac/c0/03acc030c6700dfd274d1ef20e70609b.jpg")
+  patients        Patient[]
+  appointments    Appointment[]
 }
 
 model Patient {
