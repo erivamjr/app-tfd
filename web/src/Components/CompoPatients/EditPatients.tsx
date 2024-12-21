@@ -92,7 +92,7 @@ export default function EditPatient() {
     try {
       await api.patch(`/patients/${id}`, formData)
       alert('Paciente atualizado com sucesso')
-      navigate('/pacientes')
+      navigate('/patients')
     } catch (error) {
       console.error('Erro ao atualizar paciente:', error)
       alert('Erro ao atualizar o paciente')
@@ -111,7 +111,7 @@ export default function EditPatient() {
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => navigate('/pacientes')}
+              onClick={() => navigate('/patients')}
               className="bg-blue-600 text-white p-3 text-2xl rounded"
             >
               <IoReturnDownBack />
