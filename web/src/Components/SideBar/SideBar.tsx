@@ -43,53 +43,52 @@ export default function SideBar() {
   }, [])
 
   return (
-    <div
-      className={`${
-        sideBar ? 'w-16' : 'w-60'
-      }  flex flex-col bg-blue-600 text-white transition-width duration-300`}
-    >
+    <div className="flex">
       <div
-        onClick={handleSideBar}
-        className="flex justify-end text-3xl cursor-pointer p-3 bg-blue-600"
+        className={`${
+          sideBar ? 'w-16' : 'w-60'
+        } flex-shrink-0 bg-blue-600 text-white transition-all duration-300 `}
       >
-        {sideBar ? <IoMenu /> : <IoIosClose />}
-      </div>
-      {!sideBar && (
-        <div className="flex justify-end items-center bg-blue-600">
-          <img className="w-36 h-36" src={Logo} alt="Logo" />
+        <div
+          onClick={handleSideBar}
+          className="flex justify-end text-3xl cursor-pointer p-3 bg-blue-600"
+        >
+          {sideBar ? <IoMenu /> : <IoIosClose />}
         </div>
-      )}
-      <div
-        className={`flex flex-col justify-between p-3 ${
-          sideBar ? 'items-center' : 'items-start'
-        }`}
-      >
-        <ul className="mt-20 w-full">
-          <MenuItem
-            to="/"
-            icon={<CiHome />}
-            label="Home"
-            currentPage={page}
-            setPage={setPage}
-            sideBar={sideBar}
-          />
-          <MenuItem
-            to="/patients"
-            icon={<GiBrain />}
-            label="Pacientes"
-            currentPage={page}
-            setPage={setPage}
-            sideBar={sideBar}
-          />
-          <MenuItem
-            to="/requests"
-            icon={<RiCalendarScheduleLine />}
-            label="Solicitação"
-            currentPage={page}
-            setPage={setPage}
-            sideBar={sideBar}
-          />
-          {/* <MenuItem
+        {!sideBar && (
+          <div className="flex justify-end items-center bg-blue-600">
+            <img className="w-36 h-36" src={Logo} alt="Logo" />
+          </div>
+        )}
+        <div
+          className={`flex flex-col justify-between p-3 ${sideBar ? 'items-center' : 'items-start'}`}
+        >
+          <ul className="mt-20 w-full">
+            <MenuItem
+              to="/"
+              icon={<CiHome />}
+              label="Home"
+              currentPage={page}
+              setPage={setPage}
+              sideBar={sideBar}
+            />
+            <MenuItem
+              to="/patients"
+              icon={<GiBrain />}
+              label="Pacientes"
+              currentPage={page}
+              setPage={setPage}
+              sideBar={sideBar}
+            />
+            <MenuItem
+              to="/requests"
+              icon={<RiCalendarScheduleLine />}
+              label="Solicitação"
+              currentPage={page}
+              setPage={setPage}
+              sideBar={sideBar}
+            />
+            {/* <MenuItem
             to="/relatorios"
             icon={<TbReportSearch />}
             label="Relatórios"
@@ -97,32 +96,33 @@ export default function SideBar() {
             setPage={setPage}
             sideBar={sideBar}
           /> */}
-          <MenuItem
-            to="/specialties"
-            icon={<CiMedicalCase />}
-            label="Especialidades"
-            currentPage={page}
-            setPage={setPage}
-            sideBar={sideBar}
-          />
-          <MenuItem
-            to="/usuarios"
-            icon={<GoPeople />}
-            label="Usuários"
-            currentPage={page}
-            setPage={setPage}
-            sideBar={sideBar}
-          />
-          <MenuItem
-            to="/usuarios"
-            icon={<CiLogout />}
-            label="Sair"
-            currentPage={page}
-            setPage={setPage}
-            sideBar={sideBar}
-            onClick={logout}
-          />
-        </ul>
+            <MenuItem
+              to="/specialties"
+              icon={<CiMedicalCase />}
+              label="Especialidades"
+              currentPage={page}
+              setPage={setPage}
+              sideBar={sideBar}
+            />
+            <MenuItem
+              to="/usuarios"
+              icon={<GoPeople />}
+              label="Usuários"
+              currentPage={page}
+              setPage={setPage}
+              sideBar={sideBar}
+            />
+            <MenuItem
+              to="/usuarios"
+              icon={<CiLogout />}
+              label="Sair"
+              currentPage={page}
+              setPage={setPage}
+              sideBar={sideBar}
+              onClick={logout}
+            />
+          </ul>
+        </div>
       </div>
     </div>
   )
@@ -140,8 +140,8 @@ function MenuItem({
   const isActive = currentPage === label
 
   const handleClick = () => {
-    if (onClick) onClick() // Executes onClick if provided
-    setPage(label) // Sets the current page
+    if (onClick) onClick()
+    setPage(label)
   }
 
   return (
