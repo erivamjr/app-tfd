@@ -21,6 +21,7 @@ import { Specialties } from './Page/Specialties/Specialties'
 import { MainLayout } from './Components/MainLayout/MainLayout'
 import { DataProvider } from './Components/Context/DataContext'
 import RegisterPatient from './Components/CompoPatients/RegisterPatient'
+import CreateRequest from './Components/CompoRequest/CreateRequest'
 
 function AdminPrivate({ children }: { children: JSX.Element }) {
   const { authenticated } = useContext(AuthContext)
@@ -76,13 +77,18 @@ export default function AppRouter() {
                         element={<DetailsPatients />}
                       />
                       {/* Rota de solicitações */}
-                      <Route path="/solicitacao" element={<Request />} />
+                      <Route path="/requests" element={<Request />} />
+                      {/* Rota de adicionar solicitação	 */}
+                      <Route
+                        path="/request/add-request"
+                        element={<CreateRequest />}
+                      />
                       {/* Detalhes da solicitação */}
                       <Route
-                        path="/detalhessolicitacao/:id"
+                        path="/details-request/:id"
                         element={<DetailsRequest />}
                       />
-                      {/* Editar solicitação */}
+                      {/* Editar solicitação  */}
                       <Route
                         path="/edit-request/:id"
                         element={<EditRequest />}
