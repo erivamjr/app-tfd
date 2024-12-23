@@ -22,21 +22,21 @@ export default function CardHome() {
   ]
   return (
     <div className="flex-1 p-6">
-      <Title title={'Dashboard Gerencial'} subTitle={'Analise de dados'} />
-      <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-2 bg-blue-500 p-4 rounded-lg shadow">
+      <Title title={'Dashboard Gerencial'} subTitle={'Análise de dados'} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="col-span-1 sm:col-span-2 md:col-span-2 bg-blue-500 p-4 rounded-lg shadow">
           <h2 className="text-white font-bold text-1xl">
-            Total de agendas aberta
+            Total de agendas abertas
           </h2>
           <div className="text-white font-bold text-3xl"></div>
         </div>
-        <div className="col-span-2 bg-purple-500 p-4 rounded-lg shadow">
+        <div className="col-span-1 sm:col-span-2 md:col-span-2 bg-purple-500 p-4 rounded-lg shadow">
           <h2 className="text-white font-bold text-1xl">Total de agendas</h2>
           <div className="text-white font-bold text-3xl">
             {countAppointments}
           </div>
         </div>
-        <div className="col-span-4 bg-white p-4 rounded-lg shadow"></div>
+        <div className="col-span-1 sm:col-span-2 bg-white p-4 rounded-lg shadow"></div>
         <div className="col-span-1 bg-blue-300 p-4 rounded-lg shadow">
           <h2 className="font-bold">Em progresso</h2>
           <div>{countInProgress}</div>
@@ -50,8 +50,8 @@ export default function CardHome() {
         <div className="col-span-1 bg-blue-300 p-4 rounded-lg shadow">
           <h2 className="font-bold">Título</h2>
         </div>
-        <div className="col-span-4 bg-white p-4 rounded-lg shadow">
-          <h2 className="font-bold">Agendas diaria</h2>
+        <div className="col-span-1 sm:col-span-2 md:col-span-4 bg-white p-4 rounded-lg shadow">
+          <h2 className="font-bold">Agendas diárias</h2>
           <Chart data={salesData} title="Sales Data" />
         </div>
       </div>

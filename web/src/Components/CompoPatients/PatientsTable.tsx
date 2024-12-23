@@ -98,7 +98,7 @@ export default function PatientsTable() {
     <div>
       <Link to="/patients/add-patient" className="flex justify-end mb-4">
         <div className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer">
-          <RiUserAddLine />
+          <RiUserAddLine size={24} />
 
           <span className="hidden md:block">Adicionar Paciente</span>
         </div>
@@ -123,7 +123,7 @@ export default function PatientsTable() {
           className="flex gap-2 bg-blue-500 p-2 text-white rounded hover:bg-blue-700"
         >
           <CiSearch size={24} />
-          <p>Buscar</p>
+          <p className="hidden md:block">Buscar</p>
         </button>
       </form>
 

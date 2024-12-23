@@ -38,7 +38,13 @@ const Chart = ({ data, title }) => {
 
   return (
     <div>
-      <ApexCharts options={options} series={series} type="line" height={350} />
+      <ApexCharts
+        options={options}
+        series={series}
+        type="line"
+        height="350"
+        className="w-full"
+      />
     </div>
   )
 }

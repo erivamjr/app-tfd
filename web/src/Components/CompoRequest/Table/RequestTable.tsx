@@ -135,7 +135,7 @@ export default function RequestTable() {
       <div className="flex justify-end mb-4">
         <Link to="/request/add-request" className="flex justify-end mb-4">
           <div className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer">
-            <TfiAgenda />
+            <TfiAgenda size={24} />
 
             <span className="hidden sm:block">Adicionar Solicitação</span>
           </div>
@@ -225,7 +225,7 @@ export default function RequestTable() {
         />
         <button className="flex gap-2 bg-blue-500 p-2 text-white rounded hover:bg-blue-700">
           <CiSearch size={24} />
-          <p>Buscar</p>
+          <p className="hidden md:block">Buscar</p>
         </button>
       </div>
       <Table>
