@@ -110,13 +110,13 @@ export function CompoSpecialties() {
           <h2 className="ml-2">{specialty.name}</h2>
           <div className="flex gap-2">
             <button
-              className="text-white bg-green-500 hover:bg-green-700 flex gap-3 items-center justify-center text-2xl rounded p-3"
+              className="bg-green-100 hover:bg-green-300 text-green-800 flex gap-3 items-center justify-center text-2xl rounded p-3"
               onClick={() => openModal('edit', specialty)}
             >
               <FaRegEdit />
             </button>
             <button
-              className="text-white bg-red-500 hover:bg-red-700 flex gap-3 items-center justify-center text-2xl rounded p-3"
+              className="bg-red-100 hover:bg-red-300 text-red-800 flex gap-3 items-center justify-center text-2xl rounded p-3"
               onClick={() => openModal('delete', specialty)}
             >
               <RiDeleteBin6Line />
