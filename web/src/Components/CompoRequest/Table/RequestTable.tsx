@@ -1,4 +1,7 @@
 import { ChangeEvent, useState } from 'react'
+import { TbReportSearch } from 'react-icons/tb'
+import { FaChevronDown, FaChevronUp, FaRegEdit } from 'react-icons/fa'
+import { RiDeleteBin6Line } from 'react-icons/ri'
 import useAppointment from '../../Hooks/Api/Appointments/Appointments'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../../Ux/Input/Input'
@@ -6,16 +9,18 @@ import Table from '../../Ux/Table/Table'
 import { TableActions } from '../../Ux/Table/TableActions'
 import TableCell from '../../Ux/Table/TableCell'
 import TableRow from '../../Ux/Table/TableRow'
-import { FaRegEdit } from 'react-icons/fa'
-import { RiDeleteBin6Line } from 'react-icons/ri'
-import { TbReportSearch } from 'react-icons/tb'
 import { Pagination } from '../../Ux/Table/Pagination '
-import api from '../../../Api'
 import Modal from '../../Ux/Modal/Modal'
 import { TypeAppointment } from '../../Hooks/Api/Appointments/TypeAppointments'
 import CreatableSelect from 'react-select/creatable'
+import api from '../../../Api'
+import { ButtonAction } from '../../Ux/ButtonActionProps'
+import { IoReturnDownBack } from 'react-icons/io5'
+import { TfiAgenda } from 'react-icons/tfi'
+import { Link } from 'react-router-dom'
 
 export default function RequestTable() {
+  const [expandedRows, setExpandedRows] = useState<string[]>([])
   const { appointments } = useAppointment()
   const [searchValue, setSearchValue] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
@@ -27,6 +32,12 @@ export default function RequestTable() {
   const [selectedSpecialty, setSelectedSpecialty] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('')
   const [selectedPriority, setSelectedPriority] = useState('')
+
+  const toggleRow = (id: string) => {
+    setExpandedRows((prev) =>
+      prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id],
+    )
+  }
 
   const filteredAppointments = appointments.filter((appointment) => {
     return (
@@ -40,10 +51,6 @@ export default function RequestTable() {
   function handleOpenModal(appintments) {
     setIsModalOpen(true)
     setAppointmentsDelete(appintments)
-  }
-
-  function handleCloseModal() {
-    setIsModalOpen(false)
   }
 
   async function handleDelete(id: string | undefined) {
@@ -125,7 +132,16 @@ export default function RequestTable() {
 
   return (
     <div>
-      <div className="mb-5 grid grid-cols-4 gap-4">
+      <div className="flex justify-end mb-4">
+        <Link to="/request/add-request" className="flex justify-end mb-4">
+          <div className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer">
+            <TfiAgenda />
+
+            <span className="hidden sm:block">Adicionar Solicitação</span>
+          </div>
+        </Link>
+      </div>
+      <div className="mb-5 grid sm:grid-cols-4 grid-cols-1 gap-4">
         <CreatableSelect
           placeholder="Todas Especialidades"
           isClearable
@@ -213,7 +229,7 @@ export default function RequestTable() {
         </button>
       </div>
       <Table>
-        <TableRow>
+        <TableRow isHeader>
           <TableCell isHeader>Nome</TableCell>
           <TableCell isHeader>P</TableCell>
           <TableCell isHeader>CPF</TableCell>
@@ -223,45 +239,134 @@ export default function RequestTable() {
           <TableCell isHeader>Configurações</TableCell>
         </TableRow>
         {displayAppointments().map((appointment) => (
-          <TableRow key={appointment.id}>
-            <TableCell>{appointment.patient.name}</TableCell>
-            <TableCell>{priorityEmojis[appointment.priority] || ''}</TableCell>
-            <TableCell>{appointment.patient.cpf}</TableCell>
-            <TableCell>{appointment.patient.phone}</TableCell>
-            <TableCell>{appointment.specialty.name}</TableCell>
-            <TableCell>
-              {new Date(appointment.createdAt).toLocaleDateString('pt-BR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </TableCell>
-            <TableCell>
-              <div className="flex justify-between items-center w-full">
-                <TableActions
-                  id={appointment.id}
-                  url={'detalhessolicitacao'}
-                  icon={<TbReportSearch />}
-                  color={'bg-blue-500 hover:bg-blue-700'}
-                  text={'white'}
-                />
-                <TableActions
-                  id={appointment.id}
-                  url={'edit-request'}
-                  icon={<FaRegEdit />}
-                  color={'bg-green-500 hover:bg-green-700'}
-                  text={'white'}
-                />
-
-                <button
-                  className="text-white bg-red-500 hover:bg-red-700 flex gap-3 items-center justify-center text-2xl rounded p-3"
-                  onClick={() => handleOpenModal(appointment)}
-                >
-                  <RiDeleteBin6Line />
-                </button>
+          <div key={appointment.id}>
+            {/* Mobile View */}
+            <div
+              className="lg:hidden border-b border-gray-200"
+              onClick={() => toggleRow(appointment.id)}
+            >
+              <div className="flex items-center justify-between p-4 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-gray-900">
+                    {appointment.patient.name}
+                  </span>
+                  <span>{priorityEmojis[appointment.priority] || ''}</span>
+                </div>
+                {expandedRows.includes(appointment.id) ? (
+                  <FaChevronUp className="w-5 h-5 text-gray-500" />
+                ) : (
+                  <FaChevronDown className="w-5 h-5 text-gray-500" />
+                )}
               </div>
-            </TableCell>
-          </TableRow>
+
+              {expandedRows.includes(appointment.id) && (
+                <div className="px-4 pb-4 space-y-4">
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-500">CPF</p>
+                    <p className="text-sm text-gray-900">
+                      {appointment.patient.cpf}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-500">Telefone</p>
+                    <p className="text-sm text-gray-900">
+                      {appointment.patient.phone}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-500">Especialidade</p>
+                    <p className="text-sm text-gray-900">
+                      {appointment.specialty.name}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-500">Data de Cadastro</p>
+                    <p className="text-sm text-gray-900">
+                      {new Date(appointment.createdAt).toLocaleDateString(
+                        'pt-BR',
+                        {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        },
+                      )}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-500">Ações</p>
+                    <div className="flex gap-2 mt-2">
+                      <TableActions
+                        id={appointment.id}
+                        url={'details-request'}
+                        icon={<TbReportSearch />}
+                        color={'bg-blue-100 hover:bg-blue-300 text-blue-800'}
+                      />
+                      <TableActions
+                        id={appointment.id}
+                        url={'edit-request'}
+                        icon={<FaRegEdit />}
+                        color={'bg-green-100 hover:bg-green-300 text-green-800'}
+                        text={'white'}
+                      />
+                      <ButtonAction
+                        icon={<RiDeleteBin6Line />}
+                        color={'bg-red-100 hover:bg-red-300 text-red-800'}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleOpenModal(appointment)
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Desktop View */}
+            <div className="hidden lg:block">
+              <TableRow>
+                <TableCell>{appointment.patient.name}</TableCell>
+                <TableCell>
+                  {priorityEmojis[appointment.priority] || ''}
+                </TableCell>
+                <TableCell>{appointment.patient.cpf}</TableCell>
+                <TableCell>{appointment.patient.phone}</TableCell>
+                <TableCell>{appointment.specialty.name}</TableCell>
+                <TableCell>
+                  {new Date(appointment.createdAt).toLocaleDateString('pt-BR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-2 mt-2">
+                    <TableActions
+                      id={appointment.id}
+                      url={'details-request'}
+                      icon={<TbReportSearch />}
+                      color={'bg-blue-100 hover:bg-blue-300 text-blue-800'}
+                    />
+                    <TableActions
+                      id={appointment.id}
+                      url={'edit-request'}
+                      icon={<FaRegEdit />}
+                      color={'bg-green-100 hover:bg-green-300 text-green-800'}
+                      text={'white'}
+                    />
+                    <ButtonAction
+                      icon={<RiDeleteBin6Line />}
+                      color={'bg-red-100 hover:bg-red-300 text-red-800'}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleOpenModal(appointment)
+                      }}
+                    />
+                  </div>
+                </TableCell>
+              </TableRow>
+            </div>
+          </div>
         ))}
       </Table>
       <Pagination
@@ -271,32 +376,45 @@ export default function RequestTable() {
       />
       <Modal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        title="Deletar paciente"
+        onClose={() => setIsModalOpen(false)}
+        title="Deletar Solicitação"
       >
-        <h1>
-          Tem certeza que quer deletar o agendamento com a especialidade{' '}
-          <span className="text-bold text-xl uppercase">
-            {appointmentsDelete?.specialty.name}
-          </span>{' '}
-          de{' '}
-          <span className="text-bold text-xl uppercase">
-            {appointmentsDelete?.patient.name}
-          </span>
-        </h1>
-        <button
-          className="text-white bg-red-500 hover:bg-red-700 p-2 px-4 rounded mr-2"
-          onClick={() => handleDelete(appointmentsDelete?.id)}
-        >
-          <h1>Sim</h1>
-        </button>
+        <div className="space-y-4">
+          <h1 className="text-lg font-semibold text-gray-800">
+            Tem certeza que deseja deletar a solicitação para{' '}
+            <span className="font-bold text-xl text-gray-900">
+              {appointmentsDelete?.specialty.name}
+            </span>{' '}
+            de{' '}
+            <span className="font-bold text-xl text-gray-900">
+              {appointmentsDelete?.patient.name}
+            </span>
+            ?
+          </h1>
+          <p className="text-sm text-gray-600">
+            Esta ação não pode ser desfeita. O paciente será removido
+            permanentemente da lista de solicitações.
+          </p>
+          <div className="flex justify-end gap-4 mt-6">
+            {/* Botão de Deletar */}
+            <button
+              className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md font-medium flex items-center gap-2 transition-all duration-300"
+              onClick={() => handleDelete(appointmentsDelete?.id)}
+            >
+              <RiDeleteBin6Line size={20} /> {/* Ícone de lixeira */}
+              Sim, Deletar
+            </button>
 
-        <button
-          className="text-white bg-green-500 hover:bg-green-700 p-2 px-4 rounded"
-          onClick={() => setIsModalOpen(false)}
-        >
-          <h1>Não</h1>
-        </button>
+            {/* Botão de Cancelar */}
+            <button
+              className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-md font-medium flex items-center gap-2 transition-all duration-300"
+              onClick={() => setIsModalOpen(false)}
+            >
+              <IoReturnDownBack size={20} /> {/* Ícone de voltar */}
+              Não, Cancelar
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   )

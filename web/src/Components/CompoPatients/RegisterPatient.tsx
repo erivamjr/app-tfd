@@ -2,12 +2,13 @@ import { AxiosError } from 'axios'
 import { useState, FormEvent } from 'react'
 import { CiFloppyDisk } from 'react-icons/ci'
 import { IoReturnDownBack } from 'react-icons/io5'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import api from '../../Api'
 import Label from '../Ux/Label/Label'
 import Loading from '../Ux/Loading/Loading'
 import Input from '../Ux/Input/Input'
+import AdminToolbar from '../Ux/AdminToolbar/AdminToolbar'
 
 export default function RegisterPatients() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -88,14 +89,21 @@ export default function RegisterPatients() {
 
   return (
     <div className="shadow-lg mt-2 border-gray-800 p-3 bg-white">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold mb-4">Registrar Paciente</h1>
-        <Link to="/patients">
-          <div className="bg-blue-500 hover:bg-blue-700 text-white p-3 text-2xl rounded">
-            <IoReturnDownBack />
+      <AdminToolbar>
+        <div className="p-2 flex">
+          <div className="font-bold text-black text-2xl flex-1 text-center">
+            Cadastrar Paciente
           </div>
-        </Link>
-      </div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => navigate('/patients')}
+              className="bg-blue-600 text-white p-3 text-2xl rounded"
+            >
+              <IoReturnDownBack />
+            </button>
+          </div>
+        </div>
+      </AdminToolbar>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="w-full flex flex-wrap md:flex-nowrap">
           <div className="flex-1 p-3">

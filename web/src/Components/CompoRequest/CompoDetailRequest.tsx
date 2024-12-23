@@ -52,7 +52,7 @@ export default function CompoDetailsRequest() {
             <div className="bg-blue-600 text-white p-3 text-2xl rounded">
               <ImPrinter />
             </div>
-            <Link to="/solicitacao">
+            <Link to="/requests">
               <div className="bg-blue-600 text-white p-3 text-2xl rounded">
                 <IoReturnDownBack />
               </div>
