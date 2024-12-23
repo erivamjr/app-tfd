@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { IoMenu } from 'react-icons/io5'
 import { CiHome, CiLogout, CiMedicalCase } from 'react-icons/ci'
 import { IoIosClose } from 'react-icons/io'
 import { GoPeople } from 'react-icons/go'
-import { TbReportSearch } from 'react-icons/tb'
 import { RiCalendarScheduleLine } from 'react-icons/ri'
 import { GiBrain } from 'react-icons/gi'
 import { AuthContext } from '../Context/Auth'
@@ -28,6 +27,20 @@ export default function SideBar() {
   function handleSideBar() {
     setSideBar(!sideBar)
   }
+
+  const handleResize = () => {
+    if (window.innerWidth < 768) {
+      setSideBar(true) // Sidebar starts collapsed on mobile
+    } else {
+      setSideBar(false) // Sidebar starts expanded on larger screens
+    }
+  }
+
+  useEffect(() => {
+    handleResize() // Initialize sidebar state based on window size
+    window.addEventListener('resize', handleResize) // Listen for window resize
+    return () => window.removeEventListener('resize', handleResize) // Cleanup event listener
+  }, [])
 
   return (
     <div
@@ -61,7 +74,7 @@ export default function SideBar() {
             sideBar={sideBar}
           />
           <MenuItem
-            to="/pacientes"
+            to="/patients"
             icon={<GiBrain />}
             label="Pacientes"
             currentPage={page}
@@ -69,21 +82,21 @@ export default function SideBar() {
             sideBar={sideBar}
           />
           <MenuItem
-            to="/solicitacao"
+            to="/requests"
             icon={<RiCalendarScheduleLine />}
             label="Solicitação"
             currentPage={page}
             setPage={setPage}
             sideBar={sideBar}
           />
-          <MenuItem
+          {/* <MenuItem
             to="/relatorios"
             icon={<TbReportSearch />}
             label="Relatórios"
             currentPage={page}
             setPage={setPage}
             sideBar={sideBar}
-          />
+          /> */}
           <MenuItem
             to="/specialties"
             icon={<CiMedicalCase />}
