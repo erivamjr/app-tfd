@@ -1,13 +1,12 @@
 import { useState } from 'react'
-
 import { TbReportSearch } from 'react-icons/tb'
-import { FaRegEdit } from 'react-icons/fa'
-import { RiDeleteBin6Line } from 'react-icons/ri'
+import { FaChevronDown, FaChevronUp, FaRegEdit } from 'react-icons/fa'
+import { RiDeleteBin6Line, RiUserAddLine } from 'react-icons/ri'
+
 import Alert from '../Ux/Alert/Alert'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../Ux/Input/Input'
 import usePatientsPage from '../Hooks/Api/Patiens/PatientsPage'
-
 import { Pagination } from '../Ux/Table/Pagination '
 import Table from '../Ux/Table/Table'
 import { TableActions } from '../Ux/Table/TableActions'
@@ -16,8 +15,13 @@ import TableRow from '../Ux/Table/TableRow'
 import Modal from '../Ux/Modal/Modal'
 import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
 import api from '../../Api'
+import { CardHeader } from '../Ux/Table/CardHeader'
+import { ButtonAction } from '../Ux/ButtonActionProps'
+import { Link } from 'react-router-dom'
+import { IoMdClose } from 'react-icons/io'
 
 export default function PatientsTable() {
+  const [expandedRows, setExpandedRows] = useState<string[]>([])
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
@@ -26,6 +30,20 @@ export default function PatientsTable() {
   const [patientDelete, setPatientDelete] = useState<Patient>()
   const { patientsPage, isLoading, isError, totalPages, setPatientsPage } =
     usePatientsPage(currentPage, itemsPerPage, searchTherm)
+  const headers = [
+    'Nome',
+    'CPF',
+    'Telefone',
+    'Usuário',
+    'Data de Cadastro',
+    'Configurações',
+  ]
+
+  const toggleRow = (id: string) => {
+    setExpandedRows((prev) =>
+      prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id],
+    )
+  }
 
   function handleOpenModal(patient) {
     setIsModalOpen(true)
@@ -78,6 +96,13 @@ export default function PatientsTable() {
 
   return (
     <div>
+      <Link to="/patients/add-patient" className="flex justify-end mb-4">
+        <div className="ml-10 bg-blue-500 text-white hover:bg-blue-700 p-2 rounded flex items-center gap-2 cursor-pointer">
+          <RiUserAddLine />
+
+          <span className="hidden md:block">Adicionar Paciente</span>
+        </div>
+      </Link>
       <form
         onSubmit={handleSearch}
         className="w-full flex items-center justify-center gap-2 mb-5"
@@ -102,9 +127,12 @@ export default function PatientsTable() {
         </button>
       </form>
 
-      <div className="w-[100%]  overflow-hidden">
+      <div className="w-[100%] overflow-hidden">
         <Table>
-          <TableRow>
+          <div className="lg:hidden">
+            <CardHeader headers={headers} />
+          </div>
+          <TableRow isHeader>
             <TableCell isHeader>Nome</TableCell>
             <TableCell isHeader>CPF</TableCell>
             <TableCell isHeader>Telefone</TableCell>
@@ -114,52 +142,135 @@ export default function PatientsTable() {
           </TableRow>
           {patientsPage &&
             patientsPage.map((patient) => (
-              <TableRow key={patient.id}>
-                <TableCell>{patient.name}</TableCell>
-                <TableCell>{patient.cpf}</TableCell>
-                <TableCell>{patient.phone}</TableCell>
-                <TableCell>{patient.user.name}</TableCell>
-                <TableCell>
-                  {patient.createdAt &&
-                    new Date(patient.createdAt).toLocaleDateString('pt-BR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                </TableCell>
-                <TableCell>
-                  <div className="flex justify-between items-center w-full">
-                    <TableActions
-                      id={patient.id}
-                      url={'detalhespaciente'}
-                      icon={<TbReportSearch />}
-                      color={'bg-blue-500 hover:bg-blue-700'}
-                      text={'white'}
-                    />
-                    <TableActions
-                      id={patient.id}
-                      url={'edit-patient'}
-                      icon={<FaRegEdit />}
-                      color={'bg-green-500 hover:bg-green-700'}
-                      text={'white'}
-                    />
-                    {/* <TableActions
-                      id={patient.id}
-                      url={'delete-patient'}
-                      icon={<RiDeleteBin6Line />}
-                      color={'bg-red-500 hover:bg-red-700'}
-                      text={'white'}
-                    /> */}
-
-                    <button
-                      className="text-white bg-red-500 hover:bg-red-700 flex gap-3 items-center justify-center text-2xl rounded p-3"
-                      onClick={() => handleOpenModal(patient)}
-                    >
-                      <RiDeleteBin6Line />
-                    </button>
+              <div key={patient.id}>
+                {/* Mobile View */}
+                <div
+                  className="lg:hidden border-b border-gray-200"
+                  onClick={() => toggleRow(patient.id)}
+                >
+                  <div className="flex items-center justify-between p-4 cursor-pointer">
+                    <span className="font-medium text-gray-900">
+                      {patient.name}
+                    </span>
+                    {expandedRows.includes(patient.id) ? (
+                      <FaChevronUp className="w-5 h-5 text-gray-500" />
+                    ) : (
+                      <FaChevronDown className="w-5 h-5 text-gray-500" />
+                    )}
                   </div>
-                </TableCell>
-              </TableRow>
+
+                  {expandedRows.includes(patient.id) && (
+                    <div className="px-4 pb-4 space-y-4">
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-500">CPF</p>
+                        <p className="text-sm text-gray-900">{patient.cpf}</p>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-500">Telefone</p>
+                        <p className="text-sm text-gray-900">{patient.phone}</p>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-500">Usuário</p>
+                        <p className="text-sm text-gray-900">
+                          {patient.user.name}
+                        </p>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-500">
+                          Data de Cadastro
+                        </p>
+                        <p className="text-sm text-gray-900">
+                          {patient.createdAt &&
+                            new Date(patient.createdAt).toLocaleDateString(
+                              'pt-BR',
+                              {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: '2-digit',
+                              },
+                            )}
+                        </p>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-500">Ações</p>
+                        <div className="flex gap-2 mt-2">
+                          <TableActions
+                            id={patient.id}
+                            url={'details-patient'}
+                            icon={<TbReportSearch />}
+                            color={
+                              'bg-blue-100 hover:bg-blue-300 text-blue-800'
+                            }
+                          />
+                          <TableActions
+                            id={patient.id}
+                            url={'edit-patient'}
+                            icon={<FaRegEdit />}
+                            color={
+                              'bg-green-100 hover:bg-green-300 text-green-800'
+                            }
+                          />
+                          <ButtonAction
+                            icon={<RiDeleteBin6Line />}
+                            color={'bg-red-100 hover:bg-red-300'}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleOpenModal(patient)
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Desktop View */}
+                <div className="hidden lg:block">
+                  <TableRow>
+                    <TableCell>{patient.name}</TableCell>
+                    <TableCell>{patient.cpf}</TableCell>
+                    <TableCell>{patient.phone}</TableCell>
+                    <TableCell>{patient.user.name}</TableCell>
+                    <TableCell>
+                      {patient.createdAt &&
+                        new Date(patient.createdAt).toLocaleDateString(
+                          'pt-BR',
+                          {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          },
+                        )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-2 mt-2">
+                        <TableActions
+                          id={patient.id}
+                          url={'details-patient'}
+                          icon={<TbReportSearch />}
+                          color={'bg-blue-100 hover:bg-blue-300 text-blue-800'}
+                        />
+                        <TableActions
+                          id={patient.id}
+                          url={'edit-patient'}
+                          icon={<FaRegEdit />}
+                          color={
+                            'bg-green-100 hover:bg-green-300 text-green-800'
+                          }
+                        />
+                        <ButtonAction
+                          icon={<RiDeleteBin6Line />}
+                          color={'bg-red-100 hover:bg-red-300'}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleOpenModal(patient)
+                          }}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                </div>
+              </div>
             ))}
         </Table>
         <div className=" mb-5 lg:bottom-5 ">
@@ -172,27 +283,39 @@ export default function PatientsTable() {
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          title="Deletar paciente"
+          title="Deletar Paciente"
         >
-          <h1>
-            Tem certeza que quer deletar paciente{' '}
-            <span className="text-bold text-xl uppercase">
-              {patientDelete?.name}
-            </span>
-          </h1>
-          <button
-            className="text-white bg-red-500 hover:bg-red-700 p-2 px-4 rounded mr-2"
-            onClick={() => handleDelete(patientDelete?.id)}
-          >
-            <h1>Sim</h1>
-          </button>
+          <div className="space-y-4">
+            <h1 className="text-xl font-semibold text-gray-800">
+              Tem certeza que deseja deletar o paciente{' '}
+              <span className="text-lg font-bold text-gray-900">
+                {patientDelete?.name}
+              </span>
+              ?
+            </h1>
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">
+                Esta ação é irreversível. O paciente será removido
+                permanentemente do sistema.
+              </p>
+            </div>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => handleDelete(patientDelete?.id)}
+                className="text-white bg-red-600 hover:bg-red-700 px-6 py-3 rounded-md text-lg font-medium transition-all duration-300 flex items-center gap-2"
+              >
+                <IoMdClose size={20} />
+                Sim, deletar
+              </button>
 
-          <button
-            className="text-white bg-green-500 hover:bg-green-700 p-2 px-4 rounded"
-            onClick={() => setIsModalOpen(false)}
-          >
-            <h1>Não</h1>
-          </button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-gray-800 bg-gray-200 hover:bg-gray-300 px-6 py-3 rounded-md text-lg font-medium transition-all duration-300"
+              >
+                Não, cancelar
+              </button>
+            </div>
+          </div>
         </Modal>
       </div>
     </div>

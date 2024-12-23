@@ -5,22 +5,16 @@ interface TableActionsProps {
   icon: React.ReactNode
   url: string
   color: string
-  text: string
+  text?: string
 }
 
-export const TableActions = ({
-  id,
-  icon,
-  url,
-  color,
-  text,
-}: TableActionsProps) => (
-  <Link to={`/${url}/${id}`}>
-    <div
-      style={{ color: text }}
-      className={` flex gap-3 ${color} items-center justify-center text-2xl rounded p-3`}
+export const TableActions = ({ id, icon, url, color }: TableActionsProps) => {
+  return (
+    <Link
+      to={`/${url}/${id}`}
+      className={`rounded-md transition-all duration-200  hover:scale-105 ${color} flex items-center justify-center p-2 min-w-[50px]`}
     >
-      {icon}
-    </div>
-  </Link>
-)
+      <span className="text-xl ">{icon}</span>
+    </Link>
+  )
+}

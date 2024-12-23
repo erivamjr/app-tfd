@@ -20,6 +20,8 @@ import User from './Page/User/User'
 import { Specialties } from './Page/Specialties/Specialties'
 import { MainLayout } from './Components/MainLayout/MainLayout'
 import { DataProvider } from './Components/Context/DataContext'
+import RegisterPatient from './Components/CompoPatients/RegisterPatient'
+import CreateRequest from './Components/CompoRequest/CreateRequest'
 
 function AdminPrivate({ children }: { children: JSX.Element }) {
   const { authenticated } = useContext(AuthContext)
@@ -57,25 +59,43 @@ export default function AppRouter() {
                   <MainLayout>
                     <Routes>
                       <Route path="/" element={<Home />} />
-                      <Route path="/pacientes" element={<Patients />} />
+                      {/* Rota para listagem de pacientes */}
+                      <Route path="/patients" element={<Patients />} />
+                      {/* Rota para adicionar pacientes */}
                       <Route
-                        path="/detalhespaciente/:id"
-                        element={<DetailsPatients />}
+                        path="/patients/add-patient"
+                        element={<RegisterPatient />}
                       />
+                      {/* Rota para editar paciente */}
                       <Route
                         path="/edit-patient/:id"
                         element={<EditPatient />}
                       />
+                      {/* Detalhes de paciente */}
+                      <Route
+                        path="/details-patient/:id"
+                        element={<DetailsPatients />}
+                      />
+                      {/* Rota de solicitações */}
+                      <Route path="/requests" element={<Request />} />
+                      {/* Rota de adicionar solicitação	 */}
+                      <Route
+                        path="/request/add-request"
+                        element={<CreateRequest />}
+                      />
+                      {/* Detalhes da solicitação */}
+                      <Route
+                        path="/details-request/:id"
+                        element={<DetailsRequest />}
+                      />
+                      {/* Editar solicitação  */}
                       <Route
                         path="/edit-request/:id"
                         element={<EditRequest />}
                       />
-                      <Route path="/solicitacao" element={<Request />} />
+                      {/* Especialidades */}
                       <Route path="/specialties" element={<Specialties />} />
-                      <Route
-                        path="/detalhessolicitacao/:id"
-                        element={<DetailsRequest />}
-                      />
+                      {/* Usuários */}
                       <Route path="/usuarios" element={<User />} />
                     </Routes>
                   </MainLayout>

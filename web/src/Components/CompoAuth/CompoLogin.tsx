@@ -18,11 +18,11 @@ export default function CompoLogin() {
   }
 
   return (
-    <div className=" w-screen relative min-h-screen bg-gray-100">
-      <div className="absolute z-10 h-screen w-1/2 bg-blue-500 flex items-center justify-center"></div>
+    <div className="w-screen relative min-h-screen bg-gray-100">
+      <div className="absolute z-10 h-screen w-full sm:w-1/2 bg-blue-500 flex items-center justify-center"></div>
       <div className="relative z-20 flex items-center justify-center min-h-screen">
-        <div className="flex w-[800px] shadow-lg">
-          <div className="flex items-center justify-center w-1/2 bg-blue-500">
+        <div className="flex w-full sm:w-[800px] shadow-lg flex-col sm:flex-row">
+          <div className="flex mb-10 items-center justify-center w-full sm:w-1/2 bg-blue-500">
             <img
               src={Logo}
               alt="Logo"
@@ -31,7 +31,7 @@ export default function CompoLogin() {
               height="200"
             />
           </div>
-          <div className="flex flex-col z-30 items-center justify-center w-1/2 pl-10 pr-10 pt-10 bg-white">
+          <div className="flex flex-col z-30 items-center justify-center w-full sm:w-1/2 px-10 py-10 bg-white">
             <h2 className="mb-6 text-2xl font-bold">Login</h2>
             <form className="w-full">
               <div className="space-y-2">
@@ -63,7 +63,7 @@ export default function CompoLogin() {
               <div className="w-full py-2">
                 <button
                   onClick={handleSubmit}
-                  className="bg-blue-500 py-2 my-2 px-8 rounded-md text-white hover:bg-blue-700 duration-300"
+                  className="bg-blue-500 py-2 my-2 px-8 rounded-md text-white hover:bg-blue-700 duration-300 w-full sm:w-auto"
                 >
                   Entrar
                 </button>

@@ -125,7 +125,7 @@ export default function EditRequest() {
         notes: formData.notes,
       })
       alert('Agendamento atualizado com sucesso!')
-      navigate('/solicitacao')
+      navigate('/requests')
     } catch (error) {
       console.error('Erro ao atualizar agendamento:', error)
       alert('Erro ao atualizar o agendamento.')
@@ -144,7 +144,7 @@ export default function EditRequest() {
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => navigate('/solicitacao')}
+              onClick={() => navigate('/requests')}
               className="bg-blue-600 text-white p-3 text-2xl rounded"
             >
               <IoReturnDownBack />

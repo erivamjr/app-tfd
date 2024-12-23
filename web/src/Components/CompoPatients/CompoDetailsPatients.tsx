@@ -123,7 +123,7 @@ export default function DetailsPatients() {
             <div className="bg-blue-600 text-white p-3 text-2xl rounded">
               <ImPrinter />
             </div>
-            <Link to="/pacientes">
+            <Link to="/patients">
               <div className="bg-blue-600 text-white p-3 text-2xl rounded">
                 <IoReturnDownBack />
               </div>
@@ -134,7 +134,7 @@ export default function DetailsPatients() {
       <Container>
         <section>
           <div className="p-1 font-bold text-black">Dados Pessoais</div>
-          <div className="grid grid-cols-3 w-full p-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full p-3 gap-4">
             <div className="flex flex-col gap-2">
               <span>Nome: {patient.name}</span>
               <span>CPF: {patient.cpf}</span>
@@ -147,7 +147,9 @@ export default function DetailsPatients() {
               <span>Logradouro: {patient.address}</span>
               <span>Cidade: {patient.city}</span>
             </div>
-            <div className="flex flex-col gap-2"></div>
+            <div className="flex flex-col gap-2">
+              {/* Adicione mais informações aqui caso necessário */}
+            </div>
           </div>
           <div className="p-1 text-black font-bold">Histórico</div>
         </section>
