@@ -36,7 +36,10 @@ export default function CardHome() {
             {countAppointments}
           </div>
         </div>
-        <div className="col-span-1 sm:col-span-2 bg-white p-4 rounded-lg shadow"></div>
+        <div className="col-span-1 sm:col-span-2 bg-orange-300 p-4 rounded-lg shadow">
+          <h2 className="font-bold">Em progresso</h2>
+          <div>{countInProgress}</div>
+        </div>
         <div className="col-span-1 bg-blue-300 p-4 rounded-lg shadow">
           <h2 className="font-bold">Em progresso</h2>
           <div>{countInProgress}</div>
