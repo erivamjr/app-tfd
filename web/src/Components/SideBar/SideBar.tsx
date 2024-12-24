@@ -105,7 +105,7 @@ export default function SideBar() {
               sideBar={sideBar}
             />
             <MenuItem
-              to="/usuarios"
+              to="/users"
               icon={<GoPeople />}
               label="Usuários"
               currentPage={page}
@@ -113,7 +113,7 @@ export default function SideBar() {
               sideBar={sideBar}
             />
             <MenuItem
-              to="/usuarios"
+              to="/users"
               icon={<CiLogout />}
               label="Sair"
               currentPage={page}

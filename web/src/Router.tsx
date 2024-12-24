@@ -96,7 +96,7 @@ export default function AppRouter() {
                       {/* Especialidades */}
                       <Route path="/specialties" element={<Specialties />} />
                       {/* Usuários */}
-                      <Route path="/usuarios" element={<User />} />
+                      <Route path="/users" element={<User />} />
                     </Routes>
                   </MainLayout>
                 </DataProvider>
