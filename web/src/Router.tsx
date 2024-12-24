@@ -22,6 +22,7 @@ import { MainLayout } from './Components/MainLayout/MainLayout'
 import { DataProvider } from './Components/Context/DataContext'
 import RegisterPatient from './Components/CompoPatients/RegisterPatient'
 import CreateRequest from './Components/CompoRequest/CreateRequest'
+import Profile from './Page/User/Profile'
 
 function AdminPrivate({ children }: { children: JSX.Element }) {
   const { authenticated } = useContext(AuthContext)
@@ -96,7 +97,9 @@ export default function AppRouter() {
                       {/* Especialidades */}
                       <Route path="/specialties" element={<Specialties />} />
                       {/* Usuários */}
-                      <Route path="/usuarios" element={<User />} />
+                      <Route path="/users" element={<User />} />
+                      {/* Perfil */}
+                      <Route path="/profile" element={<Profile />} />
                     </Routes>
                   </MainLayout>
                 </DataProvider>

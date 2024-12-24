@@ -1,3 +1,4 @@
+import { Footer } from '../Footer'
 import Menu from '../Menu/Menu'
 import SideBar from '../SideBar/SideBar'
 
@@ -11,9 +12,7 @@ export function MainLayout({ children }: { children: JSX.Element }) {
           <div className="flex-grow overflow-auto">{children}</div>
         </div>
       </div>
-      <footer className="text-center text-[#B0BEC5] bg-blue-600 w-full py-4">
-        FOOTER
-      </footer>
+      <Footer />
     </div>
   )
 }
