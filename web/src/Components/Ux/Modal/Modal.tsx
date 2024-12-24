@@ -20,11 +20,9 @@ export default function Modal({
 
   return ReactDOM.createPortal(
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-all duration-300 ${
-        isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      }`}
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
     >
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl mx-4 p-6 sm:p-8">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg sm:max-w-3xl mx-4 p-4 sm:p-8">
         <div className="flex justify-between items-center border-b pb-3 mb-4">
           <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
           <button
