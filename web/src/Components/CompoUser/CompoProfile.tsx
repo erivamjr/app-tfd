@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
+import { useUpdateProfile } from '../Hooks/Api/Users/use-update-profile'
+import { formatCPF } from '../../utils/utils'
 
 interface CompoProfileProps {
+  id: string
   name: string
   email: string
   phone: string
   cpf: string
   role: string
   workLocation: string
-  profileUrlImage: string
+  profileUrlImage?: string
 }
 
 const CompoProfile: React.FC<CompoProfileProps> = ({
+  id,
   name,
   email,
   phone,
@@ -22,6 +26,7 @@ const CompoProfile: React.FC<CompoProfileProps> = ({
   const [image, setImage] = useState(profileUrlImage)
   const [isEditing, setIsEditing] = useState(false) // Controla se os campos estão em modo de edição
   const [formData, setFormData] = useState({
+    id,
     name,
     email,
     phone,
@@ -29,6 +34,8 @@ const CompoProfile: React.FC<CompoProfileProps> = ({
     role,
     workLocation,
   })
+
+  const { mutate: updateProfile } = useUpdateProfile(id)
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -45,7 +52,21 @@ const CompoProfile: React.FC<CompoProfileProps> = ({
     setIsEditing(true) // Ativa o modo de edição
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    const updatedData: CompoProfileProps = {
+      ...formData,
+      cpf: formatCPF(formData.cpf),
+    }
+    console.log('updatedData', updatedData)
+
+    updateProfile(updatedData, {
+      onSuccess: () => {
+        console.log('Dados atualizados com sucesso')
+      },
+      onError: (error) => {
+        console.error('Erro ao atualizar os dados:', error)
+      },
+    })
     setIsEditing(false) // Desativa o modo de edição
     // Aqui você pode implementar a lógica para salvar as alterações, como uma chamada API
     console.log('Dados salvos', formData)
@@ -54,7 +75,7 @@ const CompoProfile: React.FC<CompoProfileProps> = ({
   const handleCancel = () => {
     setIsEditing(false)
     setFormData({
-      // Reseta os dados para o valor inicial
+      id,
       name,
       email,
       phone,
