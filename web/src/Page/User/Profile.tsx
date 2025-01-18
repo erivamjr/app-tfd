@@ -8,6 +8,7 @@ export default function Profile() {
   return (
     user && (
       <CompoProfile
+        id={user.id}
         name={user.name}
         email={user.email}
         phone={user.phone}
