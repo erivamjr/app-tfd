@@ -8,10 +8,16 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../database/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { formatCpf } from '../utils/utils';
+import { AvatarDto } from '../auth/dto/file.dto';
+import { SupabaseStorage } from '../storage/supabase.storage';
+import { extname } from 'path';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private storage: SupabaseStorage,
+  ) {}
   async create(body: CreateUserDto) {
     await this.userExistsCreate(body.cpf, body.email);
     const salt = await bcrypt.genSalt();
@@ -89,6 +95,19 @@ export class UserService {
     });
   }
 
+  async execute(data: AvatarDto) {
+    const extFile = extname(data.file.originalname).split('.')[1];
+    const transformName = `${data.idUser}.${extFile}`;
+    data.file.originalname = transformName;
+    const file = await this.storage.upload(data.file, 'avatar');
+
+    const pathAvatar = `avatar/${data.file.originalname}`;
+
+    await this.uploadAvatar(data.idUser, pathAvatar);
+
+    return file;
+  }
+
   async userExistsCreate(cpf: string, email: string) {
     const existingUser = await this.prisma.user.findFirst({
       where: {
@@ -138,5 +157,16 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`Specialty ${id} not found`);
     }
+  }
+
+  async uploadAvatar(id: string, path: string) {
+    await this.prisma.user.update({
+      data: {
+        profileUrlImage: path,
+      },
+      where: {
+        id,
+      },
+    });
   }
 }

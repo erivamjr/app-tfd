@@ -71,7 +71,7 @@ export class AuthService {
       },
     });
 
-    if (!user) {
+    if (!user || !user.active) {
       throw new UnauthorizedException('Invalid credentials');
     }
 

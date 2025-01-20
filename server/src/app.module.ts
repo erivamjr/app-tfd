@@ -12,6 +12,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { SpecialtyModule } from './specialty/specialty.module';
 import { SharedModule } from './shared/shared.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { SharedModule } from './shared/shared.module';
     PatientsModule,
     SpecialtyModule,
     AppointmentsModule,
+    FileModule,
     MailerModule.forRoot({
       transport: {
         host: 'smtp.ethereal.email',

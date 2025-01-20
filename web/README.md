@@ -4,15 +4,17 @@
 - [x] 🚀 Acrescentar a variável local no usuário
 - [x] 📸 Adicionar mais uma variável para receber a foto do usuário
 - [ ] 🔒 Revisar backend e suas permissões
-- [ ] 👤 Funcionalidade de atualizar avatar do paciente
+- [x] 👤 Funcionalidade de atualizar avatar do paciente
 - [ ] 📝 Ajustar filtro de pacientes no backend e retirar do front
-- [ ] 📝 Acrescentar no agendamento
+- [x] 📝 Acrescentar no agendamento
   * Está Gravida?
   * Possui Hipertensão?
   * Possui Diabétes?
   * Acamado
   * Mandato Judicial
   * Suspeito ou Portador
+- [ ] 🛠️ Funcionalidade de deletar pacientes, ou buscar clientes inativos para ativar
+- [ ] 📊 Adicionar rotas para dados do dashboard
 
 
 
@@ -20,6 +22,13 @@
 - [x] 👤 Criar a página de perfil do próprio usuário
 - [ ] 👤 Funcionalidade de atualizar e deletar perfil do usuário
 - [ ] 👤 Funcionalidade de atualizar o avatar do paciente
+- [ ] 📝 Acrescentar no cadastramento de agendamento
+  * Está Gravida?
+  * Possui Hipertensão?
+  * Possui Diabétes?
+  * Acamado
+  * Mandato Judicial
+  * Suspeito ou Portador
 - [x] 🏥 Criar um componente de criação de pacientes
 - [x] 📅 Criar um componente de criação de agendamentos
 - [ ] 📝 Ajustar a lista de agendamentos de cada paciente para que seja possível clicar no agendamento e ver os detalhes

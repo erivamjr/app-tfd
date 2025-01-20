@@ -80,6 +80,12 @@ model Appointment {
   requestDate      DateTime
   status           Status
   notes            String?
+  isPregnant       Boolean   @default(false)
+  hasHypertension  Boolean   @default(false)
+  hasDiabetes      Boolean   @default(false)
+  isBedridden      Boolean   @default(false)
+  hasCourtOrder    Boolean   @default(false)
+  isSuspected      Boolean   @default(false)
   active           Boolean   @default(true)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt

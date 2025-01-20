@@ -20,7 +20,7 @@ import { Role } from '../enums/role.enum';
 import { AuthGuard } from '../guards/auth.guard';
 import { RoleGuard } from '../guards/role.guard';
 
-@Roles(Role.ADMIN)
+@Roles(Role.ADMIN, Role.USER)
 @UseGuards(AuthGuard, RoleGuard)
 @Controller('patients')
 export class PatientsController {
