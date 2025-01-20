@@ -7,6 +7,9 @@ import {
   Param,
   Delete,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,6 +18,9 @@ import { AuthGuard } from '../guards/auth.guard';
 import { RoleGuard } from '../guards/role.guard';
 import { Roles } from '../decorators/role.decorator';
 import { Role } from '../enums/role.enum';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileDto } from '../auth/dto/file.dto';
+import { User } from '../decorators/user.decorator';
 
 @UseGuards(AuthGuard, RoleGuard)
 @Controller('users')
@@ -49,5 +55,17 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('avatar')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadAvatar(@User() user, @UploadedFile() file: FileDto) {
+    const result = await this.userService.execute({
+      idUser: user.id,
+      file,
+    });
+
+    return result;
   }
 }
