@@ -19,6 +19,12 @@ export interface PatientProps {
   createdAt: Date
   updatedAt: Date
   userId: string
+  isPregnant?: boolean
+  hasHypertension?: boolean
+  hasDiabetes?: boolean
+  isBedridden?: boolean
+  hasCourtOrder?: boolean
+  isSuspected?: boolean
 }
 export interface SpecialtyProps {
   id: number
