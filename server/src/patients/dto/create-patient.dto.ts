@@ -70,5 +70,6 @@ export class CreatePatientDto {
   motherName?: string;
 
   @IsBoolean()
-  active: boolean;
+  @IsOptional()
+  active?: boolean;
 }
