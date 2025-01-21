@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Put,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -35,8 +36,24 @@ export class UserController {
 
   @Roles(Role.ADMIN)
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('orderBy') orderBy: 'name' | 'workLocation' = 'name',
+    @Query('orderDirection') orderDirection: 'asc' | 'desc' = 'asc',
+    @Query('name') name?: string,
+    @Query('workLocation') workLocation?: string,
+    @Query('inactive') inactive?: boolean,
+  ) {
+    return this.userService.findAll({
+      page,
+      limit,
+      orderBy,
+      orderDirection,
+      name,
+      workLocation,
+      inactive,
+    });
   }
 
   @Roles(Role.ADMIN)
@@ -55,6 +72,11 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
+  }
+
+  @Patch(':id/activate')
+  async activateUser(@Param('id') id: string) {
+    return this.userService.activateUser(id);
   }
 
   @UseGuards(AuthGuard)

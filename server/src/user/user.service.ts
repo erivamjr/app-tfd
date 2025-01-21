@@ -29,15 +29,56 @@ export class UserService {
     });
   }
 
-  async findAll() {
-    const users = await this.prisma.user.findMany({
-      where: { active: true },
-    });
+  async findAll({
+    page,
+    limit,
+    orderBy,
+    orderDirection,
+    inactive,
+    name,
+    workLocation,
+  }) {
+    page = isNaN(page) || page < 1 ? 1 : page;
+    limit = isNaN(limit) || limit < 1 ? 10 : limit;
 
-    return users.map((user) => ({
-      ...user,
-      cpf: formatCpf(user.cpf),
-    }));
+    const skip = (page - 1) * limit;
+    const take = limit;
+
+    const queryConditions: any = {};
+
+    // Filtro de usuários inativos ou ativos
+    if (inactive !== undefined) {
+      queryConditions.active = !inactive; // Se inactive for false, então ativa; se true, inativa
+    }
+
+    // Filtro por nome
+    if (name) {
+      queryConditions.name = {
+        contains: name,
+        mode: 'insensitive', // Ignora maiúsculas/minúsculas
+      };
+    }
+
+    // Filtro por local de trabalho
+    if (workLocation) {
+      queryConditions.workLocation = {
+        contains: workLocation,
+        mode: 'insensitive',
+      };
+    }
+
+    // Ordenação
+    const orderCriteria =
+      orderBy === 'workLocation'
+        ? { workLocation: orderDirection }
+        : { name: orderDirection };
+
+    return this.prisma.user.findMany({
+      where: queryConditions,
+      skip,
+      take,
+      orderBy: orderCriteria,
+    });
   }
 
   async findOne(id: string) {
@@ -92,6 +133,13 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: { active: false },
+    });
+  }
+
+  async activateUser(id: string) {
+    return this.prisma.user.update({
+      where: { id },
+      data: { active: true },
     });
   }
 
