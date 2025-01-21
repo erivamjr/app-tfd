@@ -1,4 +1,5 @@
-import { IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class SearchPatientDto {
   @IsOptional()
@@ -8,4 +9,11 @@ export class SearchPatientDto {
   @IsOptional()
   @IsString()
   cpf?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) =>
+    value === 'true' ? true : value === 'false' ? false : undefined,
+  )
+  inactive?: boolean;
 }

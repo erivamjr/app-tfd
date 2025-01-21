@@ -6,6 +6,7 @@ import {
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { PrismaService } from '../database/prisma.service';
+import { SearchPatientDto } from './dto/search-patient.dto';
 
 @Injectable()
 export class PatientsService {
@@ -27,39 +28,34 @@ export class PatientsService {
     limit: number;
     orderBy?: 'name' | 'date';
     orderDirection?: 'asc' | 'desc';
+    includeInactive?: boolean;
   }) {
-    const { page, limit, orderBy, orderDirection } = paginationParams;
+    const { page, limit, orderBy, orderDirection, includeInactive } =
+      paginationParams;
 
-    let paget = Number(page);
-    let limitt = Number(limit);
+    const paget = isNaN(page) || page <= 0 ? 1 : page;
+    const limitt = isNaN(limit) || limit <= 0 ? 10 : limit;
 
-    if (isNaN(page) || page <= 0) {
-      paget = 1;
-    }
-    if (isNaN(limit) || limit <= 0) {
-      limitt = 10;
-    }
     const offset = (paget - 1) * limitt;
 
-    // Configura a ordenação padrão
     const orderCriteria =
       orderBy === 'date'
-        ? { createdAt: orderDirection || 'asc' }
-        : { name: orderDirection || 'asc' };
+        ? { createdAt: orderDirection }
+        : { name: orderDirection };
 
     const [data, total] = await this.prisma.$transaction([
       this.prisma.patient.findMany({
         where: {
-          active: true,
+          active: includeInactive ? undefined : true,
         },
         include: { user: true },
         skip: offset,
         take: limitt,
-        orderBy: orderCriteria, // Adiciona a ordenação
+        orderBy: orderCriteria,
       }),
       this.prisma.patient.count({
         where: {
-          active: true,
+          active: includeInactive ? undefined : true,
         },
       }),
     ]);
@@ -68,7 +64,7 @@ export class PatientsService {
       data,
       total,
       page: paget,
-      pageCount: Math.ceil(total / limitt),
+      limit: limitt,
     };
   }
 
@@ -98,18 +94,44 @@ export class PatientsService {
     });
   }
 
-  async search(name?: string, cpf?: string) {
-    const patients = await this.prisma.patient.findMany({
+  async reactivate(cpf: string) {
+    return this.prisma.patient.updateMany({
       where: {
-        OR: [
-          { name: { contains: name, mode: 'insensitive' } },
-          { cpf: { contains: cpf, mode: 'insensitive' } },
-        ],
+        cpf,
+        active: false,
       },
+      data: {
+        active: true,
+      },
+    });
+  }
+
+  async search({ name, cpf, inactive }: SearchPatientDto) {
+    console.log(name, cpf, inactive);
+
+    const whereConditions: any = {};
+
+    if (name || cpf) {
+      whereConditions.OR = [
+        { name: { contains: name, mode: 'insensitive' } },
+        { cpf: { contains: cpf, mode: 'insensitive' } },
+      ];
+    }
+
+    if (inactive !== undefined) {
+      whereConditions.active = !inactive;
+    }
+
+    if (!name && !cpf && inactive === undefined) {
+      return this.prisma.patient.findMany({
+        include: { user: true },
+      });
+    }
+
+    return this.prisma.patient.findMany({
+      where: whereConditions,
       include: { user: true },
     });
-
-    return patients;
   }
 
   async isExistCpf(cpf: string) {
