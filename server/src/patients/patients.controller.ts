@@ -37,19 +37,20 @@ export class PatientsController {
     @Query('limit') limit: number = 10,
     @Query('orderBy') orderBy: 'name' | 'date' = 'name',
     @Query('orderDirection') orderDirection: 'asc' | 'desc' = 'asc',
+    @Query('includeInactive') includeInactive: boolean = false,
   ) {
     return this.patientsService.findAll({
       page,
       limit,
       orderBy,
       orderDirection,
+      includeInactive,
     });
   }
 
   @Get('search')
   search(@Query() searchPatient: SearchPatientDto) {
-    const { name, cpf } = searchPatient;
-    return this.patientsService.search(name, cpf);
+    return this.patientsService.search(searchPatient);
   }
 
   @Get(':id')
@@ -65,5 +66,10 @@ export class PatientsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.patientsService.remove(id);
+  }
+
+  @Patch('reactivate')
+  async reactivateByCpf(@Query('cpf') cpf: string) {
+    return this.patientsService.reactivate(cpf);
   }
 }

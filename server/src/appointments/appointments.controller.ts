@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { AppointmentFilterDto } from './dto/filter-appointment.dto';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -21,8 +23,23 @@ export class AppointmentsController {
   }
 
   @Get()
-  findAll() {
-    return this.appointmentsService.findAll();
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('orderBy') orderBy: 'createdAt' | 'status' = 'createdAt',
+    @Query('orderDirection') orderDirection: 'asc' | 'desc' = 'asc',
+  ) {
+    return this.appointmentsService.findAll({
+      page,
+      limit,
+      orderBy,
+      orderDirection,
+    });
+  }
+
+  @Get('filtered')
+  async getFilteredAppointments(@Query() filters: AppointmentFilterDto) {
+    return this.appointmentsService.getFilteredAppointments(filters);
   }
 
   @Get(':id')

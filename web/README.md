@@ -5,7 +5,7 @@
 - [x] 📸 Adicionar mais uma variável para receber a foto do usuário
 - [ ] 🔒 Revisar backend e suas permissões
 - [x] 👤 Funcionalidade de atualizar avatar do paciente
-- [ ] 📝 Ajustar filtro de pacientes no backend e retirar do front
+- [x] 📝 Ajustar filtro de pacientes no backend e retirar do front
 - [x] 📝 Acrescentar no agendamento
   * Está Gravida?
   * Possui Hipertensão?
@@ -13,7 +13,8 @@
   * Acamado
   * Mandato Judicial
   * Suspeito ou Portador
-- [ ] 🛠️ Funcionalidade de deletar pacientes, ou buscar clientes inativos para ativar
+- [x] 🛠️ Funcionalidade de deletar pacientes, ou buscar clientes inativos para ativar
+- [ ] 👤 Funcionalidade de deletar usuarios, ou buscar clientes inativos para ativar
 - [ ] 📊 Adicionar rotas para dados do dashboard
 
 
