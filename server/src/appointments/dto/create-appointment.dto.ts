@@ -56,7 +56,6 @@ export class CreateAppointmentDto {
   @IsString()
   notes?: string;
 
-  // Campos Opcionais (não obrigatórios)
   @IsOptional()
   @IsBoolean()
   isPregnant?: boolean;
