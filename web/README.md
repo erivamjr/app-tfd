@@ -3,7 +3,6 @@
 ## 🛠️ **BACKEND**
 - [x] 🚀 Acrescentar a variável local no usuário
 - [x] 📸 Adicionar mais uma variável para receber a foto do usuário
-- [ ] 🔒 Revisar backend e suas permissões
 - [x] 👤 Funcionalidade de atualizar avatar do paciente
 - [x] 📝 Ajustar filtro de pacientes no backend e retirar do front
 - [x] 📝 Acrescentar no agendamento
@@ -14,8 +13,9 @@
   * Mandato Judicial
   * Suspeito ou Portador
 - [x] 🛠️ Funcionalidade de deletar pacientes, ou buscar clientes inativos para ativar
-- [ ] 👤 Funcionalidade de deletar usuarios, ou buscar clientes inativos para ativar
-- [ ] 📊 Adicionar rotas para dados do dashboard
+- [x] 👤 Funcionalidade de deletar usuarios, ou buscar clientes inativos para ativar
+- [x] 📊 Adicionar rotas para dados do dashboard
+- [ ] 🔒 Revisar backend e suas permissões
 
 
 

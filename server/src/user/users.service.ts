@@ -13,7 +13,7 @@ import { SupabaseStorage } from '../storage/supabase.storage';
 import { extname } from 'path';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private storage: SupabaseStorage,
@@ -48,14 +48,14 @@ export class UserService {
 
     // Filtro de usuários inativos ou ativos
     if (inactive !== undefined) {
-      queryConditions.active = !inactive; // Se inactive for false, então ativa; se true, inativa
+      queryConditions.active = !inactive;
     }
 
     // Filtro por nome
     if (name) {
       queryConditions.name = {
         contains: name,
-        mode: 'insensitive', // Ignora maiúsculas/minúsculas
+        mode: 'insensitive',
       };
     }
 
@@ -154,6 +154,12 @@ export class UserService {
     await this.uploadAvatar(data.idUser, pathAvatar);
 
     return file;
+  }
+
+  async getActiveUsers() {
+    return await this.prisma.user.count({
+      where: { active: true },
+    });
   }
 
   async userExistsCreate(cpf: string, email: string) {
