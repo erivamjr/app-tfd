@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
-import { UserService } from '../user/user.service';
+import { UsersService } from '../user/users.service';
 import { PrismaModule } from '../database/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { SupabaseStorage } from '../storage/supabase.storage';
@@ -13,7 +13,7 @@ import { SupabaseStorage } from '../storage/supabase.storage';
       signOptions: { expiresIn: '7d' },
     }),
   ],
-  providers: [AuthService, UserService, SupabaseStorage],
-  exports: [AuthService, UserService, JwtModule, SupabaseStorage],
+  providers: [AuthService, UsersService, SupabaseStorage],
+  exports: [AuthService, UsersService, JwtModule, SupabaseStorage],
 })
 export class SharedModule {}

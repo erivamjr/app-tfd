@@ -10,7 +10,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { ForgetAuthDto } from './dto/forget-auth.dto';
 import { ResetAuthDto } from './dto/reset-auth.tto';
-import { UserService } from '../user/user.service';
+import { UsersService } from '../user/users.service';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { User } from '../decorators/user.decorator';
@@ -22,7 +22,7 @@ import { join } from 'path';
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly userService: UserService,
+    private readonly userService: UsersService,
     private readonly authService: AuthService,
     private readonly fileService: FileService,
   ) {}

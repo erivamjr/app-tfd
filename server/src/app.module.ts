@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { UsersModule } from './user/users.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
@@ -13,6 +13,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { SpecialtyModule } from './specialty/specialty.module';
 import { SharedModule } from './shared/shared.module';
 import { FileModule } from './file/file.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { FileModule } from './file/file.module';
     ]),
     ConfigModule.forRoot(),
     SharedModule,
-    UserModule,
+    UsersModule,
     AuthModule,
     PatientsModule,
     SpecialtyModule,
@@ -51,6 +52,7 @@ import { FileModule } from './file/file.module';
         },
       },
     }),
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [
