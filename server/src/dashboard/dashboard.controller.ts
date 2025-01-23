@@ -7,89 +7,60 @@ export class DashboardController {
 
   @Get('total-appointments')
   getTotalAppointments(
-    @Query('startDate') startDate: string = '2024-01-01', // Data inicial padrão
-    @Query('endDate') endDate: string = new Date().toISOString(), // Data final padrão (data atual)
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
   ) {
-    const startDateParsed = new Date(startDate);
-    const endDateParsed = new Date(endDate);
-    return this.dashboardService.getTotalAppointments(
-      startDateParsed,
-      endDateParsed,
-    );
+    return this.dashboardService.getTotalAppointments(startDate, endDate);
   }
 
   @Get('appointments-by-status')
   getAppointmentsByStatus(
-    @Query('startDate') startDate: string = '2024-01-01', // Data inicial padrão
-    @Query('endDate') endDate: string = new Date().toISOString(), // Data final padrão
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
   ) {
-    const startDateParsed = new Date(startDate);
-    const endDateParsed = new Date(endDate);
-    return this.dashboardService.getAppointmentsByStatus(
-      startDateParsed,
-      endDateParsed,
-    );
+    return this.dashboardService.getAppointmentsByStatus(startDate, endDate);
   }
 
   @Get('appointments-by-month')
   getAppointmentsByMonth(
-    @Query('startDate') startDate: string = '2024-01-01', // Data inicial padrão
-    @Query('endDate') endDate: string = new Date().toISOString(), // Data final padrão
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
   ) {
-    const startDateParsed = new Date(startDate);
-    const endDateParsed = new Date(endDate);
-    return this.dashboardService.getAppointmentsByMonth(
-      startDateParsed,
-      endDateParsed,
-    );
+    return this.dashboardService.getAppointmentsByMonth(startDate, endDate);
   }
 
   @Get('appointments-by-status-and-month')
   getAppointmentsByStatusAndMonth(
-    @Query('startDate') startDate: string = '2024-01-01', // Data inicial padrão
-    @Query('endDate') endDate: string = new Date().toISOString(), // Data final padrão
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
   ) {
-    const startDateParsed = new Date(startDate);
-    const endDateParsed = new Date(endDate);
     return this.dashboardService.getAppointmentsByStatusAndMonth(
-      startDateParsed,
-      endDateParsed,
+      startDate,
+      endDate,
     );
   }
 
   @Get('top-classifications')
   getTopClassifications(
-    @Query('startDate') startDate: string = '2024-01-01', // Data inicial padrão
-    @Query('endDate') endDate: string = new Date().toISOString(), // Data final padrão
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
   ) {
-    const startDateParsed = new Date(startDate);
-    const endDateParsed = new Date(endDate);
-    return this.dashboardService.getTopClassifications(
-      startDateParsed,
-      endDateParsed,
-    );
+    return this.dashboardService.getTopClassifications(startDate, endDate);
   }
 
   @Get('top-patients')
   getTopPatients(
-    @Query('startDate') startDate: string = '2024-01-01', // Data inicial padrão
-    @Query('endDate') endDate: string = new Date().toISOString(), // Data final padrão
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
   ) {
-    const startDateParsed = new Date(startDate);
-    const endDateParsed = new Date(endDate);
-    return this.dashboardService.getTopPatients(startDateParsed, endDateParsed);
+    return this.dashboardService.getTopPatients(startDate, endDate);
   }
 
   @Get('top-specialties')
-  getTopSpecialties(
-    @Query('startDate') startDate: string = '2024-01-01', // Data inicial padrão
-    @Query('endDate') endDate: string = new Date().toISOString(), // Data final padrão
+  async getTopSpecialties(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
   ) {
-    const startDateParsed = new Date(startDate);
-    const endDateParsed = new Date(endDate);
-    return this.dashboardService.getTopSpecialties(
-      startDateParsed,
-      endDateParsed,
-    );
+    return this.dashboardService.getTopSpecialties(startDate, endDate);
   }
 }

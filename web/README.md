@@ -21,8 +21,12 @@
 
 ## 💻 **FRONTEND**
 - [x] 👤 Criar a página de perfil do próprio usuário
+- [x] 🏥 Criar um componente de criação de pacientes
+- [x] 📅 Criar um componente de criação de agendamentos
+- [x] 🛠️ Ajustar a página de usuários para que o administrador possa modificar as permissões de cada usuário
 - [ ] 👤 Funcionalidade de atualizar e deletar perfil do usuário
 - [ ] 👤 Funcionalidade de atualizar o avatar do paciente
+- [ ] 📝 Arrumar link que esta apenas no texto e mudar para div
 - [ ] 📝 Acrescentar no cadastramento de agendamento
   * Está Gravida?
   * Possui Hipertensão?
@@ -30,13 +34,10 @@
   * Acamado
   * Mandato Judicial
   * Suspeito ou Portador
-- [x] 🏥 Criar um componente de criação de pacientes
-- [x] 📅 Criar um componente de criação de agendamentos
 - [ ] 📝 Ajustar a lista de agendamentos de cada paciente para que seja possível clicar no agendamento e ver os detalhes
-- [ ] 📊 Ajustar o Dashboard para exibir o total de agendamentos, total agendado, total finalizado e total de pacientes cadastrados
 - [ ] 🔍 Corrigir a busca na segunda página que não está funcionando corretamente
 - [ ] 📅 Ajustar as colunas da header da tabela para que fique alinhada com das celulas abaixo
-- [x] 🛠️ Ajustar a página de usuários para que o administrador possa modificar as permissões de cada usuário
+- [ ] 📊 Ajustar o Dashboard para exibir o total de agendamentos, total agendado, total finalizado e total de pacientes cadastrados
 - [ ] 🌓 Adicionar a features de darkmode
 
 

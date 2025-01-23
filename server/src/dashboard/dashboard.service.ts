@@ -7,15 +7,24 @@ import { AppointmentByMonth } from '../utils/utils';
 export class DashboardService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getTotalAppointments(startDate: Date, endDate: Date) {
+  async getTotalAppointments(startDate: string, endDate: string) {
+    const start = new Date(startDate || '2024-01-01');
+    const end = new Date(endDate || new Date());
+
     return this.prisma.appointment.count({
       where: {
-        createdAt: { gte: startDate, lte: endDate },
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
       },
     });
   }
 
-  async getAppointmentsByStatus(startDate: Date, endDate: Date) {
+  async getAppointmentsByStatus(startDate: string, endDate: string) {
+    const start = new Date(startDate || '2024-01-01');
+    const end = new Date(endDate || new Date());
+
     const statuses = [Status.InProgress, Status.Scheduled, Status.Completed];
     const statusCount = {};
 
@@ -23,7 +32,10 @@ export class DashboardService {
       statusCount[status] = await this.prisma.appointment.count({
         where: {
           status,
-          createdAt: { gte: startDate, lte: endDate },
+          createdAt: {
+            gte: start,
+            lte: end,
+          },
         },
       });
     }
@@ -31,7 +43,10 @@ export class DashboardService {
     return statusCount;
   }
 
-  async getAppointmentsByMonth(startDate: Date, endDate: Date) {
+  async getAppointmentsByMonth(startDate: string, endDate: string) {
+    const start = new Date(startDate || '2024-01-01');
+    const end = new Date(endDate || new Date());
+
     const appointmentsByMonth = await this.prisma.$queryRaw<
       AppointmentByMonth[]
     >`
@@ -40,20 +55,21 @@ export class DashboardService {
         EXTRACT(YEAR FROM "createdAt") AS year,
         COUNT(*) AS total
       FROM "Appointment"
-      WHERE "createdAt" >= ${startDate} AND "createdAt" <= ${endDate}
+      WHERE "createdAt" BETWEEN ${start} AND ${end}
       GROUP BY EXTRACT(MONTH FROM "createdAt"), EXTRACT(YEAR FROM "createdAt")
       ORDER BY year ASC, month ASC;
     `;
 
-    // Convertendo BigInt para Number
     return appointmentsByMonth.map((appointment) => ({
       ...appointment,
-      total: Number(appointment.total), // Converte para Number
+      total: appointment.total.toString(),
     }));
   }
 
-  async getAppointmentsByStatusAndMonth(startDate: Date, endDate: Date) {
-    // Fazendo a consulta com a tipagem explícita
+  async getAppointmentsByStatusAndMonth(startDate: string, endDate: string) {
+    const start = new Date(startDate || '2024-01-01');
+    const end = new Date(endDate || new Date());
+
     const appointmentsByStatusAndMonth = await this.prisma.$queryRaw<
       {
         status: string;
@@ -68,33 +84,38 @@ export class DashboardService {
         EXTRACT(YEAR FROM "createdAt") AS year,
         COUNT(*) AS count
       FROM "Appointment"
-      WHERE "createdAt" >= ${startDate} AND "createdAt" <= ${endDate}
+      WHERE "createdAt" BETWEEN ${start} AND ${end}
       GROUP BY status, month, year
       ORDER BY year ASC, month ASC;
     `;
 
-    // Verificando e mapeando o resultado para converter BigInt para Number
     return appointmentsByStatusAndMonth.map((appointment) => ({
       status: appointment.status,
       month: appointment.month,
       year: appointment.year,
-      count: Number(appointment.count), // Converte de BigInt para Number
+      count: Number(appointment.count),
     }));
   }
 
-  async getTopClassifications(startDate: Date, endDate: Date) {
+  async getTopClassifications(startDate: string, endDate: string) {
+    const start = new Date(startDate || '2024-01-01');
+    const end = new Date(endDate || new Date());
+
     const classifications = await this.prisma.appointment.groupBy({
       by: ['priority'],
       _count: {
         priority: true,
       },
+      where: {
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
+      },
       orderBy: {
         _count: {
           priority: 'desc',
         },
-      },
-      where: {
-        createdAt: { gte: startDate, lte: endDate },
       },
       take: 3,
     });
@@ -105,57 +126,25 @@ export class DashboardService {
     }));
   }
 
-  async getTopPatients(startDate: Date, endDate: Date) {
-    const topPatientsIds = await this.prisma.appointment.groupBy({
-      by: ['patientId'],
-      _count: {
-        patientId: true,
-      },
-      orderBy: {
-        _count: {
-          patientId: 'desc',
-        },
-      },
-      where: {
-        createdAt: { gte: startDate, lte: endDate },
-      },
-      take: 10,
-    });
+  async getTopSpecialties(startDate: string, endDate: string) {
+    const start = new Date(startDate || '2024-01-01');
+    const end = new Date(endDate || new Date());
 
-    const patientIds = topPatientsIds.map((patient) => patient.patientId);
-
-    const patients = await this.prisma.patient.findMany({
-      where: {
-        id: { in: patientIds },
-      },
-      select: {
-        id: true,
-        name: true,
-      },
-    });
-
-    return topPatientsIds.map((patient) => {
-      const patientInfo = patients.find((p) => p.id === patient.patientId);
-      return {
-        name: patientInfo?.name,
-        appointmentCount: patient._count.patientId,
-      };
-    });
-  }
-
-  async getTopSpecialties(startDate: Date, endDate: Date) {
     const specialties = await this.prisma.appointment.groupBy({
       by: ['specialtyId'],
       _count: {
         specialtyId: true,
       },
+      where: {
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
+      },
       orderBy: {
         _count: {
           specialtyId: 'desc',
         },
-      },
-      where: {
-        createdAt: { gte: startDate, lte: endDate },
       },
       take: 3,
     });
@@ -171,13 +160,61 @@ export class DashboardService {
       },
     });
 
-    return specialties.map((specialty) => {
+    const result = specialties.map((specialty) => {
       const specialtyData = specialtyNames.find(
         (item) => item.id === specialty.specialtyId,
       );
       return {
         specialty: specialtyData?.name || 'Unknown',
         count: specialty._count.specialtyId,
+      };
+    });
+
+    return result;
+  }
+
+  async getTopPatients(startDate: string, endDate: string) {
+    const start = new Date(startDate || '2024-01-01');
+    const end = new Date(endDate || new Date());
+
+    const topPatientsIds = await this.prisma.appointment.groupBy({
+      by: ['patientId'],
+      _count: {
+        patientId: true,
+      },
+      where: {
+        createdAt: {
+          gte: start,
+          lte: end,
+        },
+      },
+      orderBy: {
+        _count: {
+          patientId: 'desc',
+        },
+      },
+      take: 10,
+    });
+
+    const patientIds = topPatientsIds.map((patient) => patient.patientId);
+
+    const patients = await this.prisma.patient.findMany({
+      where: {
+        id: {
+          in: patientIds,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    return topPatientsIds.map((patient) => {
+      const patientInfo = patients.find((p) => p.id === patient.patientId);
+      return {
+        name: patientInfo?.name,
+        appointmentCount: patient._count.patientId,
       };
     });
   }
