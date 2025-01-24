@@ -146,7 +146,7 @@ export class DashboardService {
           specialtyId: 'desc',
         },
       },
-      take: 3,
+      take: 10,
     });
 
     const specialtyIds = specialties.map((specialty) => specialty.specialtyId);
