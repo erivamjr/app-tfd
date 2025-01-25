@@ -102,7 +102,7 @@ const CardHome = () => {
       {/* Filtro de Data */}
       <div className="flex flex-col bg-blue-100 p-6 rounded-lg shadow-md mb-6">
         <div className="flex items-center justify-between mb-4 flex-col md:flex-row gap-4">
-          <h2 className="text-2xl font-semibold">Solicitações</h2>
+          <h2 className="text-2xl font-semibold">Análise de Dados</h2>
           <div className="flex flex-col md:flex-row gap-4">
             <input
               type="date"
@@ -127,13 +127,13 @@ const CardHome = () => {
       {/* Cards de Contagem */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card
-          color="green"
+          color="teal"
           title="Pacientes"
           icon={<RiUserAddLine size={24} />}
           number={appointmentsByMonth.length}
         />
         <Card
-          color="blue"
+          color="red"
           title="Solicitações"
           icon={<TfiAgenda size={24} />}
           number={appointmentsByStatus.InProgress}
@@ -145,7 +145,7 @@ const CardHome = () => {
           number={appointmentsByStatus.Scheduled}
         />
         <Card
-          color="red"
+          color="green"
           title="Finalizados"
           icon={<TfiAgenda size={24} />}
           number={appointmentsByStatus.Completed}
