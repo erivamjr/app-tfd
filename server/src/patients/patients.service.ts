@@ -73,6 +73,7 @@ export class PatientsService {
 
     return this.prisma.patient.findUnique({
       where: { id },
+      include: { user: true },
     });
   }
 
