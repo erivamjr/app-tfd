@@ -127,7 +127,7 @@ const CardHome = () => {
       {/* Cards de Contagem */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card
-          color="teal"
+          color="gray"
           title="Pacientes"
           icon={<RiUserAddLine size={24} />}
           number={appointmentsByMonth.length}

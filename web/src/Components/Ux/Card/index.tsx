@@ -2,7 +2,7 @@ interface CardProps {
   title: string
   icon: React.ReactNode
   number: number
-  color: string
+  color: 'teal' | 'blue' | 'red' | 'green' | 'yellow' | 'gray' | 'purple'
 }
 
 export const Card = ({ title, icon, number, color }: CardProps) => {

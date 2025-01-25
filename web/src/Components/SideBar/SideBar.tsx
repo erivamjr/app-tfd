@@ -5,9 +5,9 @@ import { CiHome, CiLogout, CiMedicalCase } from 'react-icons/ci'
 import { IoIosClose } from 'react-icons/io'
 import { GoPeople } from 'react-icons/go'
 import { RiCalendarScheduleLine } from 'react-icons/ri'
-import { GiBrain } from 'react-icons/gi'
 import { AuthContext } from '../Context/Auth'
 import Logo from '../Ux/Logo/Vector.png'
+import { CgProfile } from 'react-icons/cg'
 
 interface MenuItemProps {
   to: string
@@ -57,7 +57,7 @@ export default function SideBar() {
         </div>
         {!sideBar && (
           <div className="flex justify-end items-center bg-blue-600">
-            <img className="w-36 h-36" src={Logo} alt="Logo" />
+            <img className="w-36 h-36 rounded-l-lg" src={Logo} alt="Logo" />
           </div>
         )}
         <div
@@ -74,7 +74,7 @@ export default function SideBar() {
             />
             <MenuItem
               to="/patients"
-              icon={<GiBrain />}
+              icon={<CgProfile />}
               label="Pacientes"
               currentPage={page}
               setPage={setPage}
