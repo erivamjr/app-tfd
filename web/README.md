@@ -37,7 +37,7 @@
 - [ ] 📝 Ajustar a lista de agendamentos de cada paciente para que seja possível clicar no agendamento e ver os detalhes
 - [ ] 🔍 Corrigir a busca na segunda página que não está funcionando corretamente
 - [ ] 📅 Ajustar as colunas da header da tabela para que fique alinhada com das celulas abaixo
-- [ ] 📊 Ajustar o Dashboard para exibir o total de agendamentos, total agendado, total finalizado e total de pacientes cadastrados
+- [x] 📊 Ajustar o Dashboard para exibir o total de agendamentos, total agendado, total finalizado e total de pacientes cadastrados
 - [ ] 🌓 Adicionar a features de darkmode
 
 
