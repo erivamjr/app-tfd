@@ -45,7 +45,7 @@ export const useUpdateProfile = (userId: string) => {
           // Log para verificar a lista de usuários
           console.log('Usuários antigos:', oldUsers)
 
-          if (!Array.isArray(oldUsers)) {
+          if (!Array.isArray([oldUsers])) {
             throw new Error('A lista de usuários não é um array.')
           }
 
@@ -53,6 +53,8 @@ export const useUpdateProfile = (userId: string) => {
             if (oldUser.id === userId) {
               return updatedProfile
             }
+            console.log('Usuário antigo:', oldUser)
+
             return oldUser
           })
         },

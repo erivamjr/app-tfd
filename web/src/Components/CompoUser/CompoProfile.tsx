@@ -1,9 +1,20 @@
-import React, { useState } from 'react'
-import { useUpdateProfile } from '../Hooks/Api/Users/use-update-profile'
+import React, { useContext, useState } from 'react'
+import api from '../../Api'
 import { formatCPF } from '../../utils/utils'
+import { DataContext } from '../Context/DataContext'
 
-interface CompoProfileProps {
-  id: string
+// interface CompoProfileProps {
+//   id: string
+//   name: string
+//   email: string
+//   phone: string
+//   cpf: string
+//   role: string
+//   workLocation: string
+//   profileUrlImage: string
+// }
+
+interface UpdateProfileProps {
   name: string
   email: string
   phone: string
@@ -13,7 +24,7 @@ interface CompoProfileProps {
   profileUrlImage?: string
 }
 
-const CompoProfile: React.FC<CompoProfileProps> = ({
+const CompoProfile = ({
   id,
   name,
   email,
@@ -23,8 +34,9 @@ const CompoProfile: React.FC<CompoProfileProps> = ({
   workLocation,
   profileUrlImage,
 }) => {
+  const { updateProfile } = useContext(DataContext)
   const [image, setImage] = useState(profileUrlImage)
-  const [isEditing, setIsEditing] = useState(false) // Controla se os campos estão em modo de edição
+  const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     id,
     name,
@@ -33,9 +45,8 @@ const CompoProfile: React.FC<CompoProfileProps> = ({
     cpf,
     role,
     workLocation,
+    profileUrlImage,
   })
-
-  const { mutate: updateProfile } = useUpdateProfile(id)
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -53,23 +64,24 @@ const CompoProfile: React.FC<CompoProfileProps> = ({
   }
 
   const handleSave = async () => {
-    const updatedData: CompoProfileProps = {
-      ...formData,
-      cpf: formatCPF(formData.cpf),
+    const updatData: UpdateProfileProps = {
+      name: formData?.name?.trim(),
+      email: formData?.email?.trim(),
+      phone: formData?.phone?.trim(),
+      cpf: formatCPF(formData.cpf)?.trim(),
+      role: formData?.role?.trim(),
+      workLocation: formData?.workLocation?.trim(),
+      profileUrlImage: formData?.profileUrlImage?.trim(),
     }
-    console.log('updatedData', updatedData)
 
-    updateProfile(updatedData, {
-      onSuccess: () => {
-        console.log('Dados atualizados com sucesso')
-      },
-      onError: (error) => {
-        console.error('Erro ao atualizar os dados:', error)
-      },
-    })
-    setIsEditing(false) // Desativa o modo de edição
-    // Aqui você pode implementar a lógica para salvar as alterações, como uma chamada API
-    console.log('Dados salvos', formData)
+    try {
+      await updateProfile(id, updatData)
+
+      // Caso o update seja bem-sucedido, defina isEditing como falso
+      setIsEditing(false)
+    } catch (error) {
+      console.error('Erro ao atualizar dados:', error)
+    }
   }
 
   const handleCancel = () => {
@@ -82,12 +94,18 @@ const CompoProfile: React.FC<CompoProfileProps> = ({
       cpf,
       role,
       workLocation,
+      profileUrlImage,
     })
   }
 
-  const handleDelete = () => {
-    // Lógica para deletar conta
-    console.log('Conta deletada')
+  const handleDelete = async () => {
+    try {
+      const response = await api.delete(`/path/to/delete/endpoint/${id}`)
+      console.log('Perfil deletado com sucesso:', response.data)
+      // Após a exclusão, você pode redirecionar o usuário ou realizar outra ação
+    } catch (error) {
+      console.error('Erro ao deletar conta:', error)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
