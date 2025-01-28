@@ -95,7 +95,6 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get('/signed-url/:filePath')
   async getSignedUrl(@Param('filePath') filePath: string) {
-    console.log('filePath', filePath);
     const signedUrl = await this.userService.getSingUrl(filePath);
     return { signedUrl };
   }

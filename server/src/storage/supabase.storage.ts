@@ -35,7 +35,6 @@ export class SupabaseStorage implements IStorage {
     if (error) {
       throw new Error(`Erro ao gerar URL assinada: ${error.message}`);
     }
-    console.log('URL assinada:', data.signedUrl);
     return data.signedUrl;
   }
 }
