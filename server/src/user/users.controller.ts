@@ -65,6 +65,7 @@ export class UserController {
   @Roles(Role.ADMIN)
   @Patch(':id')
   update(@Param('id') id: string, @Body() body: UpdateUserDto) {
+    console.log('Chegou no backend', body);
     return this.userService.update(id, body);
   }
 
@@ -89,5 +90,13 @@ export class UserController {
     });
 
     return result;
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/signed-url/:filePath')
+  async getSignedUrl(@Param('filePath') filePath: string) {
+    console.log('filePath', filePath);
+    const signedUrl = await this.userService.getSingUrl(filePath);
+    return { signedUrl };
   }
 }

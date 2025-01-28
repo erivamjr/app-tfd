@@ -42,6 +42,7 @@ export class CreateUserDto {
     minUppercase: 1,
     minSymbols: 1,
   })
+  @IsOptional()
   password: string;
 
   @IsOptional()
