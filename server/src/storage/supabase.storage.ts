@@ -25,4 +25,17 @@ export class SupabaseStorage implements IStorage {
     }
     return data;
   }
+
+  async getSignedUrl(filePath: string) {
+    const fullFilePath = `avatar/${filePath}`;
+    const { data, error } = await this.client.storage
+      .from(process.env.SUPABASE_BUCKET)
+      .createSignedUrl(fullFilePath, 3600);
+
+    if (error) {
+      throw new Error(`Erro ao gerar URL assinada: ${error.message}`);
+    }
+    console.log('URL assinada:', data.signedUrl);
+    return data.signedUrl;
+  }
 }
