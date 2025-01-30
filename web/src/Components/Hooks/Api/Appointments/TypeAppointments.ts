@@ -40,7 +40,7 @@ export interface UserProps {
   email: string
   workLocation: string
   profileUrlImage: string
-  password: string
+  password?: string
   role: string
   createdAt: string
   updatedAt: string

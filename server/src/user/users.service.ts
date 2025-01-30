@@ -144,16 +144,23 @@ export class UsersService {
   }
 
   async execute(data: AvatarDto) {
+    if (!data.file) {
+      throw new NotFoundException('File not found');
+    }
     const extFile = extname(data.file.originalname).split('.')[1];
     const transformName = `${data.idUser}.${extFile}`;
     data.file.originalname = transformName;
     const file = await this.storage.upload(data.file, 'avatar');
 
-    const pathAvatar = `avatar/${data.file.originalname}`;
+    const pathAvatar = `${data.file.originalname}`;
 
     await this.uploadAvatar(data.idUser, pathAvatar);
 
     return file;
+  }
+
+  async getSingUrl(filePach: string) {
+    return this.storage.getSignedUrl(filePach);
   }
 
   async getActiveUsers() {
@@ -215,11 +222,11 @@ export class UsersService {
 
   async uploadAvatar(id: string, path: string) {
     await this.prisma.user.update({
-      data: {
-        profileUrlImage: path,
-      },
       where: {
         id,
+      },
+      data: {
+        profileUrlImage: path,
       },
     });
   }

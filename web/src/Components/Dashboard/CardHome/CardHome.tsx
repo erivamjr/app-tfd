@@ -95,10 +95,8 @@ const CardHome = () => {
     }),
   )
 
-  console.log('topPatients', topPatients)
-
   return (
-    <div className="grid grid-cols-1 gap-4 my-10 px-4 md:px-0">
+    <div className="grid grid-cols-1 gap-4 my-10 px-2 md:px-0">
       {/* Filtro de Data */}
       <div className="flex flex-col bg-blue-100 p-6 rounded-lg shadow-md mb-6">
         <div className="flex items-center justify-between mb-4 flex-col md:flex-row gap-4">
@@ -127,7 +125,7 @@ const CardHome = () => {
       {/* Cards de Contagem */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card
-          color="teal"
+          color="gray"
           title="Pacientes"
           icon={<RiUserAddLine size={24} />}
           number={appointmentsByMonth.length}

@@ -15,6 +15,7 @@ export default function Profile() {
         cpf={user.cpf}
         role={user.role}
         workLocation={user.workLocation}
+        password={user.password}
         profileUrlImage={user.profileUrlImage}
       />
     )

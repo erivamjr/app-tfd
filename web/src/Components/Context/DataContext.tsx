@@ -18,6 +18,15 @@ interface UpdateUserData {
   active?: boolean
 }
 
+interface UpdateProfileProps {
+  name: string
+  email: string
+  phone: string
+  cpf: string
+  role: string
+  workLocation: string
+}
+
 interface DataContextProps {
   specialties: SpecialtyProps[]
   appointments: TypeAppointment[]
@@ -29,6 +38,7 @@ interface DataContextProps {
   // Novas funções para gerenciamento de usuários
   updateUser: (userId: string, data: UpdateUserData) => Promise<void>
   fetchUsers: () => Promise<void>
+  updateProfile: (userId: string, data: UpdateProfileProps) => Promise<void>
 }
 
 export const DataContext = createContext({} as DataContextProps)
@@ -110,12 +120,6 @@ export const DataProvider = ({ children }: DataProviderProps) => {
 
   // Nova função para atualizar usuário
   const updateUser = async (userId: string, data: UpdateUserData) => {
-    console.log(
-      'verificando userId',
-      userId,
-      'verificando o que esta vindo!',
-      data,
-    )
     try {
       await api.patch(`/users/${userId}`, data)
       setUsers((prev) =>
@@ -123,7 +127,21 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       )
     } catch (error) {
       handleError(error, 'Erro ao atualizar usuário.')
-      throw error // Propagar erro para tratamento no componente
+      throw error
+    }
+  }
+
+  const updateProfile = async (userId: string, data: UpdateProfileProps) => {
+    try {
+      console.log('response =', userId, data)
+      await api.patch(`/users/${userId}`, data)
+
+      setUsers((prev) =>
+        prev.map((user) => (user.id === userId ? { ...user, ...data } : user)),
+      )
+    } catch (error) {
+      handleError(error, 'Erro ao atualizar perfil.')
+      throw error
     }
   }
 
@@ -146,6 +164,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
         deleteSpecialty,
         updateUser,
         fetchUsers,
+        updateProfile,
       }}
     >
       {children}

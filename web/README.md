@@ -27,6 +27,7 @@
 - [ ] 👤 Funcionalidade de atualizar e deletar perfil do usuário
 - [ ] 👤 Funcionalidade de atualizar o avatar do paciente
 - [ ] 📝 Arrumar link que esta apenas no texto e mudar para div
+- [ ] 🛠️ Funcionalidade de detalhes do paciente
 - [ ] 📝 Acrescentar no cadastramento de agendamento
   * Está Gravida?
   * Possui Hipertensão?

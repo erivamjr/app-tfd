@@ -87,7 +87,7 @@ export default function DetailsTable({
           </TableRow>
           {item.map((itemData) => (
             <TableRow key={itemData.id}>
-              <TableCell>{itemData.user.name}</TableCell>
+              <TableCell>{itemData?.user?.name}</TableCell>
               <TableCell>{itemData.priority}</TableCell>
               <TableCell>{itemData.diagnosis}</TableCell>
               <TableCell>{itemData.specialty.name}</TableCell>
