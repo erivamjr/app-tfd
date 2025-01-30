@@ -2,17 +2,7 @@ import React, { useContext, useState } from 'react'
 import api from '../../Api'
 import { formatCPF } from '../../utils/utils'
 import { DataContext } from '../Context/DataContext'
-
-// interface CompoProfileProps {
-//   id: string
-//   name: string
-//   email: string
-//   phone: string
-//   cpf: string
-//   role: string
-//   workLocation: string
-//   profileUrlImage: string
-// }
+import { AuthContext } from '../Context/Auth'
 
 interface UpdateProfileProps {
   name: string
@@ -21,7 +11,7 @@ interface UpdateProfileProps {
   cpf: string
   role: string
   workLocation: string
-  profileUrlImage?: string
+  password?: string
 }
 
 const CompoProfile = ({
@@ -32,11 +22,14 @@ const CompoProfile = ({
   cpf,
   role,
   workLocation,
+  password,
   profileUrlImage,
 }) => {
+  const { refreshAvatarUrl } = useContext(AuthContext)
   const { updateProfile } = useContext(DataContext)
   const [image, setImage] = useState(profileUrlImage)
   const [isEditing, setIsEditing] = useState(false)
+  const [confirmPassword, setConfirmPassword] = useState(password)
   const [formData, setFormData] = useState({
     id,
     name,
@@ -45,25 +38,53 @@ const CompoProfile = ({
     cpf,
     role,
     workLocation,
+    password,
     profileUrlImage,
   })
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
+    const form = new FormData()
+    const reader = new FileReader()
+
     if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        if (reader.result) setImage(reader.result as string)
+      form.append('file', file)
+
+      try {
+        const response = await api.put('/users/avatar', form, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        reader.onloadend = () => {
+          if (reader.result) setImage(reader.result as string)
+        }
+        reader.readAsDataURL(file)
+
+        refreshAvatarUrl(id)
+
+        setImage(image)
+
+        console.log('Imagem enviada com sucesso', response.data)
+      } catch (error) {
+        console.error('Erro ao enviar a imagem', error)
+
+        alert('Erro ao enviar a imagem. Tente novamente.')
       }
-      reader.readAsDataURL(file)
+    } else {
+      alert('Por favor, selecione uma imagem para enviar.')
     }
   }
 
   const handleEdit = () => {
-    setIsEditing(true) // Ativa o modo de edição
+    setIsEditing(true)
   }
 
   const handleSave = async () => {
+    if (confirmPassword !== formData.password) {
+      alert('Senhas diferentes')
+      return
+    }
     const updatData: UpdateProfileProps = {
       name: formData?.name?.trim(),
       email: formData?.email?.trim(),
@@ -71,13 +92,11 @@ const CompoProfile = ({
       cpf: formatCPF(formData.cpf)?.trim(),
       role: formData?.role?.trim(),
       workLocation: formData?.workLocation?.trim(),
-      profileUrlImage: formData?.profileUrlImage?.trim(),
+      password: formData?.password?.trim(),
     }
 
     try {
       await updateProfile(id, updatData)
-
-      // Caso o update seja bem-sucedido, defina isEditing como falso
       setIsEditing(false)
     } catch (error) {
       console.error('Erro ao atualizar dados:', error)
@@ -94,15 +113,15 @@ const CompoProfile = ({
       cpf,
       role,
       workLocation,
+      password,
       profileUrlImage,
     })
   }
 
   const handleDelete = async () => {
     try {
-      const response = await api.delete(`/path/to/delete/endpoint/${id}`)
+      const response = await api.delete(`/users/${id}`)
       console.log('Perfil deletado com sucesso:', response.data)
-      // Após a exclusão, você pode redirecionar o usuário ou realizar outra ação
     } catch (error) {
       console.error('Erro ao deletar conta:', error)
     }
@@ -120,8 +139,10 @@ const CompoProfile = ({
           <img
             src={image}
             alt="Profile"
-            className="w-32 h-32 rounded-full object-cover border-4 border-blue-600"
+            className="w-44 h-44 rounded-full object-cover border-4 border-blue-600 cursor-pointer"
+            onClick={() => document.getElementById('file-upload')?.click()} // Ação de clique na imagem para abrir o seletor
           />
+
           <input
             id="file-upload"
             type="file"
@@ -129,12 +150,6 @@ const CompoProfile = ({
             onChange={handleImageChange}
             className="hidden"
           />
-          <label
-            htmlFor="file-upload"
-            className="bg-blue-500 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-600 transition-all duration-300 mt-2"
-          >
-            Mudar Foto
-          </label>
         </div>
 
         <div className="md:ml-6 w-full md:w-3/4">
@@ -186,6 +201,32 @@ const CompoProfile = ({
                 name="workLocation"
                 value={formData.workLocation}
                 onChange={handleChange}
+                disabled={!isEditing}
+                className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${isEditing ? 'bg-white' : 'bg-gray-100 cursor-not-allowed'}`}
+              />
+            </div>
+
+            <div>
+              <label className="font-semibold text-gray-600">Senha</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                disabled={!isEditing}
+                className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${isEditing ? 'bg-white' : 'bg-gray-100 cursor-not-allowed'}`}
+              />
+            </div>
+
+            <div>
+              <label className="font-semibold text-gray-600">
+                Confirmar Senha
+              </label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 disabled={!isEditing}
                 className={`w-full mt-1 p-2 border border-gray-300 rounded-md ${isEditing ? 'bg-white' : 'bg-gray-100 cursor-not-allowed'}`}
               />

@@ -95,8 +95,6 @@ const CardHome = () => {
     }),
   )
 
-  console.log('topPatients', topPatients)
-
   return (
     <div className="grid grid-cols-1 gap-4 my-10 px-2 md:px-0">
       {/* Filtro de Data */}

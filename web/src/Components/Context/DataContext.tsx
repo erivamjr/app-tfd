@@ -25,7 +25,6 @@ interface UpdateProfileProps {
   cpf: string
   role: string
   workLocation: string
-  profileUrlImage?: string
 }
 
 interface DataContextProps {
@@ -134,7 +133,9 @@ export const DataProvider = ({ children }: DataProviderProps) => {
 
   const updateProfile = async (userId: string, data: UpdateProfileProps) => {
     try {
+      console.log('response =', userId, data)
       await api.patch(`/users/${userId}`, data)
+
       setUsers((prev) =>
         prev.map((user) => (user.id === userId ? { ...user, ...data } : user)),
       )

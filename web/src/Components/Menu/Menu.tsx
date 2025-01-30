@@ -4,7 +4,7 @@ import UserProfile from '../UserProfile/UserProfile'
 
 export default function Menu() {
   const { user } = useContext(AuthContext)
-  // console.log('CONSOLANDO USER DO CONTEXT', user)
+  console.log('CONSOLANDO USER DO CONTEXT', user)
 
   return (
     <div>
