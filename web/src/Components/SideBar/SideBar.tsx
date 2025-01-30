@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { IoMenu } from 'react-icons/io5'
 import { CiHome, CiLogout, CiMedicalCase } from 'react-icons/ci'
 import { IoIosClose } from 'react-icons/io'
@@ -8,21 +8,13 @@ import { RiCalendarScheduleLine } from 'react-icons/ri'
 import { AuthContext } from '../Context/Auth'
 import Logo from '../Ux/Logo/Vector.png'
 import { CgProfile } from 'react-icons/cg'
-
-interface MenuItemProps {
-  to: string
-  icon: React.ReactNode
-  label: string
-  currentPage: string
-  setPage: (page: string) => void
-  sideBar: boolean
-  onClick?: () => void
-}
+import { MenuItem } from './MenuItem'
 
 export default function SideBar() {
   const { logout } = useContext(AuthContext)
   const [sideBar, setSideBar] = useState(false)
   const [page, setPage] = useState('Home')
+  const navigate = useNavigate()
 
   function handleSideBar() {
     setSideBar(!sideBar)
@@ -30,24 +22,22 @@ export default function SideBar() {
 
   const handleResize = () => {
     if (window.innerWidth < 768) {
-      setSideBar(true) // Sidebar starts collapsed on mobile
+      setSideBar(true)
     } else {
-      setSideBar(false) // Sidebar starts expanded on larger screens
+      setSideBar(false)
     }
   }
 
   useEffect(() => {
-    handleResize() // Initialize sidebar state based on window size
-    window.addEventListener('resize', handleResize) // Listen for window resize
-    return () => window.removeEventListener('resize', handleResize) // Cleanup event listener
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   return (
     <div className="flex">
       <div
-        className={`${
-          sideBar ? 'w-16' : 'w-60'
-        } flex-shrink-0 bg-blue-600 text-white transition-all duration-300 `}
+        className={`${sideBar ? 'w-16' : 'w-60'} flex-shrink-0 bg-blue-600 text-white transition-all duration-300`}
       >
         <div
           onClick={handleSideBar}
@@ -71,6 +61,7 @@ export default function SideBar() {
               currentPage={page}
               setPage={setPage}
               sideBar={sideBar}
+              navigate={navigate}
             />
             <MenuItem
               to="/patients"
@@ -79,6 +70,7 @@ export default function SideBar() {
               currentPage={page}
               setPage={setPage}
               sideBar={sideBar}
+              navigate={navigate}
             />
             <MenuItem
               to="/requests"
@@ -87,15 +79,8 @@ export default function SideBar() {
               currentPage={page}
               setPage={setPage}
               sideBar={sideBar}
+              navigate={navigate}
             />
-            {/* <MenuItem
-            to="/relatorios"
-            icon={<TbReportSearch />}
-            label="Relatórios"
-            currentPage={page}
-            setPage={setPage}
-            sideBar={sideBar}
-          /> */}
             <MenuItem
               to="/specialties"
               icon={<CiMedicalCase />}
@@ -103,6 +88,7 @@ export default function SideBar() {
               currentPage={page}
               setPage={setPage}
               sideBar={sideBar}
+              navigate={navigate}
             />
             <MenuItem
               to="/users"
@@ -111,6 +97,7 @@ export default function SideBar() {
               currentPage={page}
               setPage={setPage}
               sideBar={sideBar}
+              navigate={navigate}
             />
             <MenuItem
               to="/users"
@@ -120,46 +107,11 @@ export default function SideBar() {
               setPage={setPage}
               sideBar={sideBar}
               onClick={logout}
+              navigate={navigate}
             />
           </ul>
         </div>
       </div>
     </div>
-  )
-}
-
-function MenuItem({
-  to,
-  icon,
-  label,
-  currentPage,
-  setPage,
-  sideBar,
-  onClick,
-}: MenuItemProps) {
-  const isActive = currentPage === label
-
-  const handleClick = () => {
-    if (onClick) onClick()
-    setPage(label)
-  }
-
-  return (
-    <li
-      onClick={handleClick}
-      className={`flex gap-1 items-center p-2 cursor-pointer ${
-        isActive
-          ? 'w-full bg-white rounded text-blue-600'
-          : 'hover:text-blue-200'
-      } ${sideBar ? 'justify-center' : ''}`}
-    >
-      <Link
-        to={to}
-        className={`flex items-center gap-1 ${sideBar ? 'justify-center' : ''}`}
-      >
-        <span>{icon}</span>
-        {!sideBar && <span>{label}</span>}
-      </Link>
-    </li>
   )
 }
