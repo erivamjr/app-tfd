@@ -63,7 +63,6 @@ export class AppointmentsService {
   }
 
   async getFilteredAppointments(filter: AppointmentFilterDto) {
-    console.log(filter);
     const {
       isPregnant,
       hasHypertension,
@@ -137,8 +136,6 @@ export class AppointmentsService {
     if (active !== undefined) {
       queryConditions.active = active;
     }
-
-    console.log('Filters received:', queryConditions);
 
     return this.prisma.appointment.findMany({
       where: queryConditions,

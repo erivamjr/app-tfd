@@ -108,8 +108,6 @@ export class PatientsService {
   }
 
   async search({ name, cpf, inactive }: SearchPatientDto) {
-    console.log(name, cpf, inactive);
-
     const whereConditions: any = {};
 
     if (name || cpf) {

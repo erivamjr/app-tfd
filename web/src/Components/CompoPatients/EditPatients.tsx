@@ -78,7 +78,7 @@ export default function EditPatient() {
         zipCode: patient.zipCode?.toString() ?? '',
       })
     } else {
-      console.log('Nenhum paciente encontrado com o ID fornecido.')
+      console.log('Not patient found.')
     }
   }, [patient, id])
 

@@ -13,7 +13,6 @@ export default function CompoDetailsRequest() {
   const { appointments } = useAppointment()
 
   const appointment = appointments.find((appointment) => appointment.id === id)
-  appointment && console.log('CONSOLANDO', appointment)
 
   if (!appointment) {
     return <DisplayMessage message="Agendamento não encontrado." />
@@ -106,7 +105,7 @@ export default function CompoDetailsRequest() {
               <span>Data da Solicitação: {formattedDate}</span>
             </div>
             <div className="flex flex-col gap-2">
-              <span>Usuario de Solicitação: {appointment.user.name}</span>
+              <span>Usuario de Solicitação: {appointment?.user?.name}</span>
               <span className="bg-yellow-100  p-2 rounded-md">
                 Observação: {appointment.notes}
               </span>
