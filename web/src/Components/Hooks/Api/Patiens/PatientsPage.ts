@@ -34,11 +34,11 @@ const usePatientsPage = (
           response = await api.get<{
             data: Patient[]
             total: number
-            pageCount: number
           }>(`/patients?page=${currentPage}&limit=${itemsPerPage}`, { signal })
 
+          const pageCount = Math.ceil(response.data.total / itemsPerPage)
           setPatientsPage(response.data.data)
-          setTotalPages(response.data.pageCount)
+          setTotalPages(pageCount)
         }
       } catch (error) {
         if (axios.isCancel(error)) {

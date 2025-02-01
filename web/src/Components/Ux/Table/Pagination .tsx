@@ -7,14 +7,11 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <button
           onClick={() => onPageChange(currentPage > 1 ? currentPage - 1 : 1)}
           disabled={currentPage === 1}
-          className={`
-            px-3 py-2 rounded-md text-sm font-medium transition-colors
-            ${
-              currentPage === 1
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-            }
-          `}
+          className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+            currentPage === 1
+              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+          }`}
         >
           &laquo;
         </button>
@@ -24,14 +21,11 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             <button
               key={page}
               onClick={() => onPageChange(page)}
-              className={`
-                px-3 py-2 rounded-md text-sm font-medium transition-colors
-                ${
-                  page === currentPage
-                    ? 'bg-blue-500 text-white hover:bg-blue-600'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-                }
-              `}
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                page === currentPage
+                  ? 'bg-blue-500 text-white hover:bg-blue-600'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+              }`}
             >
               {page}
             </button>
@@ -51,14 +45,11 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             )
           }
           disabled={currentPage === totalPages}
-          className={`
-            px-3 py-2 rounded-md text-sm font-medium transition-colors
-            ${
-              currentPage === totalPages
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-            }
-          `}
+          className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+            currentPage === totalPages
+              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+          }`}
         >
           &raquo;
         </button>

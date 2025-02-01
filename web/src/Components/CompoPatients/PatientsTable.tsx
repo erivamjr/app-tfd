@@ -54,6 +54,10 @@ export default function PatientsTable() {
     setIsModalOpen(false)
   }
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
   if (isLoading)
     return (
       <div>
@@ -277,7 +281,7 @@ export default function PatientsTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={handlePageChange}
           />
         </div>
         <Modal
