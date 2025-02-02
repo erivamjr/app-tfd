@@ -47,6 +47,7 @@ export class AppointmentsService {
       include: {
         patient: true,
         specialty: true,
+        user: true,
       },
     });
   }
@@ -58,7 +59,7 @@ export class AppointmentsService {
       where: {
         id: id,
       },
-      include: { patient: true, specialty: true },
+      include: { patient: true, specialty: true, user: true },
     });
   }
 
@@ -139,7 +140,7 @@ export class AppointmentsService {
 
     return this.prisma.appointment.findMany({
       where: queryConditions,
-      include: { patient: true, specialty: true },
+      include: { patient: true, specialty: true, user: true },
     });
   }
 
