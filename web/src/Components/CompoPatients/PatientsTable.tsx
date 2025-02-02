@@ -234,7 +234,7 @@ export default function PatientsTable() {
                     <TableCell>{patient.name}</TableCell>
                     <TableCell>{patient.cpf}</TableCell>
                     <TableCell>{patient.phone}</TableCell>
-                    <TableCell>{patient.user.name}</TableCell>
+                    <TableCell>{patient?.user?.name}</TableCell>
                     <TableCell>
                       {patient.createdAt &&
                         new Date(patient.createdAt).toLocaleDateString(
