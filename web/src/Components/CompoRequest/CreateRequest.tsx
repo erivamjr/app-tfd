@@ -133,7 +133,6 @@ export default function CreateRequest() {
     setIsLoadingPatient(true)
 
     const specialty = specialties.find((s) => s.id === specialtyId)
-    console.log(specialty)
 
     if (!patientId || !specialty) {
       setType('warning')
@@ -160,7 +159,6 @@ export default function CreateRequest() {
       status,
       notes,
     }
-    console.log(requestData)
 
     try {
       await api.post('/appointments', requestData)

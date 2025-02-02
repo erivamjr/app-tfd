@@ -30,9 +30,6 @@ export const useUpdateProfile = (userId: string) => {
         profileUrlImage: data?.profileUrlImage?.trim(),
       })
 
-      // Log para verificar a resposta da API
-      console.log('Resposta da API:', updatedProfile)
-
       if (!updatedProfile) {
         throw new Error('A resposta da API não contém dados válidos.')
       }
@@ -42,9 +39,6 @@ export const useUpdateProfile = (userId: string) => {
       queryClient.setQueryData(
         userQueryKeys.getAll(),
         (oldUsers: UserProps[]) => {
-          // Log para verificar a lista de usuários
-          console.log('Usuários antigos:', oldUsers)
-
           if (!Array.isArray([oldUsers])) {
             throw new Error('A lista de usuários não é um array.')
           }
@@ -53,7 +47,6 @@ export const useUpdateProfile = (userId: string) => {
             if (oldUser.id === userId) {
               return updatedProfile
             }
-            console.log('Usuário antigo:', oldUser)
 
             return oldUser
           })

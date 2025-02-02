@@ -24,9 +24,9 @@
 - [x] 🏥 Criar um componente de criação de pacientes
 - [x] 📅 Criar um componente de criação de agendamentos
 - [x] 🛠️ Ajustar a página de usuários para que o administrador possa modificar as permissões de cada usuário
-- [ ] 👤 Funcionalidade de atualizar e deletar perfil do usuário
-- [ ] 👤 Funcionalidade de atualizar o avatar do paciente
-- [ ] 📝 Arrumar link que esta apenas no texto e mudar para div
+- [x] 👤 Funcionalidade de atualizar e deletar perfil do usuário
+- [x] 👤 Funcionalidade de atualizar o avatar do paciente
+- [x] 📝 Arrumar link que esta apenas no texto e mudar para div
 - [ ] 🛠️ Funcionalidade de detalhes do paciente
 - [ ] 📝 Acrescentar no cadastramento de agendamento
   * Está Gravida?

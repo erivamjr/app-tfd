@@ -20,6 +20,7 @@ export interface UserProps {
   email: string
   password: string
   role: 'admin' | 'user' | 'guest'
+  workLocation: string
   createdAt: Date
   updatedAt: Date
   active: boolean

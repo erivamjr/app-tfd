@@ -47,6 +47,7 @@ export class AppointmentsService {
       include: {
         patient: true,
         specialty: true,
+        user: true,
       },
     });
   }
@@ -58,12 +59,11 @@ export class AppointmentsService {
       where: {
         id: id,
       },
-      include: { patient: true, specialty: true },
+      include: { patient: true, specialty: true, user: true },
     });
   }
 
   async getFilteredAppointments(filter: AppointmentFilterDto) {
-    console.log(filter);
     const {
       isPregnant,
       hasHypertension,
@@ -138,11 +138,9 @@ export class AppointmentsService {
       queryConditions.active = active;
     }
 
-    console.log('Filters received:', queryConditions);
-
     return this.prisma.appointment.findMany({
       where: queryConditions,
-      include: { patient: true, specialty: true },
+      include: { patient: true, specialty: true, user: true },
     });
   }
 

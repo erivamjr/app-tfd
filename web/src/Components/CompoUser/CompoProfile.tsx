@@ -51,7 +51,7 @@ const CompoProfile = ({
       form.append('file', file)
 
       try {
-        const response = await api.put('/users/avatar', form, {
+        await api.put('/users/avatar', form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -64,8 +64,6 @@ const CompoProfile = ({
         refreshAvatarUrl(id)
 
         setImage(image)
-
-        console.log('Imagem enviada com sucesso', response.data)
       } catch (error) {
         console.error('Erro ao enviar a imagem', error)
 
@@ -120,8 +118,8 @@ const CompoProfile = ({
 
   const handleDelete = async () => {
     try {
-      const response = await api.delete(`/users/${id}`)
-      console.log('Perfil deletado com sucesso:', response.data)
+      await api.delete(`/users/${id}`)
+      alert('Conta deletada com sucesso!')
     } catch (error) {
       console.error('Erro ao deletar conta:', error)
     }

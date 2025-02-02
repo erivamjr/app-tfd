@@ -18,7 +18,6 @@ const usePatients = () => {
         const response = await api.get<{
           data: Patient[]
         }>(`/patients`, { signal })
-        console.log(response.data)
 
         setPatients(response.data.data)
       } catch (error) {

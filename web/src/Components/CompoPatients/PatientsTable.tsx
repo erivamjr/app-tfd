@@ -54,6 +54,10 @@ export default function PatientsTable() {
     setIsModalOpen(false)
   }
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
   if (isLoading)
     return (
       <div>
@@ -230,7 +234,7 @@ export default function PatientsTable() {
                     <TableCell>{patient.name}</TableCell>
                     <TableCell>{patient.cpf}</TableCell>
                     <TableCell>{patient.phone}</TableCell>
-                    <TableCell>{patient.user.name}</TableCell>
+                    <TableCell>{patient?.user?.name}</TableCell>
                     <TableCell>
                       {patient.createdAt &&
                         new Date(patient.createdAt).toLocaleDateString(
@@ -277,7 +281,7 @@ export default function PatientsTable() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={handlePageChange}
           />
         </div>
         <Modal

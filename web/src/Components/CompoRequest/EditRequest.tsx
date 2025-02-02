@@ -15,8 +15,6 @@ export default function EditRequest() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { users } = useContext(DataContext)
-  // const { user } = useContext(AuthContext)
-  // console.log('USER', user)
 
   const [formData, setFormData] = useState({
     specialtyName: '',

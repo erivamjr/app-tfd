@@ -6,8 +6,7 @@ export const useGetUsers = () => {
   return useQuery<UserProps[]>({
     queryKey: ['users'], // Chave de cache do React Query
     queryFn: async () => {
-      const { data: users } = await api.get('/users') // Endpoint de usuários
-      console.log('users', users)
+      const { data: users } = await api.get('/users')
 
       return users
     },
