@@ -79,7 +79,6 @@ export class UserController {
     return this.userService.activateUser(id);
   }
 
-  @UseGuards(AuthGuard)
   @Put('avatar')
   @UseInterceptors(FileInterceptor('file'))
   async uploadAvatar(@User() user, @UploadedFile() file: FileDto) {
@@ -91,7 +90,6 @@ export class UserController {
     return result;
   }
 
-  @UseGuards(AuthGuard)
   @Get('/signed-url/:filePath')
   async getSignedUrl(@Param('filePath') filePath: string) {
     const signedUrl = await this.userService.getSingUrl(filePath);
