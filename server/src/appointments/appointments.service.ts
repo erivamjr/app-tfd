@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { PrismaService } from '../database/prisma.service';
-import { AppointmentFilterDto } from './dto/filter-appointment.dto';
+import { FilteredAppointmentsDto } from './dto/filter-appointment.dto';
 
 @Injectable()
 export class AppointmentsService {
@@ -63,7 +63,7 @@ export class AppointmentsService {
     });
   }
 
-  async getFilteredAppointments(filter: AppointmentFilterDto) {
+  async getFilteredAppointments(filter: FilteredAppointmentsDto) {
     const {
       isPregnant,
       hasHypertension,
@@ -79,12 +79,21 @@ export class AppointmentsService {
       startDate,
       endDate,
       active,
+      page,
+      limit,
+      orderBy,
+      orderDirection,
     } = filter;
+
+    // Garantir que page e limit sejam válidos
+    const pageNumber = Math.max(Number(page) || 1, 1); // Garante que page seja no mínimo 1
+    const pageSize = Math.max(Number(limit) || 10, 1); // Garante que limit seja no mínimo 1
 
     const queryConditions: any = {
       active: true,
     };
 
+    // Lógica de filtro
     if (search) {
       queryConditions.OR = [
         { patient: { name: { contains: search, mode: 'insensitive' } } },
@@ -138,10 +147,32 @@ export class AppointmentsService {
       queryConditions.active = active;
     }
 
-    return this.prisma.appointment.findMany({
+    // Paginação: calcular o número de registros a pular
+    const skip = (pageNumber - 1) * pageSize;
+
+    // Retorno dos agendamentos com paginação e ordenação
+    const appointments = await this.prisma.appointment.findMany({
       where: queryConditions,
       include: { patient: true, specialty: true, user: true },
+      skip, // Pular os primeiros 'skip' itens
+      take: pageSize, // Limitar o número de resultados
+      orderBy: {
+        [orderBy]: orderDirection, // Ordena pelo campo e direção recebidos
+      },
     });
+
+    // Contar o total de registros que atendem aos filtros
+    const total = await this.prisma.appointment.count({
+      where: queryConditions,
+    });
+
+    // Retornar os dados paginados
+    return {
+      data: appointments,
+      page: pageNumber,
+      limit: pageSize,
+      total,
+    };
   }
 
   async update(id: string, body: UpdateAppointmentDto) {

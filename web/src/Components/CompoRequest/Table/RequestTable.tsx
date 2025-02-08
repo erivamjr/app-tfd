@@ -55,8 +55,8 @@ export default function RequestTable() {
 
   async function handleDelete(id: string | undefined) {
     try {
-      await api.delete(`/patients/${id}`)
-      alert('DELETADO COM SUCESSO!')
+      await api.delete(`/appointments/${id}`)
+      alert('DELETADO AGENDAMENTO COM SUCESSO!')
       setIsModalOpen(false)
     } catch (err) {
       console.error('Delete patient fail!')

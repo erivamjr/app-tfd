@@ -11,8 +11,7 @@ import {
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
-import { AppointmentFilterDto } from './dto/filter-appointment.dto';
-
+import { FilteredAppointmentsDto } from './dto/filter-appointment.dto';
 @Controller('appointments')
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
@@ -38,7 +37,9 @@ export class AppointmentsController {
   }
 
   @Get('filtered')
-  async getFilteredAppointments(@Query() filters: AppointmentFilterDto) {
+  async getFilteredAppointments(
+    @Query() filters: FilteredAppointmentsDto, // Filtros de consulta
+  ) {
     return this.appointmentsService.getFilteredAppointments(filters);
   }
 

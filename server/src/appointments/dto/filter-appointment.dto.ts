@@ -1,7 +1,31 @@
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsOptional,
+  IsString,
+  IsInt,
+} from 'class-validator';
 
-export class AppointmentFilterDto {
+export class FilteredAppointmentsDto {
+  // Propriedades de paginação
+  @IsOptional()
+  @IsInt()
+  @Transform(({ value }) => parseInt(value, 10))
+  page?: number = 1;
+
+  @IsOptional()
+  @IsInt()
+  @Transform(({ value }) => parseInt(value, 10))
+  limit?: number = 10;
+
+  @IsOptional()
+  orderBy?: 'createdAt' | 'status' = 'createdAt';
+
+  @IsOptional()
+  orderDirection?: 'asc' | 'desc' = 'asc';
+
+  // Propriedades de filtro
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
