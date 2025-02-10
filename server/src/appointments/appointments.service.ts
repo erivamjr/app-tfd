@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { PrismaService } from '../database/prisma.service';
-import { AppointmentFilterDto } from './dto/filter-appointment.dto';
+import { FilteredAppointmentsDto } from './dto/filter-appointment.dto';
 
 @Injectable()
 export class AppointmentsService {
@@ -40,7 +40,7 @@ export class AppointmentsService {
       };
     }
 
-    return this.prisma.appointment.findMany({
+    const data = await this.prisma.appointment.findMany({
       skip,
       take,
       orderBy: orderCriteria,
@@ -50,6 +50,10 @@ export class AppointmentsService {
         user: true,
       },
     });
+
+    const total = await this.prisma.appointment.count();
+
+    return { data, page, limit, total };
   }
 
   async findOne(id: string) {
@@ -63,8 +67,9 @@ export class AppointmentsService {
     });
   }
 
-  async getFilteredAppointments(filter: AppointmentFilterDto) {
+  async getFilteredAppointments(filter: FilteredAppointmentsDto) {
     const {
+      patientId,
       isPregnant,
       hasHypertension,
       hasDiabetes,
@@ -79,12 +84,19 @@ export class AppointmentsService {
       startDate,
       endDate,
       active,
+      page,
+      limit,
+      orderBy,
+      orderDirection,
     } = filter;
 
-    const queryConditions: any = {
-      active: true,
-    };
+    // Garantir que page e limit sejam válidos
+    const pageNumber = Math.max(Number(page) || 1, 1); // Garante que page seja no mínimo 1
+    const pageSize = Math.max(Number(limit) || 10, 1); // Garante que limit seja no mínimo 1
 
+    const queryConditions: any = {};
+
+    // Lógica de filtro
     if (search) {
       queryConditions.OR = [
         { patient: { name: { contains: search, mode: 'insensitive' } } },
@@ -93,55 +105,66 @@ export class AppointmentsService {
       ];
     }
 
-    if (isPregnant !== undefined) {
-      queryConditions.isPregnant = isPregnant;
-    }
-    if (hasHypertension !== undefined) {
+    if (patientId) queryConditions.patientId = patientId;
+    if (active !== undefined) queryConditions.active = active;
+    if (isPregnant !== undefined) queryConditions.isPregnant = isPregnant;
+    if (hasHypertension !== undefined)
       queryConditions.hasHypertension = hasHypertension;
-    }
-    if (hasDiabetes !== undefined) {
-      queryConditions.hasDiabetes = hasDiabetes;
-    }
-    if (isBedridden !== undefined) {
-      queryConditions.isBedridden = isBedridden;
-    }
-    if (hasCourtOrder !== undefined) {
+    if (hasDiabetes !== undefined) queryConditions.hasDiabetes = hasDiabetes;
+    if (isBedridden !== undefined) queryConditions.isBedridden = isBedridden;
+    if (hasCourtOrder !== undefined)
       queryConditions.hasCourtOrder = hasCourtOrder;
-    }
-    if (isSuspected !== undefined) {
-      queryConditions.isSuspected = isSuspected;
-    }
-
-    if (createdAt) {
-      queryConditions.createdAt = { gte: new Date(createdAt) };
-    }
+    if (isSuspected !== undefined) queryConditions.isSuspected = isSuspected;
+    if (createdAt) queryConditions.createdAt = { gte: new Date(createdAt) };
     if (startDate && endDate) {
       queryConditions.createdAt = {
         gte: new Date(startDate),
         lte: new Date(endDate),
       };
     }
-
-    if (specialty) {
+    if (specialty)
       queryConditions.specialty = {
         name: { contains: specialty, mode: 'insensitive' },
       };
-    }
-    if (status) {
-      queryConditions.status = status;
-    }
-    if (priority) {
-      queryConditions.priority = priority;
-    }
+    if (status) queryConditions.status = status;
+    if (priority) queryConditions.priority = priority;
+    if (active !== undefined) queryConditions.active = active;
 
-    if (active !== undefined) {
-      queryConditions.active = active;
-    }
+    // Definir campos de ordenação válidos
+    const validSortFields = ['createdAt', 'status', 'priority'];
+    const sortField = validSortFields.includes(orderBy) ? orderBy : 'createdAt';
 
-    return this.prisma.appointment.findMany({
-      where: queryConditions,
-      include: { patient: true, specialty: true, user: true },
-    });
+    // Garantir que orderDirection seja 'asc' ou 'desc'
+    const validSortDirections = ['asc', 'desc'];
+    const sortDirection = validSortDirections.includes(orderDirection)
+      ? orderDirection
+      : 'asc';
+
+    // Paginação
+    const skip = (pageNumber - 1) * pageSize;
+
+    try {
+      // Query paginada e ordenada corretamente
+      const appointments = await this.prisma.appointment.findMany({
+        where: queryConditions,
+        include: { patient: true, specialty: true, user: true },
+        skip,
+        take: pageSize,
+        orderBy: {
+          [sortField]: sortDirection,
+        },
+      });
+
+      // Contagem total de registros
+      const total = await this.prisma.appointment.count({
+        where: queryConditions,
+      });
+
+      return { data: appointments, page: pageNumber, limit: pageSize, total };
+    } catch (error) {
+      console.error('Search appointments error:', error);
+      throw new Error('Search appointments error');
+    }
   }
 
   async update(id: string, body: UpdateAppointmentDto) {

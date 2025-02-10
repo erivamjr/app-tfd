@@ -1,7 +1,37 @@
+import { Priority, Status } from '@prisma/client';
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsDate, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsOptional,
+  IsString,
+  IsInt,
+  IsEnum,
+} from 'class-validator';
 
-export class AppointmentFilterDto {
+export class FilteredAppointmentsDto {
+  // Propriedades de paginação
+  @IsOptional()
+  @IsString()
+  patientId?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Transform(({ value }) => parseInt(value, 10))
+  page?: number = 1;
+
+  @IsOptional()
+  @IsInt()
+  @Transform(({ value }) => parseInt(value, 10))
+  limit?: number = 10;
+
+  @IsOptional()
+  orderBy?: 'createdAt' | 'status' = 'createdAt';
+
+  @IsOptional()
+  orderDirection?: 'asc' | 'desc' = 'asc';
+
+  // Propriedades de filtro
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true')
@@ -42,12 +72,12 @@ export class AppointmentFilterDto {
   specialty?: string;
 
   @IsOptional()
-  @IsString()
-  status?: string;
+  @IsEnum(Status)
+  status?: Status;
 
   @IsOptional()
-  @IsString()
-  priority?: string;
+  @IsEnum(Priority)
+  priority?: Priority;
 
   @IsOptional()
   @IsString()

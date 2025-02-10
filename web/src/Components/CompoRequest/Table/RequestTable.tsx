@@ -1,8 +1,7 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react'
 import { TbReportSearch } from 'react-icons/tb'
 import { FaChevronDown, FaChevronUp, FaRegEdit } from 'react-icons/fa'
 import { RiDeleteBin6Line } from 'react-icons/ri'
-import useAppointment from '../../Hooks/Api/Appointments/Appointments'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../../Ux/Input/Input'
 import Table from '../../Ux/Table/Table'
@@ -12,41 +11,107 @@ import TableRow from '../../Ux/Table/TableRow'
 import { Pagination } from '../../Ux/Table/Pagination '
 import Modal from '../../Ux/Modal/Modal'
 import { TypeAppointment } from '../../Hooks/Api/Appointments/TypeAppointments'
-import CreatableSelect from 'react-select/creatable'
 import api from '../../../Api'
 import { ButtonAction } from '../../Ux/ButtonActionProps'
 import { IoReturnDownBack } from 'react-icons/io5'
 import { TfiAgenda } from 'react-icons/tfi'
 import { Link } from 'react-router-dom'
+import { useAppointmentsPage } from '../../Hooks/Api/Appointments/AppointmentsPage'
+import Alert from '../../Ux/Alert/Alert'
+import { DataContext } from '../../Context/DataContext'
+import { debounce } from 'lodash'
+import { SelectReact } from '../../Ux/Input/SelectReact'
 
 export default function RequestTable() {
   const [expandedRows, setExpandedRows] = useState<string[]>([])
-  const { appointments } = useAppointment()
-  const [searchValue, setSearchValue] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
-  const totalPages = Math.ceil((appointments?.length || 0) / itemsPerPage)
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [searchValue, setSearchValue] = useState('')
   const [appointmentsDelete, setAppointmentsDelete] =
     useState<TypeAppointment>()
   const [selectedSpecialty, setSelectedSpecialty] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('')
   const [selectedPriority, setSelectedPriority] = useState('')
+  const [isPregnant, setIsPregnant] = useState(false)
+  const [hasHypertension, setHasHypertension] = useState(false)
+  const [hasDiabetes, setHasDiabetes] = useState(false)
+  const [isBedridden, setIsBedridden] = useState(false)
+  const [hasCourtOrder, setHasCourtOrder] = useState(false)
+  const [isSuspected, setIsSuspected] = useState(false)
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+
+  const filters = useMemo(
+    () => ({
+      specialty: selectedSpecialty || undefined,
+      status: selectedStatus || undefined,
+      priority: selectedPriority || undefined,
+      isPregnant: isPregnant || undefined,
+      hasHypertension: hasHypertension || undefined,
+      hasDiabetes: hasDiabetes || undefined,
+      isBedridden: isBedridden || undefined,
+      hasCourtOrder: hasCourtOrder || undefined,
+      isSuspected: isSuspected || undefined,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+      search: searchValue || undefined,
+    }),
+    [
+      selectedSpecialty,
+      selectedStatus,
+      selectedPriority,
+      isPregnant,
+      hasHypertension,
+      hasDiabetes,
+      isBedridden,
+      hasCourtOrder,
+      isSuspected,
+      startDate,
+      endDate,
+      searchValue,
+    ],
+  )
+
+  const [debouncedFilters, setDebouncedFilters] = useState(filters)
+
+  useEffect(() => {
+    const handler = debounce(() => {
+      setDebouncedFilters(filters)
+    }, 500) // Aguarda 500ms antes de atualizar os filtros
+
+    handler()
+    return () => handler.cancel()
+  }, [filters])
+
+  const {
+    appointmentsPage = [],
+    isLoading,
+    isError,
+    totalPages,
+    setAppointmentsPage,
+  } = useAppointmentsPage(currentPage, itemsPerPage, debouncedFilters)
+
+  const { specialties } = useContext(DataContext)
+
+  if (isLoading)
+    return (
+      <div>
+        <Alert type={'success'} message={'Carregando...'} />
+      </div>
+    )
+  if (isError)
+    return (
+      <div>
+        <Alert type={'error'} message={'Erro na requisição!'} />
+      </div>
+    )
 
   const toggleRow = (id: string) => {
     setExpandedRows((prev) =>
       prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id],
     )
   }
-
-  const filteredAppointments = appointments.filter((appointment) => {
-    return (
-      (!selectedSpecialty ||
-        appointment.specialty.name === selectedSpecialty) &&
-      (!selectedStatus || appointment.status === selectedStatus) &&
-      (!selectedPriority || appointment.priority === selectedPriority)
-    )
-  })
 
   function handleOpenModal(appintments) {
     setIsModalOpen(true)
@@ -58,6 +123,9 @@ export default function RequestTable() {
       await api.delete(`/patients/${id}`)
       alert('DELETADO COM SUCESSO!')
       setIsModalOpen(false)
+      setAppointmentsPage((prevAppointments) =>
+        prevAppointments.filter((patient) => patient.id !== id),
+      )
     } catch (err) {
       console.error('Delete patient fail!')
     }
@@ -73,53 +141,38 @@ export default function RequestTable() {
   }
 
   const specialtyOptions = [
-    ...new Set(appointments.map((appointment) => appointment.specialty.name)),
+    ...new Set(specialties.map((specialty) => specialty.name)),
   ].map((name) => ({
     value: name,
     label: name,
   }))
 
-  const compareDates = (a: TypeAppointment, b: TypeAppointment) => {
-    const dateA = new Date(a.createdAt).getTime() // Converte para timestamp
-    const dateB = new Date(b.createdAt).getTime() // Converte para timestamp
-    return dateA - dateB // Comparação numérica para ordenação decrescente
+  const handleStatusChange = (selectedOption) => {
+    setSelectedStatus(selectedOption ? selectedOption.value : '')
   }
 
-  const displayAppointments = () => {
-    if (!filteredAppointments) return []
+  const statusOptions = [
+    { value: 'InProgress', label: 'Em Andamento' },
+    { value: 'Scheduled', label: 'Agendado' },
+    { value: 'Completed', label: 'Completado' },
+  ]
 
-    const sortedAppointments = filteredAppointments.slice().sort(compareDates)
-
-    const searchLower = searchValue.toLowerCase()
-    const searchedAppointments = sortedAppointments.filter((appointment) => {
-      return appointment.patient.name.toLowerCase().includes(searchLower)
-    })
-
-    const startIndex = (currentPage - 1) * itemsPerPage
-    const endIndex = Math.min(
-      startIndex + itemsPerPage,
-      searchedAppointments.length,
-    )
-    return searchedAppointments.slice(startIndex, endIndex)
+  const handlePriorityChange = (selectedOption) => {
+    setSelectedPriority(selectedOption ? selectedOption.value : '')
   }
 
-  // Event listener para mudar de página
+  const priorityOptions = [
+    { value: 'Emergency', label: 'Emergência' },
+    { value: 'Elderly', label: 'Idoso' },
+    { value: 'Pregnant', label: 'Gestante' },
+    { value: 'Normal', label: 'Normal' },
+    { value: 'Child', label: 'Criança' },
+  ]
+
   const handlePageChange = (page: number) => {
+    console.log('handlePageChange', page)
+
     setCurrentPage(page)
-  }
-
-  const priorityTranslations = {
-    Emergency: 'Emergência',
-    Elderly: 'Idoso',
-    Pregnant: 'Gestante',
-    Normal: 'Normal',
-    Child: 'Criança',
-  }
-
-  const statusTranslations = {
-    InProgress: 'Em Andamento',
-    Scheduled: 'Agendado',
-    Completed: 'Completado',
   }
 
   const priorityEmojis = {
@@ -128,6 +181,22 @@ export default function RequestTable() {
     Pregnant: '🟠',
     Normal: '🟢',
     Child: '🟠',
+  }
+
+  const conditionEmojis = {
+    isPregnant: '🤰🏼', // gestante '👶' (Bebê), '🍼' (Mamadeira)
+    hasHypertension: '💓', // hipertençao  '🫀' (Coração), '❤️‍🔥' (Batimentos)
+    hasDiabetes: '🍬', // diabetes '🩸' (Gota de sangue), '🥤' (Refrigerante)
+    isBedridden: '🛏️', // acamado '🏥' (Hospital), '🤕' (Rosto machucado)
+    hasCourtOrder: '⚖️', // processo judicial '📜' (Documento), '🏛️' (Tribunal)
+    isSuspected: '🕵🏻‍♂', // suspeita '🤔' (Pensativo), '🚨' (Alerta)
+  }
+
+  const getConditionEmojis = (appointment) => {
+    return Object.entries(conditionEmojis)
+      .filter(([key]) => appointment[key]) // Filtra apenas as condições que são `true`
+      .map(([, emoji]) => emoji) // Pega apenas os emojis
+      .join(' ') // Junta os emojis em uma string
   }
 
   return (
@@ -141,89 +210,113 @@ export default function RequestTable() {
           </div>
         </Link>
       </div>
-      <div className="mb-5 grid sm:grid-cols-4 grid-cols-1 gap-4">
-        <CreatableSelect
-          placeholder="Todas Especialidades"
-          isClearable
-          options={specialtyOptions}
-          value={
-            selectedSpecialty
-              ? { value: selectedSpecialty, label: selectedSpecialty }
-              : null
-          }
-          onChange={handleSpecialtyChange}
-          styles={{
-            control: (provided, state) => ({
-              ...provided,
-              borderColor: state.isFocused ? '#121212' : '#d9d9d9',
-              boxShadow: state.isFocused ? '0 0 0 1px #121212' : 'none',
-              '&:hover': {
-                borderColor: '#121212',
-              },
-            }),
-            menu: (base) => ({
-              ...base,
-              marginTop: '0.5rem',
-              borderRadius: '0.25rem',
-              boxShadow:
-                '0 0 0 1px rgba(0, 0, 0, 0.05), 0 4px 11px rgba(0, 0, 0, 0.1)',
-            }),
-            option: (base, state) => ({
-              ...base,
-              backgroundColor: state.isSelected ? '#e0e0e0' : 'white',
-              ':hover': {
-                backgroundColor: '#f0f0f0',
-              },
-            }),
-          }}
-        />
+      {/* Grid para os selects */}
+      <div className="grid sm:grid-cols-3 gap-4 mb-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Especialidades
+          </label>
+          <SelectReact
+            placeholder="Selecione"
+            options={specialtyOptions}
+            selected={selectedSpecialty}
+            handleChange={handleSpecialtyChange}
+          />
+        </div>
 
-        <select
-          value={selectedStatus}
-          onChange={(e) => setSelectedStatus(e.target.value)}
-          className="border rounded p-2 mr-2"
-        >
-          <option value="">Todos os status</option>
-          {appointments
-            .map((appointment) => appointment.status)
-            .filter(
-              (status, index, statuses) => statuses.indexOf(status) === index,
-            )
-            .map((status) => (
-              <option key={status} value={status}>
-                {statusTranslations[status] || status}
-              </option>
-            ))}
-        </select>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Status
+          </label>
+          <SelectReact
+            placeholder="Selecione"
+            options={statusOptions}
+            selected={selectedStatus}
+            handleChange={handleStatusChange}
+          />
+        </div>
 
-        <select
-          value={selectedPriority}
-          onChange={(e) => setSelectedPriority(e.target.value)}
-          className="border rounded p-2 mr-2"
-        >
-          <option value="">Todas as prioridades</option>
-          {appointments
-            .map((appointment) => appointment.priority)
-            .filter(
-              (priority, index, priorities) =>
-                priorities.indexOf(priority) === index,
-            )
-            .map((priority) => (
-              <option key={priority} value={priority}>
-                {priorityTranslations[priority] || priority}
-              </option>
-            ))}
-        </select>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Prioridade
+          </label>
+          <SelectReact
+            placeholder="Selecione"
+            options={priorityOptions}
+            selected={selectedPriority}
+            handleChange={handlePriorityChange}
+          />
+        </div>
       </div>
-      <div className="mb-5 flex flex-1 items-center space-x-2">
-        <Input
-          type="text"
-          name="pesquisar"
-          placeholder="Pesquisar"
-          value={searchValue}
-          onChange={handleSearchChange}
-        />
-        <button className="flex gap-2 bg-blue-500 p-2 text-white rounded hover:bg-blue-700">
+
+      {/* Filtros booleanos */}
+      <div className="grid sm:grid-cols-6 gap-4 mb-4 bg-gray-100 p-4 rounded-lg">
+        {[
+          { label: 'Gestante', state: isPregnant, setState: setIsPregnant },
+          {
+            label: 'Hipertensão',
+            state: hasHypertension,
+            setState: setHasHypertension,
+          },
+          { label: 'Diabetes', state: hasDiabetes, setState: setHasDiabetes },
+          { label: 'Acamado', state: isBedridden, setState: setIsBedridden },
+          {
+            label: 'Ordem Judicial',
+            state: hasCourtOrder,
+            setState: setHasCourtOrder,
+          },
+          { label: 'Suspeito', state: isSuspected, setState: setIsSuspected },
+        ].map((checkbox, index) => (
+          <label key={index} className="flex items-center space-x-2 text-sm">
+            <input
+              type="checkbox"
+              checked={checkbox.state}
+              onChange={(e) => checkbox.setState(e.target.checked)}
+              className="w-4 h-4 text-blue-600 border-gray-300 rounded"
+            />
+            <span>{checkbox.label}</span>
+          </label>
+        ))}
+      </div>
+
+      {/* Filtros de data */}
+      <div className="grid sm:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Data Início
+          </label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border rounded p-2 w-full shadow-sm"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Data Fim
+          </label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border rounded p-2 w-full shadow-sm"
+          />
+        </div>
+      </div>
+
+      {/* Botão de pesquisa */}
+      <div className="flex  mb-2 items-center space-x-2">
+        <div className=" rounded flex-1 shadow-sm">
+          <Input
+            type="text"
+            name="pesquisar"
+            placeholder="Pesquisar"
+            value={searchValue}
+            onChange={handleSearchChange}
+          />
+        </div>
+        <button className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 flex items-center gap-2">
           <CiSearch size={24} />
           <p className="hidden md:block">Buscar</p>
         </button>
@@ -238,7 +331,7 @@ export default function RequestTable() {
           <TableCell isHeader>Data de Cadastro</TableCell>
           <TableCell isHeader>Configurações</TableCell>
         </TableRow>
-        {displayAppointments().map((appointment) => (
+        {appointmentsPage.map((appointment) => (
           <div key={appointment.id}>
             {/* Mobile View */}
             <div
@@ -250,7 +343,10 @@ export default function RequestTable() {
                   <span className="font-medium text-gray-900">
                     {appointment.patient.name}
                   </span>
-                  <span>{priorityEmojis[appointment.priority] || ''}</span>
+                  <span>
+                    {priorityEmojis[appointment.priority] || ''}
+                    {getConditionEmojis(appointment)}
+                  </span>
                 </div>
                 {expandedRows.includes(appointment.id) ? (
                   <FaChevronUp className="w-5 h-5 text-gray-500" />
@@ -328,6 +424,7 @@ export default function RequestTable() {
                 <TableCell>{appointment.patient.name}</TableCell>
                 <TableCell>
                   {priorityEmojis[appointment.priority] || ''}
+                  {getConditionEmojis(appointment)}
                 </TableCell>
                 <TableCell>{appointment.patient.cpf}</TableCell>
                 <TableCell>{appointment.patient.phone}</TableCell>

@@ -151,7 +151,16 @@ export default function DetailsTable({
                     <div className="space-y-2">
                       <p className="text-sm text-gray-500">Solicitação</p>
                       <p className="text-sm text-gray-900">
-                        {new Date(itemData.createdAt).toLocaleDateString()}
+                        {itemData.createdAt
+                          ? new Date(itemData.createdAt).toLocaleDateString(
+                              'pt-BR',
+                              {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                              },
+                            )
+                          : 'Não informado'}
                       </p>
                     </div>
                     <div className="space-y-2">
