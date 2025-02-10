@@ -1,3 +1,4 @@
+import { Priority, Status } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import {
   IsBoolean,
@@ -5,10 +6,15 @@ import {
   IsOptional,
   IsString,
   IsInt,
+  IsEnum,
 } from 'class-validator';
 
 export class FilteredAppointmentsDto {
   // Propriedades de paginação
+  @IsOptional()
+  @IsString()
+  patientId?: string;
+
   @IsOptional()
   @IsInt()
   @Transform(({ value }) => parseInt(value, 10))
@@ -66,12 +72,12 @@ export class FilteredAppointmentsDto {
   specialty?: string;
 
   @IsOptional()
-  @IsString()
-  status?: string;
+  @IsEnum(Status)
+  status?: Status;
 
   @IsOptional()
-  @IsString()
-  priority?: string;
+  @IsEnum(Priority)
+  priority?: Priority;
 
   @IsOptional()
   @IsString()
