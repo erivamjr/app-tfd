@@ -8,7 +8,6 @@ import {
 import api from '../../Api'
 import {
   SpecialtyProps,
-  TypeAppointment,
   UserProps,
 } from '../Hooks/Api/Appointments/TypeAppointments'
 
@@ -29,13 +28,10 @@ interface UpdateProfileProps {
 
 interface DataContextProps {
   specialties: SpecialtyProps[]
-  appointments: TypeAppointment[]
   users: UserProps[]
   addSpecialty: (newSpecialty: string) => Promise<void>
-  fetchAppointments: () => Promise<void>
   updateSpecialty: (id: number, name: string) => Promise<void>
   deleteSpecialty: (id: number) => Promise<void>
-  // Novas funções para gerenciamento de usuários
   updateUser: (userId: string, data: UpdateUserData) => Promise<void>
   fetchUsers: () => Promise<void>
   updateProfile: (userId: string, data: UpdateProfileProps) => Promise<void>
@@ -49,7 +45,6 @@ interface DataProviderProps {
 
 export const DataProvider = ({ children }: DataProviderProps) => {
   const [specialties, setSpecialties] = useState<SpecialtyProps[]>([])
-  const [appointments, setAppointments] = useState<TypeAppointment[]>([])
   const [users, setUsers] = useState<UserProps[]>([])
 
   const handleError = (error: unknown, message: string) => {
@@ -75,15 +70,6 @@ export const DataProvider = ({ children }: DataProviderProps) => {
       setUsers(data)
     } catch (error) {
       handleError(error, 'Erro ao buscar usuários.')
-    }
-  }, [])
-
-  const fetchAppointments = useCallback(async () => {
-    try {
-      const { data } = await api.get('/appointments')
-      setAppointments(data)
-    } catch (error) {
-      handleError(error, 'Erro ao buscar agendamentos.')
     }
   }, [])
 
@@ -118,7 +104,6 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     }
   }
 
-  // Nova função para atualizar usuário
   const updateUser = async (userId: string, data: UpdateUserData) => {
     try {
       await api.patch(`/users/${userId}`, data)
@@ -146,19 +131,17 @@ export const DataProvider = ({ children }: DataProviderProps) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await Promise.all([fetchSpecialties(), fetchUsers(), fetchAppointments()])
+      await Promise.all([fetchSpecialties(), fetchUsers()])
     }
     fetchData()
-  }, [fetchSpecialties, fetchUsers, fetchAppointments])
+  }, [fetchSpecialties, fetchUsers])
 
   return (
     <DataContext.Provider
       value={{
         specialties,
-        appointments,
         users,
         addSpecialty,
-        fetchAppointments,
         updateSpecialty,
         deleteSpecialty,
         updateUser,
