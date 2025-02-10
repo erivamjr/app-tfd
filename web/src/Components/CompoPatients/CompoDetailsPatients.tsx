@@ -5,73 +5,20 @@ import { IoReturnDownBack } from 'react-icons/io5'
 import Container from '../Ux/Container/Container'
 import DetailsTable from './DetailsTable'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
-import useAppointment from '../Hooks/Api/Appointments/Appointments'
 import { useState, useEffect } from 'react'
 import api from '../../Api'
-import { Patient, UserProps } from '../Hooks/Api/Patiens/TypePatiens'
-
-export interface PatientProps {
-  id: string
-  name: string
-  gender: string
-  cpf: string
-  rg: string
-  address: string
-  phone: string
-  susCard: string
-  birthDate: string
-  motherName: string
-  active: string
-  createdAt: string
-  updatedAt: string
-  userId: string
-  uf: string
-  cep: string
-  district: string
-  complement: string
-  city: string
-  number: string
-}
-
-export interface SpecialtyProps {
-  id: number
-  specialtyName: string
-  specialtyActive: boolean
-}
-
-export interface TypeAppointment {
-  id: string
-  specialtyId: number
-  patientId: string
-  userId: string
-  priority: string
-  appointmentDate: string
-  diagnosis: string
-  cid: string
-  requestingDoctor: string
-  crm: string
-  requestCode: string
-  requestDate: string
-  status: string
-  notes: string
-  active: boolean
-  createdAt: string
-  updatedAt: string
-  patient: PatientProps
-  specialty: SpecialtyProps
-  user: UserProps
-}
+import {
+  PatientProps,
+  TypeAppointment,
+  UserProps,
+} from '../Hooks/Api/Appointments/TypeAppointments'
 
 export default function DetailsPatients() {
   const { id } = useParams<{ id: string }>()
 
-  const {
-    appointments,
-    isLoading: isAppointmentsLoading,
-    isError: isAppointmentsError,
-  } = useAppointment()
-
-  const [patient, setPatient] = useState<Patient>()
+  const [patient, setPatient] = useState<PatientProps>()
+  const [appointments, setAppointments] = useState<TypeAppointment[]>()
+  const [user, setUser] = useState<UserProps>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isError, setIsError] = useState<boolean>(false)
   const navigate = useNavigate()
@@ -80,8 +27,17 @@ export default function DetailsPatients() {
     const fetchPatient = async () => {
       try {
         setIsLoading(true)
-        const response = await api.get(`/patients/${id}`)
-        setPatient(response.data)
+        const response = await api.get(
+          `/appointments/filtered?patientId=${id}&limit=20&orderBy=createdAt&orderDirection=desc`,
+        )
+
+        const { data } = response.data
+
+        setAppointments(data)
+
+        setPatient(data[0]?.patient)
+
+        setUser(data[0]?.user)
       } catch (error) {
         console.error('Erro ao buscar paciente:', error)
         setIsError(true)
@@ -93,10 +49,10 @@ export default function DetailsPatients() {
     fetchPatient()
   }, [id])
 
-  if (isLoading || isAppointmentsLoading)
+  if (isLoading)
     return <DisplayMessage message={'Carregando'} color="green" text="white" />
 
-  if (isError || isAppointmentsError)
+  if (isError)
     return (
       <DisplayMessage
         message={'Erro na solicitação.'}
@@ -104,10 +60,6 @@ export default function DetailsPatients() {
         text="white"
       />
     )
-
-  const appointment = appointments
-    ? appointments.filter((appointment) => appointment.patient.id === id)
-    : []
 
   if (!patient)
     return (
@@ -154,11 +106,13 @@ export default function DetailsPatients() {
               <span>RG: {patient.rg}</span>
               <span>
                 Data de Nascimento:{' '}
-                {new Date(patient.birthDate).toLocaleDateString('pt-BR', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                })}
+                {patient.birthDate
+                  ? new Date(patient.birthDate).toLocaleDateString('pt-BR', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })
+                  : 'Não informado'}
               </span>
               <span>Cartão SUS: {patient.susCard}</span>
               <span>Mãe: {patient.motherName}</span>
@@ -174,8 +128,8 @@ export default function DetailsPatients() {
               <span>CEP: {patient.zipCode}</span>
             </div>
             <div className="flex flex-col gap-2 p-4 rounded-lg shadow-lg">
-              <span>Cadastrado por: {patient.user.name}</span>
-              <span>Local: {patient.user.workLocation}</span>
+              <span>Cadastrado por: {user?.name}</span>
+              <span>Local: {user?.workLocation}</span>
               <span>
                 Data de Cadastro:{' '}
                 {new Date(patient.createdAt).toLocaleDateString('pt-BR', {
@@ -199,9 +153,9 @@ export default function DetailsPatients() {
           <div className="p-1 text-black font-bold">Histórico</div>
         </section>
         <DetailsTable
-          item={appointment}
-          isErrorPoint={isAppointmentsError}
-          isLoadingPoint={isAppointmentsLoading}
+          item={appointments ?? []}
+          isErrorPoint={isError}
+          isLoadingPoint={isLoading}
         />
       </Container>
     </div>
