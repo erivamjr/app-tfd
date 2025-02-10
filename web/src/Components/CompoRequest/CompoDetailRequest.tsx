@@ -4,14 +4,25 @@ import { ImPrinter } from 'react-icons/im'
 import { IoReturnDownBack } from 'react-icons/io5'
 import Container from '../Ux/Container/Container'
 import DisplayMessage from '../Ux/DisplayMessage/DisplayMessage'
-import useAppointment from '../Hooks/Api/Appointments/Appointments'
+import { useEffect, useState } from 'react'
+import api from '../../Api'
+import { TypeAppointment } from '../Hooks/Api/Appointments/TypeAppointments'
 
 export default function CompoDetailsRequest() {
   const { id } = useParams<{ id: string }>()
-  const { appointments } = useAppointment()
+  const [appointment, setAppointment] = useState<TypeAppointment | null>(null)
   const navigate = useNavigate()
 
-  const appointment = appointments.find((appointment) => appointment.id === id)
+  useEffect(() => {
+    api
+      .get(`/appointments/${id}`)
+      .then((response) => {
+        setAppointment(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }, [id])
 
   if (!appointment) {
     return <DisplayMessage message="Agendamento não encontrado." />
