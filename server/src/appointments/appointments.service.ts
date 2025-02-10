@@ -40,7 +40,7 @@ export class AppointmentsService {
       };
     }
 
-    return this.prisma.appointment.findMany({
+    const data = await this.prisma.appointment.findMany({
       skip,
       take,
       orderBy: orderCriteria,
@@ -50,6 +50,10 @@ export class AppointmentsService {
         user: true,
       },
     });
+
+    const total = await this.prisma.appointment.count();
+
+    return { data, page, limit, total };
   }
 
   async findOne(id: string) {
@@ -65,6 +69,7 @@ export class AppointmentsService {
 
   async getFilteredAppointments(filter: FilteredAppointmentsDto) {
     const {
+      patientId,
       isPregnant,
       hasHypertension,
       hasDiabetes,
@@ -89,9 +94,7 @@ export class AppointmentsService {
     const pageNumber = Math.max(Number(page) || 1, 1); // Garante que page seja no mínimo 1
     const pageSize = Math.max(Number(limit) || 10, 1); // Garante que limit seja no mínimo 1
 
-    const queryConditions: any = {
-      active: true,
-    };
+    const queryConditions: any = {};
 
     // Lógica de filtro
     if (search) {
@@ -102,77 +105,66 @@ export class AppointmentsService {
       ];
     }
 
-    if (isPregnant !== undefined) {
-      queryConditions.isPregnant = isPregnant;
-    }
-    if (hasHypertension !== undefined) {
+    if (patientId) queryConditions.patientId = patientId;
+    if (active !== undefined) queryConditions.active = active;
+    if (isPregnant !== undefined) queryConditions.isPregnant = isPregnant;
+    if (hasHypertension !== undefined)
       queryConditions.hasHypertension = hasHypertension;
-    }
-    if (hasDiabetes !== undefined) {
-      queryConditions.hasDiabetes = hasDiabetes;
-    }
-    if (isBedridden !== undefined) {
-      queryConditions.isBedridden = isBedridden;
-    }
-    if (hasCourtOrder !== undefined) {
+    if (hasDiabetes !== undefined) queryConditions.hasDiabetes = hasDiabetes;
+    if (isBedridden !== undefined) queryConditions.isBedridden = isBedridden;
+    if (hasCourtOrder !== undefined)
       queryConditions.hasCourtOrder = hasCourtOrder;
-    }
-    if (isSuspected !== undefined) {
-      queryConditions.isSuspected = isSuspected;
-    }
-
-    if (createdAt) {
-      queryConditions.createdAt = { gte: new Date(createdAt) };
-    }
+    if (isSuspected !== undefined) queryConditions.isSuspected = isSuspected;
+    if (createdAt) queryConditions.createdAt = { gte: new Date(createdAt) };
     if (startDate && endDate) {
       queryConditions.createdAt = {
         gte: new Date(startDate),
         lte: new Date(endDate),
       };
     }
-
-    if (specialty) {
+    if (specialty)
       queryConditions.specialty = {
         name: { contains: specialty, mode: 'insensitive' },
       };
-    }
-    if (status) {
-      queryConditions.status = status;
-    }
-    if (priority) {
-      queryConditions.priority = priority;
-    }
+    if (status) queryConditions.status = status;
+    if (priority) queryConditions.priority = priority;
+    if (active !== undefined) queryConditions.active = active;
 
-    if (active !== undefined) {
-      queryConditions.active = active;
-    }
+    // Definir campos de ordenação válidos
+    const validSortFields = ['createdAt', 'status', 'priority'];
+    const sortField = validSortFields.includes(orderBy) ? orderBy : 'createdAt';
 
-    // Paginação: calcular o número de registros a pular
+    // Garantir que orderDirection seja 'asc' ou 'desc'
+    const validSortDirections = ['asc', 'desc'];
+    const sortDirection = validSortDirections.includes(orderDirection)
+      ? orderDirection
+      : 'asc';
+
+    // Paginação
     const skip = (pageNumber - 1) * pageSize;
 
-    // Retorno dos agendamentos com paginação e ordenação
-    const appointments = await this.prisma.appointment.findMany({
-      where: queryConditions,
-      include: { patient: true, specialty: true, user: true },
-      skip, // Pular os primeiros 'skip' itens
-      take: pageSize, // Limitar o número de resultados
-      orderBy: {
-        [orderBy]: orderDirection, // Ordena pelo campo e direção recebidos
-      },
-    });
+    try {
+      // Query paginada e ordenada corretamente
+      const appointments = await this.prisma.appointment.findMany({
+        where: queryConditions,
+        include: { patient: true, specialty: true, user: true },
+        skip,
+        take: pageSize,
+        orderBy: {
+          [sortField]: sortDirection,
+        },
+      });
 
-    // Contar o total de registros que atendem aos filtros
-    const total = await this.prisma.appointment.count({
-      where: queryConditions,
-    });
+      // Contagem total de registros
+      const total = await this.prisma.appointment.count({
+        where: queryConditions,
+      });
 
-    // Retornar os dados paginados
-    return {
-      data: appointments,
-      page: pageNumber,
-      limit: pageSize,
-      total,
-    };
+      return { data: appointments, page: pageNumber, limit: pageSize, total };
+    } catch (error) {
+      console.error('Search appointments error:', error);
+      throw new Error('Search appointments error');
+    }
   }
 
   async update(id: string, body: UpdateAppointmentDto) {
