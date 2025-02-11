@@ -47,9 +47,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
               profileUrlImage: storedAvatarUrl,
             }) as UserProps | null,
         )
-      } else {
-        // URL expirou, renovar
-        updateAvatarUrl(user?.id as string)
+      } else if (user?.id) {
+        // URL expirou, renovar apenas se user estiver definido
+        updateAvatarUrl(user.id)
       }
     }
 
@@ -71,10 +71,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setAuthError(null)
 
         const userData = await dataUser()
-        setUser(userData.data.user)
+        if (userData.data.user) {
+          setUser(userData.data.user)
 
-        // Verificar e atualizar a URL do avatar
-        await updateAvatarUrl(userData.data.user.id)
+          if (userData.data.user.id) {
+            await updateAvatarUrl(userData.data.user.id)
+          }
+        }
 
         navigate('/')
       } else {
@@ -105,6 +108,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }
 
   const updateAvatarUrl = async (userId: string) => {
+    if (!userId) return
     try {
       const response = await api.get(`/users/signed-url/${userId}.png`)
       if (response.data.signedUrl) {
