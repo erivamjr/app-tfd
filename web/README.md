@@ -35,6 +35,7 @@
   * Acamado
   * Mandato Judicial
   * Suspeito ou Portador
+- [ ] ✳️ Colocar Botão de Whatsapp na aba de atualizar paciente
 - [x] 📝 Ajustar a lista de agendamentos de cada paciente para que seja possível clicar no agendamento e ver os detalhes
 - [ ] 🔍 Corrigir a busca na segunda página que não está funcionando corretamente
 - [ ] 📅 Ajustar as colunas da header da tabela para que fique alinhada com das celulas abaixo

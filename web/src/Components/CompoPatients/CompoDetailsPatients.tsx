@@ -33,11 +33,18 @@ export default function DetailsPatients() {
 
         const { data } = response.data
 
-        setAppointments(data)
+        if (data.length !== 0) {
+          setAppointments(data)
 
-        setPatient(data[0]?.patient)
+          setPatient(data[0]?.patient)
 
-        setUser(data[0]?.user)
+          setUser(data[0]?.user)
+        } else {
+          const response = await api.get(`/patients/${id}`)
+
+          setPatient(response?.data)
+          setUser(response?.data?.user)
+        }
       } catch (error) {
         console.error('Erro ao buscar paciente:', error)
         setIsError(true)
