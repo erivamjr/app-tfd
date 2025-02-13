@@ -32,7 +32,7 @@ export default function Autocomplete({
   }
 
   useEffect(() => {
-    if (search.trim()) {
+    if (search.trim().length > 3) {
       searchPatients(search)
     } else {
       setSuggestedPatients([])
