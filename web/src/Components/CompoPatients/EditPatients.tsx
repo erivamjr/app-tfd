@@ -105,14 +105,14 @@ export default function EditPatient() {
   return (
     <div>
       <AdminToolbar>
-        <div className="p-2 flex">
-          <div className="font-bold text-black text-2xl flex-1 text-center">
+        <div className="p-4 flex justify-between items-center bg-blue-600 text-white rounded">
+          <div className="text-2xl font-bold flex-1 text-center">
             Editar Paciente
           </div>
           <div className="flex gap-3">
             <button
+              className="bg-white text-blue-600 p-3 rounded shadow-md hover:bg-gray-100"
               onClick={() => navigate('/patients')}
-              className="bg-blue-600 text-white p-3 text-2xl rounded"
             >
               <IoReturnDownBack />
             </button>

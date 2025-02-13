@@ -81,4 +81,10 @@ export interface TypeAppointment {
   patient: PatientProps
   specialty: SpecialtyProps
   user: UserProps
+  isPregnant?: boolean
+  hasHypertension?: boolean
+  hasDiabetes?: boolean
+  isBedridden?: boolean
+  hasCourtOrder?: boolean
+  isSuspected?: boolean
 }

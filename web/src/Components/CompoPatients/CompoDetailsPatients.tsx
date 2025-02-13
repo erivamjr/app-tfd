@@ -80,20 +80,20 @@ export default function DetailsPatients() {
   return (
     <div>
       <AdminToolbar>
-        <div className="p-2 flex">
-          <div className="font-bold text-black text-2xl flex flex-1 items-center justify-center">
+        <div className="rounded p-4 flex justify-between items-center bg-blue-600 text-white">
+          <div className="text-2xl font-bold flex-1 text-center">
             Detalhes do Paciente
           </div>
           <div className="flex gap-3">
-            <div className="bg-blue-600 text-white p-3 text-2xl rounded">
+            <button className="bg-white text-blue-600 p-3 rounded shadow-md hover:bg-gray-100">
               <ImPrinter />
-            </div>
-            <div
-              className="bg-blue-600 text-white p-3 text-2xl rounded cursor-pointer"
+            </button>
+            <button
+              className="bg-white text-blue-600 p-3 rounded shadow-md hover:bg-gray-100"
               onClick={handleGoBack}
             >
               <IoReturnDownBack />
-            </div>
+            </button>
           </div>
         </div>
       </AdminToolbar>
