@@ -77,6 +77,7 @@ export default function CompoDetailsRequest() {
               <span>Telefone: {patient.phone}</span>
               <span>Mãe: {patient.motherName}</span>
               <span>Logradouro: {patient.address}</span>
+              <span>Complemento: {patient.complement}</span>
               <span>Estado: {patient.state}</span>
             </div>
             <div className="flex flex-col gap-2">
