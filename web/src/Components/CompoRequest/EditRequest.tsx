@@ -15,7 +15,14 @@ export default function EditRequest() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { users } = useContext(DataContext)
-
+  const [conditions, setConditions] = useState({
+    isPregnant: false,
+    hasHypertension: false,
+    hasDiabetes: false,
+    isBedridden: false,
+    hasCourtOrder: false,
+    isSuspected: false,
+  })
   const [formData, setFormData] = useState({
     specialtyName: '',
     patientName: '',
@@ -85,6 +92,14 @@ export default function EditRequest() {
           status: appointment.status || 'InProgress',
           notes: appointment.notes || '',
         })
+        setConditions({
+          isPregnant: appointment.isPregnant || false,
+          hasHypertension: appointment.hasHypertension || false,
+          hasDiabetes: appointment.hasDiabetes || false,
+          isBedridden: appointment.isBedridden || false,
+          hasCourtOrder: appointment.hasCourtOrder || false,
+          isSuspected: appointment.isSuspected || false,
+        })
         setIsLoading(false)
       } catch (error) {
         console.error('Erro ao carregar o agendamento:', error)
@@ -121,6 +136,7 @@ export default function EditRequest() {
         requestCode: formData.requestCode,
         status: formData.status,
         notes: formData.notes,
+        ...conditions,
       })
       alert('Agendamento atualizado com sucesso!')
       navigate('/requests')
@@ -133,35 +149,41 @@ export default function EditRequest() {
   if (isLoading) return <Alert type="success" message="Carregando..." />
   if (isError) return <Alert type="error" message="Erro ao carregar dados!" />
 
+  const handleConditionChange = (condition: string) => {
+    setConditions((prev) => ({
+      ...prev,
+      [condition]: !prev[condition],
+    }))
+  }
+
   return (
     <div>
       <AdminToolbar>
-        <div className="p-2 flex">
-          <div className="font-bold text-black text-2xl flex-1 text-center">
-            Editar Agendamento
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={() => navigate('/requests')}
-              className="bg-blue-600 text-white p-3 text-2xl rounded"
-            >
-              <IoReturnDownBack />
-            </button>
-          </div>
+        <div className="p-2 flex justify-between items-center">
+          <h2 className="font-bold text-black text-2xl">Editar Agendamento</h2>
+          <button
+            onClick={() => navigate('/requests')}
+            className="bg-blue-600 text-white p-3 text-2xl rounded"
+          >
+            <IoReturnDownBack />
+          </button>
         </div>
       </AdminToolbar>
 
       <Container>
-        <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-2 p-5">
-          <div>
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-5"
+        >
+          {/* Especialidade, Paciente e Usuário */}
+          <div className="col-span-full">
             <Label label="Especialidade" />
             <Input
               type="text"
-              placeholder="Especialidade"
-              name="specialtyId"
+              name="specialtyName"
               value={formData.specialtyName}
-              onChange={handleChange}
               disabled
+              onChange={handleChange}
             />
           </div>
 
@@ -169,11 +191,10 @@ export default function EditRequest() {
             <Label label="Paciente" />
             <Input
               type="text"
-              placeholder="Paciente"
-              name="patientId"
+              name="patientName"
               value={formData.patientName}
-              onChange={handleChange}
               disabled
+              onChange={handleChange}
             />
           </div>
 
@@ -181,127 +202,154 @@ export default function EditRequest() {
             <Label label="Usuário" />
             <Input
               type="text"
-              placeholder="Usuário"
-              name="userId"
+              name="userName"
               value={formData.userName}
-              onChange={handleChange}
               disabled
+              onChange={handleChange}
             />
           </div>
 
-          <div className="md:grid grid-cols-2 gap-2">
-            <div>
-              <Label label="Prioridade" />
-              <select
-                name="priority"
-                value={formData.priority}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              >
-                {Object.entries(priorityTranslations).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <Label label="Status" />
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              >
-                {Object.entries(statusTranslations).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
+          {/* Data do Agendamento, Prioridade e Status */}
           <div>
             <Label label="Data do Agendamento" />
             <Input
               type="date"
-              placeholder="Data do Agendamento"
               name="appointmentDate"
               value={formData.appointmentDate}
-              disabled
               onChange={handleChange}
+              disabled
             />
           </div>
 
           <div>
+            <Label label="Prioridade" />
+            <select
+              name="priority"
+              value={formData.priority}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            >
+              {Object.entries(priorityTranslations).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <Label label="Status" />
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            >
+              {Object.entries(statusTranslations).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Diagnóstico, CID e Código do Pedido */}
+          <div>
             <Label label="Diagnóstico" />
             <Input
               type="text"
-              placeholder="Diagnóstico"
               name="diagnosis"
               value={formData.diagnosis}
               onChange={handleChange}
             />
           </div>
 
-          <div className="md:grid grid-cols-2 gap-2">
-            <div>
-              <Label label="CID" />
-              <Input
-                type="text"
-                placeholder="CID"
-                name="cid"
-                value={formData.cid}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <Label label="Código do Pedido" />
-              <Input
-                type="text"
-                placeholder="Código do Pedido"
-                name="requestCode"
-                value={formData.requestCode}
-                onChange={handleChange}
-              />
-            </div>
+          <div>
+            <Label label="CID" />
+            <Input
+              type="text"
+              name="cid"
+              value={formData.cid}
+              onChange={handleChange}
+            />
           </div>
+
+          <div>
+            <Label label="Código do Pedido" />
+            <Input
+              type="text"
+              name="requestCode"
+              value={formData.requestCode}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* Médico Solicitante e CRM */}
           <div>
             <Label label="Médico Solicitante" />
             <Input
               type="text"
-              placeholder="Médico Solicitante"
               name="requestingDoctor"
               value={formData.requestingDoctor}
               onChange={handleChange}
             />
           </div>
+
           <div>
             <Label label="CRM" />
             <Input
               type="text"
-              placeholder="CRM"
               name="crm"
               value={formData.crm}
               onChange={handleChange}
             />
           </div>
 
-          <div>
+          {/* Condições do Paciente */}
+          <div className="col-span-full">
+            <Label label="Condições do Paciente" />
+            <div className="grid grid-cols- md:grid-cols-3 lg:grid-cols-3 gap-4">
+              {Object.entries({
+                isPregnant: '🤰 Gestante',
+                hasHypertension: '💓 Hipertensão',
+                hasDiabetes: '🍬 Diabetes',
+                isBedridden: '🛏️ Acamado',
+                hasCourtOrder: '⚖️ Ordem Judicial',
+                isSuspected: '🕵🏻‍♂ Suspeito',
+              }).map(([key, label]) => (
+                <label
+                  key={key}
+                  className="flex items-center space-x-2 p-3 bg-gray-100 rounded-lg shadow-sm w-full"
+                >
+                  <input
+                    type="checkbox"
+                    checked={conditions[key as keyof typeof conditions]}
+                    onChange={() => handleConditionChange(key)}
+                    className="w-5 h-5 text-blue-600 rounded"
+                  />
+                  <span className="text-gray-700 text-base font-medium">
+                    {label}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Notas */}
+          <div className="col-span-full">
             <Label label="Notas" />
             <textarea
-              placeholder="Notas"
               name="notes"
               value={formData.notes}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border rounded"
             />
           </div>
 
+          {/* Botão de Salvar */}
           <button
             type="submit"
-            className="bg-green-500 text-white p-2 rounded hover:bg-green-600 col-span-3"
+            className="bg-green-500 text-white p-2 rounded hover:bg-green-600 col-span-full"
           >
             Salvar Alterações
           </button>
