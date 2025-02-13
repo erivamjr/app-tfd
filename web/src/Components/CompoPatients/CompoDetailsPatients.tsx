@@ -80,20 +80,20 @@ export default function DetailsPatients() {
   return (
     <div>
       <AdminToolbar>
-        <div className="p-2 flex">
-          <div className="font-bold text-black text-2xl flex flex-1 items-center justify-center">
+        <div className="rounded p-4 flex justify-between items-center bg-blue-600 text-white">
+          <div className="text-2xl font-bold flex-1 text-center">
             Detalhes do Paciente
           </div>
           <div className="flex gap-3">
-            <div className="bg-blue-600 text-white p-3 text-2xl rounded">
+            <button className="bg-white text-blue-600 p-3 rounded shadow-md hover:bg-gray-100">
               <ImPrinter />
-            </div>
-            <div
-              className="bg-blue-600 text-white p-3 text-2xl rounded cursor-pointer"
+            </button>
+            <button
+              className="bg-white text-blue-600 p-3 rounded shadow-md hover:bg-gray-100"
               onClick={handleGoBack}
             >
               <IoReturnDownBack />
-            </div>
+            </button>
           </div>
         </div>
       </AdminToolbar>
@@ -108,52 +108,127 @@ export default function DetailsPatients() {
                   {patient.name}
                 </span>
               </p>
-              <span>Sexo: {patient.gender}</span>
-              <span>CPF: {patient.cpf}</span>
-              <span>RG: {patient.rg}</span>
-              <span>
-                Data de Nascimento:{' '}
-                {patient.birthDate
-                  ? new Date(patient.birthDate).toLocaleDateString('pt-BR', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
-                    })
-                  : 'Não informado'}
-              </span>
-              <span>Cartão SUS: {patient.susCard}</span>
-              <span>Mãe: {patient.motherName}</span>
+              <p className="text-gray-800 font-semibold">
+                Sexo:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.gender}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                CPF:{' '}
+                <span className="text-gray-700 font-normal">{patient.cpf}</span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                RG:{' '}
+                <span className="text-gray-700 font-normal">{patient.rg}</span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Data de Nasc.:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.birthDate
+                    ? new Date(patient.birthDate).toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                      })
+                    : 'Não informado'}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Cartão SUS:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.susCard}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Mãe:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.motherName}
+                </span>
+              </p>
             </div>
             <div className="flex flex-col gap-2 p-4 rounded-lg shadow-lg">
-              <span>Telefone: {patient.phone}</span>
-              <span>
-                Logradouro: {`${patient.address}, ${patient.number ?? 'S/N'}`}
-              </span>
-              <span>Bairro: {patient.district}</span>
-              <span>Cidade: {patient.city}</span>
-              <span>Estado: {patient.state}</span>
-              <span>CEP: {patient.zipCode}</span>
+              <p className="text-gray-800 font-semibold">
+                Telefone:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.phone}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Logradouro:{' '}
+                <span className="text-gray-700 font-normal">
+                  {`${patient.address}, ${patient.number ?? 'S/N'}`}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Complemento:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.complement}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Bairro:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.district}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Cidade:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.city}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Estado:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.state}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                CEP:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.zipCode}
+                </span>
+              </p>
             </div>
             <div className="flex flex-col gap-2 p-4 rounded-lg shadow-lg">
-              <span>Cadastrado por: {user?.name}</span>
-              <span>Local: {user?.workLocation}</span>
-              <span>
+              <p className="text-gray-800 font-semibold">
+                Cadastrado por:{' '}
+                <span className="text-gray-700 font-normal">{user?.name}</span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Local:{' '}
+                <span className="text-gray-700 font-normal">
+                  {user?.workLocation}
+                </span>
+              </p>
+
+              <p className="text-gray-800 font-semibold">
                 Data de Cadastro:{' '}
-                {new Date(patient.createdAt).toLocaleDateString('pt-BR', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                })}
-              </span>
-              <span>
-                Data de Atualização:{' '}
-                {new Date(patient.updatedAt).toLocaleDateString('pt-BR', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                })}
-              </span>
-              <span>Ativo: {patient.active ? 'Sim' : 'Não'}</span>
+                <span className="text-gray-700 font-normal">
+                  {new Date(patient.createdAt).toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Data de Atualizado:{' '}
+                <span className="text-gray-700 font-normal">
+                  {new Date(patient.updatedAt).toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                  })}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Ativo:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.active ? 'Sim' : 'Não'}
+                </span>
+              </p>
             </div>
           </div>
 

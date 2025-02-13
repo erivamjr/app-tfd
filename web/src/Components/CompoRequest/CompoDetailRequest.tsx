@@ -45,73 +45,219 @@ export default function CompoDetailsRequest() {
   return (
     <div>
       <AdminToolbar>
-        <div className="p-2 flex">
-          <div className="font-bold text-black text-2xl flex flex-1 items-center justify-center">
-            Detalhes da solicitação
+        <div className="rounded p-4 flex justify-between items-center bg-blue-600 text-white">
+          <div className="text-2xl font-bold flex-1 text-center">
+            Detalhes da Solicitação
           </div>
           <div className="flex gap-3">
-            <div className="bg-blue-600 text-white p-3 text-2xl rounded">
+            <button className="bg-white text-blue-600 p-3 rounded shadow-md hover:bg-gray-100">
               <ImPrinter />
-            </div>
-            <div
-              className="bg-blue-600 text-white p-3 text-2xl rounded cursor-pointer"
+            </button>
+            <button
+              className="bg-white text-blue-600 p-3 rounded shadow-md hover:bg-gray-100"
               onClick={handleGoBack}
             >
               <IoReturnDownBack />
-            </div>
+            </button>
           </div>
         </div>
       </AdminToolbar>
+
       <Container>
         <section>
-          <div className="p-1 font-bold text-black">Dados Pessoais</div>
-          <div className="grid grid-cols-3 w-full p-3">
-            <div className="flex flex-col gap-2">
-              <span>Nome: {patient.name}</span>
-              <span>Gênero: {patient.gender}</span>
-              <span>CPF: {patient.cpf}</span>
-              <span>RG: {patient.rg}</span>
-              <span>Cartão SUS: {patient.susCard}</span>
+          <div className="p-1 font-bold text-black text-lg">Dados Pessoais</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2">
+            <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-lg">
+              <p className="text-gray-800 font-semibold">
+                Nome:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.name}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Gênero:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.gender}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                CPF:{' '}
+                <span className="text-gray-700 font-normal">{patient.cpf}</span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                RG:{' '}
+                <span className="text-gray-700 font-normal">{patient.rg}</span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Cartão SUS:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.susCard}
+                </span>
+              </p>
             </div>
-            <div className="flex flex-col gap-2">
-              <span>Telefone: {patient.phone}</span>
-              <span>Mãe: {patient.motherName}</span>
-              <span>Logradouro: {patient.address}</span>
-              <span>Estado: {patient.state}</span>
+            <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-lg">
+              <p className="text-gray-800 font-semibold">
+                Telefone:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.phone}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Mãe:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.motherName}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Logradouro:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.address}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Bairro:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.district}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Estado:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.state}
+                </span>
+              </p>
             </div>
-            <div className="flex flex-col gap-2">
-              <span>Cep: {patient.zipCode}</span>
-              <span>Número: {patient.number}</span>
-              <span>Bairro: {patient.district}</span>
-              <span>Complemento: {patient.complement}</span>
+            <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-lg">
+              <p className="text-gray-800 font-semibold">
+                CEP:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.zipCode}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Número:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.number}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Complemento:{' '}
+                <span className="text-gray-700 font-normal">
+                  {patient.complement}
+                </span>
+              </p>
             </div>
           </div>
 
-          <hr className="my-4" />
-
-          <div className="p-1 text-black font-bold">
+          <div className="p-1 text-black font-bold text-lg">
             Detalhes do Agendamento
           </div>
 
-          <div className="grid grid-cols-3 w-full p-3">
-            <div className="flex flex-col gap-2">
-              <span>Especialidade: {appointment.specialty.name}</span>
-              <span>Prioridade: {appointment.priority}</span>
-              <span>CID: {appointment.cid}</span>
-              <span>Diagnóstico: {appointment.diagnosis}</span>
-              <span>Estatus: {appointment.status}</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2">
+            <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-lg">
+              <p className="text-gray-800 font-semibold">
+                Especialidade:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.specialty.name}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Prioridade:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.priority}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                CID:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.cid}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Diagnóstico:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.diagnosis}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Status:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.status}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Gestante:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.isPregnant ? 'Sim' : 'Não'}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Hipertenção:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.hasHypertension ? 'Sim' : 'Não'}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Diabete:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.hasDiabetes ? 'Sim' : 'Não'}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Acamdado:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.isBedridden ? 'Sim' : 'Não'}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Ordem Judicial:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.hasCourtOrder ? 'Sim' : 'Não'}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Suspeito:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.isSuspected ? 'Sim' : ' Não'}
+                </span>
+              </p>
             </div>
-            <div className="flex flex-col gap-2">
-              <span>Médico: {appointment.requestingDoctor}</span>
-              <span>CRM: {appointment.crm}</span>
-              <span>Código de Solicitação: {appointment.requestCode}</span>
-              <span>Data da Solicitação: {formattedDate}</span>
+            <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-lg">
+              <p className="text-gray-800 font-semibold">
+                Médico:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.requestingDoctor}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                CRM:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.crm}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Código de Solicitação:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment.requestCode}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold">
+                Data da Solicitação:{' '}
+                <span className="text-gray-700 font-normal">
+                  {formattedDate}
+                </span>
+              </p>
             </div>
-            <div className="flex flex-col gap-2">
-              <span>Usuario de Solicitação: {appointment?.user?.name}</span>
-              <span className="bg-yellow-100  p-2 rounded-md">
+            <div className="flex flex-col gap-2 p-4 bg-white rounded-lg shadow-lg">
+              <p className="text-gray-800 font-semibold">
+                Usuário de Solicitação:{' '}
+                <span className="text-gray-700 font-normal">
+                  {appointment?.user?.name}
+                </span>
+              </p>
+              <p className="text-gray-800 font-semibold bg-yellow-100 p-2 rounded-md">
                 Observação: {appointment.notes}
-              </span>
+              </p>
             </div>
           </div>
         </section>

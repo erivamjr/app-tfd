@@ -29,7 +29,9 @@ export default function CreateRequest() {
   const [patientId, setPatientId] = useState<string>('')
   const [specialtyId, setSpecialtyId] = useState<number | undefined>()
   const [priority, setPriority] = useState<string>('Normal')
-  const [appointmentDate, setAppointmentDate] = useState<string>('')
+  const [appointmentDate, setAppointmentDate] = useState<string>(
+    new Date().toISOString().split('T')[0],
+  )
   const [diagnosis, setDiagnosis] = useState<string>('')
   const [cid, setCid] = useState<string>('')
   const [requestingDoctor, setRequestingDoctor] = useState<string>('')
@@ -39,9 +41,18 @@ export default function CreateRequest() {
   const [notes, setNotes] = useState<string>('')
   const [requestDate] = useState<string>(new Date().toISOString()) // Data da solicitação no formato ISO
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
+  const [conditions, setConditions] = useState({
+    isPregnant: false,
+    hasHypertension: false,
+    hasDiabetes: false,
+    isBedridden: false,
+    hasCourtOrder: false,
+    isSuspected: false,
+  })
+  const [selectedSpecialty, setSelectedSpecialty] = useState(null)
+
   const { user } = useContext(AuthContext)
   const navigate = useNavigate()
-  // const { setAppointments } = useContext(DataContext)
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
@@ -158,6 +169,7 @@ export default function CreateRequest() {
       requestDate,
       status,
       notes,
+      ...conditions,
     }
 
     try {
@@ -169,6 +181,8 @@ export default function CreateRequest() {
       setTimeout(() => {
         setPatientId('')
         setSpecialtyId(undefined)
+        setSelectedSpecialty(null)
+        setSelectedPatient(null)
         setPriority('Normal')
         setAppointmentDate('')
         setDiagnosis('')
@@ -178,6 +192,14 @@ export default function CreateRequest() {
         setRequestCode('')
         setStatus('InProgress')
         setNotes('')
+        setConditions({
+          isPregnant: false,
+          hasHypertension: false,
+          hasDiabetes: false,
+          isBedridden: false,
+          hasCourtOrder: false,
+          isSuspected: false,
+        })
         setType('info')
         setAlertMessage('')
         setIsAlertOpen(false)
@@ -197,12 +219,20 @@ export default function CreateRequest() {
   }
 
   const handleSpecialtyChange = (selectedOption) => {
+    setSelectedSpecialty(selectedOption)
     setSpecialtyId(selectedOption ? selectedOption.value : undefined)
   }
 
   const handlePatientSelect = (patient: Patient) => {
     setSelectedPatient(patient)
     setPatientId(patient.id)
+  }
+
+  const handleConditionChange = (condition: string) => {
+    setConditions((prev) => ({
+      ...prev,
+      [condition]: !prev[condition],
+    }))
   }
   return (
     <Container>
@@ -229,6 +259,7 @@ export default function CreateRequest() {
             <div>
               <Label label="Nome do Paciente" />
               <Autocomplete
+                key={selectedPatient?.id || 'new'}
                 placeholder="Digite o nome do paciente"
                 onSelect={handlePatientSelect}
               />
@@ -276,7 +307,39 @@ export default function CreateRequest() {
                 />
               </div>
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              {Object.entries({
+                isPregnant: '🤰 Gestante',
+                hasHypertension: '💓 Hipertensão',
+                hasDiabetes: '🍬 Diabetes',
+                isBedridden: '🛏️ Acamado',
+                hasCourtOrder: '⚖️ Ordem Judicial',
+                isSuspected: '🕵🏻‍♂ Suspeito',
+              }).map(([key, label], index, array) => (
+                <label
+                  key={key}
+                  className={`flex items-center gap-2 p-3 bg-gray-100 rounded-lg shadow-sm w-full ${
+                    index === array.length - 1
+                      ? 'md:col-span-1'
+                      : 'md:col-span-1'
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={conditions[key as keyof typeof conditions]}
+                    onChange={() => handleConditionChange(key)}
+                    className="w-5 h-5 text-blue-600 rounded focus:ring focus:ring-blue-500"
+                  />
+                  {/* Corrigindo a disposição do emoji e do texto */}
+                  <span className="text-gray-700 text-base font-medium flex gap-2 items-center">
+                    {label}
+                  </span>
+                </label>
+              ))}
+            </div>
           </div>
+
           <div className="flex-1 p-4 rounded-lg">
             <div className="text-lg font-semibold mb-2">Processo</div>
             <div className="grid grid-cols-1  gap-4">
@@ -288,6 +351,7 @@ export default function CreateRequest() {
                   ) : (
                     <CreatableSelect
                       isClearable
+                      value={selectedSpecialty}
                       options={specialties.map((specialty) => ({
                         value: specialty.id,
                         label: specialty.name,
@@ -352,6 +416,7 @@ export default function CreateRequest() {
                 </select>
                 <Label label="Data do Agendamento" />
                 <Input
+                  disabled
                   type="date"
                   name="appointmentDate"
                   value={appointmentDate}
@@ -361,7 +426,7 @@ export default function CreateRequest() {
                 <select
                   name="priority"
                   id="priority"
-                  className="rounded-md p-2 w-full"
+                  className="border rounded-md p-2 w-full"
                   value={priority}
                   onChange={(e) => setPriority(e.target.value)}
                 >
