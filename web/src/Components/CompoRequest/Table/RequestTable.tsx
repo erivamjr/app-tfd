@@ -176,11 +176,11 @@ export default function RequestTable() {
   }
 
   const priorityEmojis = {
-    Emergency: '🔴',
-    Elderly: '🟡',
-    Pregnant: '🟠',
-    Normal: '🟢',
-    Child: '🟠',
+    Emergency: '🔴', // 🔴 🚑 ⚡ 🆘
+    Elderly: '🟡', // 🟡 👴 👵 🦽
+    Pregnant: '🟠', // 🟠 🤰 🍼 🤱
+    Normal: '🟢', // 🟢 ✅ 🆗 😊
+    Child: '🟠', // 🟠 👶 🧒 🏥
   }
 
   const conditionEmojis = {
