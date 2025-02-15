@@ -39,7 +39,7 @@ export class SpecialtyService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const specialty = await this.prisma.specialty.findUnique({
       where: { id },
     });
@@ -55,7 +55,7 @@ export class SpecialtyService {
     return specialty;
   }
 
-  async update(id: number, updateSpecialtyDto: UpdateSpecialtyDto) {
+  async update(id: string, updateSpecialtyDto: UpdateSpecialtyDto) {
     await this.idExists(id);
 
     const existingSpecialty = await this.prisma.specialty.findFirst({
@@ -78,7 +78,7 @@ export class SpecialtyService {
     });
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     await this.idExists(id);
 
     return this.prisma.specialty.update({
@@ -87,7 +87,7 @@ export class SpecialtyService {
     });
   }
 
-  async reactivate(id: number) {
+  async reactivate(id: string) {
     const specialty = await this.prisma.specialty.findUnique({
       where: { id },
     });
@@ -108,7 +108,7 @@ export class SpecialtyService {
     });
   }
 
-  async idExists(id: number) {
+  async idExists(id: string) {
     const specialty = await this.prisma.specialty.findUnique({
       where: { id },
     });

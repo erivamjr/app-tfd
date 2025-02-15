@@ -28,7 +28,7 @@
 - [x] 👤 Funcionalidade de atualizar o avatar do paciente
 - [x] 📝 Arrumar link que esta apenas no texto e mudar para div
 - [x] 🛠️ Funcionalidade de detalhes do paciente
-- [ ] 📝 Acrescentar no cadastramento de agendamento
+- [x] 📝 Acrescentar no cadastramento de agendamento
   * Está Gravida?
   * Possui Hipertensão?
   * Possui Diabétes?

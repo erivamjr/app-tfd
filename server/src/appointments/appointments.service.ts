@@ -200,7 +200,7 @@ export class AppointmentsService {
     }
   }
 
-  async findBySpecialtyIdAndPatientId(specialty: number, patient: string) {
+  async findBySpecialtyIdAndPatientId(specialty: string, patient: string) {
     const specialtyId = await this.prisma.specialty.count({
       where: {
         id: specialty,

@@ -27,7 +27,7 @@ export default function CreateRequest() {
   const [alertMessage, setAlertMessage] = useState<string>('')
 
   const [patientId, setPatientId] = useState<string>('')
-  const [specialtyId, setSpecialtyId] = useState<number | undefined>()
+  const [specialtyId, setSpecialtyId] = useState<string | undefined>()
   const [priority, setPriority] = useState<string>('Normal')
   const [appointmentDate, setAppointmentDate] = useState<string>(
     new Date().toISOString().split('T')[0],
@@ -156,7 +156,7 @@ export default function CreateRequest() {
     setIsLoadingPatient(false)
 
     const requestData = {
-      specialtyId: Number(specialtyId),
+      specialtyId,
       patientId,
       userId: user.id,
       priority,
@@ -177,14 +177,14 @@ export default function CreateRequest() {
       setType('success')
       setAlertMessage('Solicitação criada com sucesso!')
       setIsAlertOpen(true)
+      console.log('Solicitação criada com sucesso!')
 
       setTimeout(() => {
         setPatientId('')
         setSpecialtyId(undefined)
         setSelectedSpecialty(null)
-        setSelectedPatient(null)
         setPriority('Normal')
-        setAppointmentDate('')
+        setAppointmentDate(new Date().toISOString().split('T')[0])
         setDiagnosis('')
         setCid('')
         setRequestingDoctor('')
@@ -265,7 +265,12 @@ export default function CreateRequest() {
               />
               {selectedPatient && (
                 <div className="mt-2 text-sm text-gray-600">
-                  <span>Selecionado: {selectedPatient.name}</span>
+                  <p>
+                    Selecionado:{' '}
+                    <span className="font-semibold text-blue-800">
+                      {selectedPatient.name}
+                    </span>
+                  </p>
                 </div>
               )}
             </div>

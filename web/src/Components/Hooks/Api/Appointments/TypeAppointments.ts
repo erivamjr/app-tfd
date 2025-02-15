@@ -27,7 +27,7 @@ export interface PatientProps {
   isSuspected?: boolean
 }
 export interface SpecialtyProps {
-  id: number
+  id: string
   name: string
   active: boolean
 }
