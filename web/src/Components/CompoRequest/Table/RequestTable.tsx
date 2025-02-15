@@ -1,6 +1,11 @@
 import { ChangeEvent, useContext, useEffect, useMemo, useState } from 'react'
 import { TbReportSearch } from 'react-icons/tb'
-import { FaChevronDown, FaChevronUp, FaRegEdit } from 'react-icons/fa'
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaRegEdit,
+  FaWhatsapp,
+} from 'react-icons/fa'
 import { RiDeleteBin6Line } from 'react-icons/ri'
 import { CiSearch } from 'react-icons/ci'
 import Input from '../../Ux/Input/Input'
@@ -21,15 +26,16 @@ import Alert from '../../Ux/Alert/Alert'
 import { DataContext } from '../../Context/DataContext'
 import { debounce } from 'lodash'
 import { SelectReact } from '../../Ux/Input/SelectReact'
+import WhatsAppModal from '../../Ux/Modal/WhatsappModal'
 
 export default function RequestTable() {
   const [expandedRows, setExpandedRows] = useState<string[]>([])
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isModalWhatsappOpen, setIsModalWhatsappOpen] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
   const [searchValue, setSearchValue] = useState('')
-  const [appointmentsDelete, setAppointmentsDelete] =
-    useState<TypeAppointment>()
+  const [appointmentsModal, setAppointmentsModal] = useState<TypeAppointment>()
   const [selectedSpecialty, setSelectedSpecialty] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('')
   const [selectedPriority, setSelectedPriority] = useState('')
@@ -115,9 +121,13 @@ export default function RequestTable() {
 
   function handleOpenModal(appintments) {
     setIsModalOpen(true)
-    setAppointmentsDelete(appintments)
+    setAppointmentsModal(appintments)
   }
 
+  function handleOpenModalWhatsapp(appintments) {
+    setIsModalWhatsappOpen(true)
+    setAppointmentsModal(appintments)
+  }
   async function handleDelete(id: string | undefined) {
     try {
       await api.delete(`/appointments/${id}`)
@@ -391,6 +401,17 @@ export default function RequestTable() {
                   <div className="space-y-2">
                     <p className="text-sm text-gray-500">Ações</p>
                     <div className="flex gap-2 mt-2">
+                      {appointment.patient.phone && (
+                        <button
+                          className="flex items-center justify-center p-2 min-w-[50px] border rounded-md transition-all duration-200 hover:scale-105 bg-green-400 hover:bg-green-500 text-white"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleOpenModalWhatsapp(appointment)
+                          }}
+                        >
+                          <FaWhatsapp size={24} />
+                        </button>
+                      )}
                       <TableActions
                         id={appointment.id}
                         url={'details-request'}
@@ -438,6 +459,17 @@ export default function RequestTable() {
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2 mt-2">
+                    {appointment.patient.phone && (
+                      <button
+                        className="flex items-center justify-center p-2 min-w-[50px] border rounded-md transition-all duration-200 hover:scale-105 bg-green-400 hover:bg-green-500 text-white"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleOpenModalWhatsapp(appointment)
+                        }}
+                      >
+                        <FaWhatsapp size={24} />
+                      </button>
+                    )}
                     <TableActions
                       id={appointment.id}
                       url={'details-request'}
@@ -480,11 +512,11 @@ export default function RequestTable() {
           <h1 className="text-lg font-semibold text-gray-800">
             Tem certeza que deseja deletar a solicitação para{' '}
             <span className="font-bold text-xl text-gray-900">
-              {appointmentsDelete?.specialty.name}
+              {appointmentsModal?.specialty.name}
             </span>{' '}
             de{' '}
             <span className="font-bold text-xl text-gray-900">
-              {appointmentsDelete?.patient.name}
+              {appointmentsModal?.patient.name}
             </span>
             ?
           </h1>
@@ -496,7 +528,7 @@ export default function RequestTable() {
             {/* Botão de Deletar */}
             <button
               className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-md font-medium flex items-center gap-2 transition-all duration-300"
-              onClick={() => handleDelete(appointmentsDelete?.id)}
+              onClick={() => handleDelete(appointmentsModal?.id)}
             >
               <RiDeleteBin6Line size={20} /> {/* Ícone de lixeira */}
               Sim, Deletar
@@ -513,6 +545,13 @@ export default function RequestTable() {
           </div>
         </div>
       </Modal>
+      {appointmentsModal && (
+        <WhatsAppModal
+          isOpen={isModalWhatsappOpen}
+          onClose={() => setIsModalWhatsappOpen(false)}
+          appointment={appointmentsModal}
+        />
+      )}
     </div>
   )
 }
