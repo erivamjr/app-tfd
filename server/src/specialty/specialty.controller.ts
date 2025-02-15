@@ -27,22 +27,22 @@ export class SpecialtyController {
   }
 
   @Get(':id')
-  findOne(@ParamId() id: number) {
+  findOne(@ParamId() id: string) {
     return this.specialtyService.findOne(id);
   }
 
   @Put(':id')
-  update(@ParamId() id: number, @Body() body: UpdateSpecialtyDto) {
+  update(@ParamId() id: string, @Body() body: UpdateSpecialtyDto) {
     return this.specialtyService.update(id, body);
   }
 
   @Delete(':id')
-  remove(@ParamId() id: number) {
+  remove(@ParamId() id: string) {
     return this.specialtyService.remove(id);
   }
 
   @Patch(':id')
-  updateActivate(@ParamId() id: number) {
+  updateActivate(@ParamId() id: string) {
     return this.specialtyService.reactivate(id);
   }
 }

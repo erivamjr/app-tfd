@@ -120,7 +120,7 @@ export default function RequestTable() {
 
   async function handleDelete(id: string | undefined) {
     try {
-      await api.delete(`/patients/${id}`)
+      await api.delete(`/appointments/${id}`)
       alert('DELETADO COM SUCESSO!')
       setIsModalOpen(false)
       setAppointmentsPage((prevAppointments) =>

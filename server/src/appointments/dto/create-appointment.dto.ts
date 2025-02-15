@@ -3,16 +3,15 @@ import { Transform } from 'class-transformer';
 import {
   IsEnum,
   IsNotEmpty,
-  IsNumber,
   IsString,
   IsBoolean,
   IsOptional,
 } from 'class-validator';
 
 export class CreateAppointmentDto {
-  @IsNumber()
   @IsNotEmpty()
-  specialtyId: number;
+  @IsString()
+  specialtyId: string;
 
   @IsNotEmpty()
   @IsString()

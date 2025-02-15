@@ -30,8 +30,8 @@ interface DataContextProps {
   specialties: SpecialtyProps[]
   users: UserProps[]
   addSpecialty: (newSpecialty: string) => Promise<void>
-  updateSpecialty: (id: number, name: string) => Promise<void>
-  deleteSpecialty: (id: number) => Promise<void>
+  updateSpecialty: (id: string, name: string) => Promise<void>
+  deleteSpecialty: (id: string) => Promise<void>
   updateUser: (userId: string, data: UpdateUserData) => Promise<void>
   fetchUsers: () => Promise<void>
   updateProfile: (userId: string, data: UpdateProfileProps) => Promise<void>
@@ -82,7 +82,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     }
   }
 
-  const updateSpecialty = async (id: number, name: string) => {
+  const updateSpecialty = async (id: string, name: string) => {
     try {
       await api.put(`/specialties/${id}`, { name })
       setSpecialties((prev) =>
@@ -95,7 +95,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     }
   }
 
-  const deleteSpecialty = async (id: number) => {
+  const deleteSpecialty = async (id: string) => {
     try {
       await api.delete(`/specialties/${id}`)
       setSpecialties((prev) => prev.filter((specialty) => specialty.id !== id))

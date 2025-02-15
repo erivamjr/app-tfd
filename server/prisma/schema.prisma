@@ -56,7 +56,7 @@ model Patient {
 }
 
 model Specialty {
-  id           Int           @id @default(autoincrement())
+  id           String        @id @default(uuid())
   name         String        @unique
   active       Boolean       @default(true)
   appointments Appointment[]
@@ -64,7 +64,7 @@ model Specialty {
 
 model Appointment {
   id               String    @id @default(uuid())
-  specialtyId      Int
+  specialtyId      String
   specialty        Specialty @relation(fields: [specialtyId], references: [id])
   patientId        String
   patient          Patient   @relation(fields: [patientId], references: [id])
