@@ -173,37 +173,41 @@ export default function CreateRequest() {
     }
 
     try {
-      await api.post('/appointments', requestData)
+      const response = await api.post('/appointments', requestData)
       setType('success')
       setAlertMessage('Solicitação criada com sucesso!')
       setIsAlertOpen(true)
       console.log('Solicitação criada com sucesso!')
 
-      setTimeout(() => {
-        setPatientId('')
-        setSpecialtyId(undefined)
-        setSelectedSpecialty(null)
-        setPriority('Normal')
-        setAppointmentDate(new Date().toISOString().split('T')[0])
-        setDiagnosis('')
-        setCid('')
-        setRequestingDoctor('')
-        setCrm('')
-        setRequestCode('')
-        setStatus('InProgress')
-        setNotes('')
-        setConditions({
-          isPregnant: false,
-          hasHypertension: false,
-          hasDiabetes: false,
-          isBedridden: false,
-          hasCourtOrder: false,
-          isSuspected: false,
-        })
-        setType('info')
-        setAlertMessage('')
-        setIsAlertOpen(false)
-      }, 3000)
+      // Limpar os campos
+      if (response.status === 201) {
+        console.log('Solicitação criada com sucesso!')
+        setTimeout(() => {
+          setPatientId('')
+          setSpecialtyId(undefined)
+          setSelectedSpecialty(null)
+          setPriority('Normal')
+          setAppointmentDate(new Date().toISOString().split('T')[0])
+          setDiagnosis('')
+          setCid('')
+          setRequestingDoctor('')
+          setCrm('')
+          setRequestCode('')
+          setStatus('InProgress')
+          setNotes('')
+          setConditions({
+            isPregnant: false,
+            hasHypertension: false,
+            hasDiabetes: false,
+            isBedridden: false,
+            hasCourtOrder: false,
+            isSuspected: false,
+          })
+          setType('info')
+          setAlertMessage('')
+          setIsAlertOpen(false)
+        }, 3000)
+      }
     } catch (error) {
       setType('error')
       setAlertMessage('Erro ao criar solicitação. Tente novamente.')
