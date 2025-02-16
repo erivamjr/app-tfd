@@ -90,14 +90,14 @@ export default function RegisterPatients() {
   return (
     <div className="shadow-lg mt-2 border-gray-800 p-3 bg-white">
       <AdminToolbar>
-        <div className="p-2 flex">
-          <div className="font-bold text-black text-2xl flex-1 text-center">
+        <div className="rounded p-4 flex justify-between items-center bg-blue-600 text-white">
+          <div className="text-2xl font-bold flex-1 text-center">
             Cadastrar Paciente
           </div>
           <div className="flex gap-3">
             <button
+              className="bg-white text-blue-600 p-3 rounded shadow-md hover:bg-gray-100"
               onClick={() => navigate('/patients')}
-              className="bg-blue-600 text-white p-3 text-2xl rounded"
             >
               <IoReturnDownBack />
             </button>
