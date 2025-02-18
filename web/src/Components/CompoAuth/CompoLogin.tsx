@@ -69,11 +69,14 @@ export default function CompoLogin() {
                 </button>
               </div>
             </form>
-            <a href="#" className="mt-4 text-sm text-gray-500">
-              Esqueceu sua senha?
-            </a>
             <Link
-              to="/auth?mode=create-account"
+              to="/auth/forget-password"
+              className="my-2 text-sm text-gray-500"
+            >
+              Esqueceu sua senha?
+            </Link>
+            <Link
+              to="/auth/create-account"
               className="my-2 text-sm text-gray-500"
             >
               Não tem cadastro? Crie uma conta
