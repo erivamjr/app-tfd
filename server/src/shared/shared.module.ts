@@ -4,6 +4,7 @@ import { UsersService } from '../user/users.service';
 import { PrismaModule } from '../database/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { SupabaseStorage } from '../storage/supabase.storage';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -12,8 +13,16 @@ import { SupabaseStorage } from '../storage/supabase.storage';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '7d' },
     }),
+    ConfigModule.forRoot(),
   ],
+
   providers: [AuthService, UsersService, SupabaseStorage],
-  exports: [AuthService, UsersService, JwtModule, SupabaseStorage],
+  exports: [
+    AuthService,
+    UsersService,
+    JwtModule,
+    SupabaseStorage,
+    ConfigModule,
+  ],
 })
 export class SharedModule {}

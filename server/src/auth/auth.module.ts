@@ -6,7 +6,7 @@ import { PrismaModule } from '../database/prisma.module';
 import { FileModule } from '../file/file.module';
 
 @Module({
-  imports: [PrismaModule, SharedModule, FileModule],
+  imports: [SharedModule, PrismaModule, SharedModule, FileModule],
   controllers: [AuthController],
   providers: [AuthService],
   exports: [AuthService],

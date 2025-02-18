@@ -10,18 +10,25 @@ import { UsersService } from '../user/users.service';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { MailerService } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   private issuer = 'login';
   private audience = 'users';
+  private frontendUrl: string;
 
   constructor(
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaService,
     private readonly userService: UsersService,
     private readonly mailerService: MailerService,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    this.frontendUrl =
+      this.configService.get<string>(process.env.FRONTEND_URL) ||
+      'http://localhost:3000';
+  }
 
   generateToken(user: User) {
     return {
@@ -100,24 +107,29 @@ export class AuthService {
         id: user.id,
       },
       {
-        expiresIn: '7 days', // was 15 minutes
+        expiresIn: '15 minutes', // was 15 minutes
         subject: String(user.id),
         issuer: 'forget',
         audience: this.audience,
       },
     );
 
+    const resetUrl = `${this.frontendUrl}/reset-password?token=${token}`;
+
     await this.mailerService.sendMail({
       to: email,
-      subject: 'Reset password',
-      template: 'forget',
-      context: {
-        name: user.name,
-        token,
-      },
+      subject: 'Recuperação de senha',
+      html: `
+        <p>Olá, ${user.name}!</p>
+        <p>Recebemos uma solicitação para redefinir sua senha.</p>
+        <p>Clique no link abaixo para criar uma nova senha:</p>
+        <a href="${resetUrl}" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Redefinir senha</a>
+        <p>Se você não solicitou a alteração, ignore este e-mail.</p>
+        <p><strong>Este link expira em 15 minutos.</strong></p>
+      `,
     });
 
-    return true;
+    return { message: 'Recovery email sent!' };
   }
 
   async reset(password: string, token: string) {
@@ -134,7 +146,7 @@ export class AuthService {
           id,
         },
         data: {
-          password,
+          password: await bcrypt.hash(password, 10),
         },
       });
 
