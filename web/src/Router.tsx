@@ -26,6 +26,7 @@ import Profile from './Page/User/Profile'
 import CompoLogin from './Components/CompoAuth/CompoLogin'
 import CompoCreateAccount from './Components/CompoAuth/CompoCreateAccount'
 import ForgetPassword from './Components/CompoAuth/ForgetPassword'
+import ResetPassword from './Components/CompoAuth/ResetPassword'
 
 function AdminPrivate({ children }: { children: JSX.Element }) {
   const { authenticated } = useContext(AuthContext)
@@ -56,6 +57,7 @@ export default function AppRouter() {
           <Route path="/auth/login" element={<CompoLogin />} />
           <Route path="/auth/create-account" element={<CompoCreateAccount />} />
           <Route path="/auth/forget-password" element={<ForgetPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           {/* Rotas privadas */}
           <Route
