@@ -8,7 +8,10 @@ import {
 @ValidatorConstraint({ async: false })
 export class IsCpfConstraint implements ValidatorConstraintInterface {
   validate(cpf: string) {
+    if (!cpf) return true;
     cpf = cpf.replace(/[^\d]+/g, '');
+    console.log(cpf);
+
     if (cpf.length !== 11) return false;
     if (
       [

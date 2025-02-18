@@ -6,10 +6,9 @@ import { AppointmentsModule } from './appointments/appointments.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PatientsModule } from './patients/patients.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { SpecialtyModule } from './specialty/specialty.module';
 import { SharedModule } from './shared/shared.module';
 import { FileModule } from './file/file.module';
@@ -24,7 +23,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
         ignoreUserAgents: [/googlebot/gi],
       },
     ]),
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot(), // Carrega variáveis do .env
     SharedModule,
     UsersModule,
     AuthModule,
@@ -32,25 +31,21 @@ import { DashboardModule } from './dashboard/dashboard.module';
     SpecialtyModule,
     AppointmentsModule,
     FileModule,
-    MailerModule.forRoot({
-      transport: {
-        host: 'smtp.ethereal.email',
-        port: 587,
-        auth: {
-          user: 'jadon.bogisich@ethereal.email',
-          pass: 'nvdWh14V6HnvsnRPhh',
+    MailerModule.forRootAsync({
+      imports: [ConfigModule.forRoot()],
+      useFactory: async (configService: ConfigService) => ({
+        transport: {
+          service: 'SendGrid',
+          auth: {
+            user: 'apikey', // Sempre "apikey" no SendGrid
+            pass: configService.get<string>('SENDGRID_API_KEY'), // Obtém a chave do .env
+          },
         },
-      },
-      defaults: {
-        from: '"Tratamento Fora Domicilio" <erivamdev@gmail.com>',
-      },
-      template: {
-        dir: __dirname + '/templates',
-        adapter: new PugAdapter(),
-        options: {
-          strict: true,
+        defaults: {
+          from: `"Tratamento Fora Domicílio" <${configService.get<string>('SENDGRID_FROM_EMAIL')}>`, // Certifique-se de que este e-mail está verificado no SendGrid
         },
-      },
+      }),
+      inject: [ConfigService],
     }),
     DashboardModule,
   ],

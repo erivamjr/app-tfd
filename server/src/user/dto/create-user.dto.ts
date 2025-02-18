@@ -26,7 +26,7 @@ export class CreateUserDto {
   phone: string;
 
   @IsString()
-  @Length(11, 11)
+  @Length(11, 14)
   @IsNotEmpty()
   @IsCpf()
   cpf: string;
