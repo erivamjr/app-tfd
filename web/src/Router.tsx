@@ -27,6 +27,7 @@ import CompoLogin from './Components/CompoAuth/CompoLogin'
 import CompoCreateAccount from './Components/CompoAuth/CompoCreateAccount'
 import ForgetPassword from './Components/CompoAuth/ForgetPassword'
 import ResetPassword from './Components/CompoAuth/ResetPassword'
+import { ToastProvider } from './Components/Context/ToastContext'
 
 function AdminPrivate({ children }: { children: JSX.Element }) {
   const { authenticated } = useContext(AuthContext)
@@ -51,70 +52,75 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          {/* Rotas públicas */}
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/auth/login" element={<CompoLogin />} />
-          <Route path="/auth/create-account" element={<CompoCreateAccount />} />
-          <Route path="/auth/forget-password" element={<ForgetPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+        <ToastProvider>
+          <Routes>
+            {/* Rotas públicas */}
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/auth/login" element={<CompoLogin />} />
+            <Route
+              path="/auth/create-account"
+              element={<CompoCreateAccount />}
+            />
+            <Route path="/auth/forget-password" element={<ForgetPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
-          {/* Rotas privadas */}
-          <Route
-            path="/*"
-            element={
-              <AdminPrivate>
-                <DataProvider>
-                  <MainLayout>
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      {/* Rota para listagem de pacientes */}
-                      <Route path="/patients" element={<Patients />} />
-                      {/* Rota para adicionar pacientes */}
-                      <Route
-                        path="/patients/add-patient"
-                        element={<RegisterPatient />}
-                      />
-                      {/* Rota para editar paciente */}
-                      <Route
-                        path="/edit-patient/:id"
-                        element={<EditPatient />}
-                      />
-                      {/* Detalhes de paciente */}
-                      <Route
-                        path="/details-patient/:id"
-                        element={<DetailsPatients />}
-                      />
-                      {/* Rota de solicitações */}
-                      <Route path="/requests" element={<Request />} />
-                      {/* Rota de adicionar solicitação	 */}
-                      <Route
-                        path="/request/add-request"
-                        element={<CreateRequest />}
-                      />
-                      {/* Detalhes da solicitação */}
-                      <Route
-                        path="/details-request/:id"
-                        element={<DetailsRequest />}
-                      />
-                      {/* Editar solicitação  */}
-                      <Route
-                        path="/edit-request/:id"
-                        element={<EditRequest />}
-                      />
-                      {/* Especialidades */}
-                      <Route path="/specialties" element={<Specialties />} />
-                      {/* Usuários */}
-                      <Route path="/users" element={<User />} />
-                      {/* Perfil */}
-                      <Route path="/profile" element={<Profile />} />
-                    </Routes>
-                  </MainLayout>
-                </DataProvider>
-              </AdminPrivate>
-            }
-          />
-        </Routes>
+            {/* Rotas privadas */}
+            <Route
+              path="/*"
+              element={
+                <AdminPrivate>
+                  <DataProvider>
+                    <MainLayout>
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        {/* Rota para listagem de pacientes */}
+                        <Route path="/patients" element={<Patients />} />
+                        {/* Rota para adicionar pacientes */}
+                        <Route
+                          path="/patients/add-patient"
+                          element={<RegisterPatient />}
+                        />
+                        {/* Rota para editar paciente */}
+                        <Route
+                          path="/edit-patient/:id"
+                          element={<EditPatient />}
+                        />
+                        {/* Detalhes de paciente */}
+                        <Route
+                          path="/details-patient/:id"
+                          element={<DetailsPatients />}
+                        />
+                        {/* Rota de solicitações */}
+                        <Route path="/requests" element={<Request />} />
+                        {/* Rota de adicionar solicitação	 */}
+                        <Route
+                          path="/request/add-request"
+                          element={<CreateRequest />}
+                        />
+                        {/* Detalhes da solicitação */}
+                        <Route
+                          path="/details-request/:id"
+                          element={<DetailsRequest />}
+                        />
+                        {/* Editar solicitação  */}
+                        <Route
+                          path="/edit-request/:id"
+                          element={<EditRequest />}
+                        />
+                        {/* Especialidades */}
+                        <Route path="/specialties" element={<Specialties />} />
+                        {/* Usuários */}
+                        <Route path="/users" element={<User />} />
+                        {/* Perfil */}
+                        <Route path="/profile" element={<Profile />} />
+                      </Routes>
+                    </MainLayout>
+                  </DataProvider>
+                </AdminPrivate>
+              }
+            />
+          </Routes>
+        </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
   )

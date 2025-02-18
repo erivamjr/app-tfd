@@ -7,6 +7,7 @@ import Logo from '../../Components/Ux/Logo/Vector.png'
 import MaskedInput from '../Ux/Input/MaskedInput'
 import api from '../../Api'
 import axios from 'axios'
+import { useToast } from '../Context/ToastContext'
 
 // Definindo o schema de validação com Zod
 const createAccountSchema = z
@@ -43,6 +44,7 @@ const createAccountSchema = z
 type CreateAccountData = z.infer<typeof createAccountSchema>
 
 export default function CompoCreateAccount() {
+  const { showSuccess, showError } = useToast()
   const navigate = useNavigate()
   const {
     register,
@@ -76,14 +78,14 @@ export default function CompoCreateAccount() {
       const response = await api.post('/auth/register', payload)
 
       if (response.status === 201) {
-        alert('Conta criada com sucesso!')
+        showSuccess('Conta criada com sucesso!')
         navigate('/auth/login')
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
           error.response.data?.message || 'Erro ao criar a conta'
-        alert(errorMessage)
+        showError(errorMessage)
       }
     }
   }
