@@ -38,6 +38,7 @@
 - [x] ✳️ Colocar Botão de Whatsapp na aba de atualizar paciente
 - [x] 📝 Ajustar a lista de agendamentos de cada paciente para que seja possível clicar no agendamento e ver os detalhes
 - [ ] 🔍 Corrigir a busca na segunda página que não está funcionando corretamente
+- [ ] 👤 Adicionar paginação na tabela de usuários
 - [ ] 📅 Ajustar as colunas da header da tabela para que fique alinhada com das celulas abaixo
 - [x] 🛠️ Funcionalidade de salvar, deletar e editar especialidades
 - [x] 📊 Ajustar o Dashboard para exibir o total de agendamentos, total agendado, total finalizado e total de pacientes cadastrados

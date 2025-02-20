@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { IStorage } from './storage';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FileDto } from '../auth/dto/file.dto';
 
 @Injectable()
@@ -33,11 +33,13 @@ export class SupabaseStorage implements IStorage {
       .createSignedUrl(fullFilePath, 3600);
 
     if (error) {
-      throw new Error(`Erro ao gerar URL assinada: ${error.message}`);
+      throw new NotFoundException(
+        `Error generating signed URL. Error: ${error.message}`,
+      );
     }
 
     if (!data?.signedUrl) {
-      throw new Error('Objeto não encontrado no Supabase Storage');
+      throw new NotFoundException('Object not found in Supabase Storage.');
     }
     return data.signedUrl;
   }
