@@ -73,12 +73,25 @@ export class UsersService {
         ? { workLocation: orderDirection }
         : { name: orderDirection };
 
-    return this.prisma.user.findMany({
-      where: queryConditions,
-      skip,
-      take,
-      orderBy: orderCriteria,
-    });
+    const [data, total] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
+        where: queryConditions,
+        skip,
+        take,
+        orderBy: orderCriteria,
+      }),
+
+      this.prisma.user.count({
+        where: queryConditions,
+      }),
+    ]);
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: string) {
