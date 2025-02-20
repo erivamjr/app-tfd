@@ -35,6 +35,10 @@ export class SupabaseStorage implements IStorage {
     if (error) {
       throw new Error(`Erro ao gerar URL assinada: ${error.message}`);
     }
+
+    if (!data?.signedUrl) {
+      throw new Error('Objeto não encontrado no Supabase Storage');
+    }
     return data.signedUrl;
   }
 }

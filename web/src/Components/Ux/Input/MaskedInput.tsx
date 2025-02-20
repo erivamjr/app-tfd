@@ -1,60 +1,28 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 import InputMask from 'react-input-mask'
 
 interface MaskedInputProps {
   mask: string
-  type: string
-  name: string
-  value?: string | number | readonly string[] | undefined
+  value: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
-  required?: boolean
-  autocomplete?: string
-  disabled?: boolean
-  className?: string
 }
 
-const MaskedInput = forwardRef<HTMLInputElement, MaskedInputProps>(
-  (
-    {
-      mask,
-      type,
-      name,
-      value,
-      onChange,
-      placeholder,
-      required,
-      autocomplete,
-      disabled,
-      className,
-    },
-    ref,
-  ) => {
-    return (
-      <InputMask mask={mask} value={value} onChange={onChange}>
-        {(inputProps: React.InputHTMLAttributes<HTMLInputElement>) => (
-          <input
-            ref={ref}
-            {...inputProps}
-            type={type}
-            name={name}
-            placeholder={placeholder}
-            required={required}
-            autoComplete={autocomplete}
-            disabled={disabled}
-            className={
-              className ||
-              (disabled
-                ? 'cursor-not-allowed w-full border border-gray-300 rounded-md p-2 bg-gray-100 text-gray-500'
-                : 'w-full border border-gray-300 rounded-md p-2')
-            }
-          />
-        )}
-      </InputMask>
-    )
-  },
-)
-
-MaskedInput.displayName = 'MaskedInput'
+const MaskedInput: React.FC<MaskedInputProps> = ({
+  mask,
+  value,
+  onChange,
+  placeholder,
+}) => {
+  return (
+    <InputMask
+      mask={mask}
+      value={value}
+      onChange={onChange}
+      className="border border-gray-300 p-2 rounded w-full focus:ring-blue-500 focus:border-blue-500"
+      placeholder={placeholder}
+    />
+  )
+}
 
 export default MaskedInput

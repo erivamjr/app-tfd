@@ -1,70 +1,59 @@
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { Link, useNavigate } from 'react-router-dom'
 import Input from '../../Components/Ux/Input/Input'
-import Logo from '../../Components/Ux/Logo/Vector.png'
 import MaskedInput from '../Ux/Input/MaskedInput'
+import Logo from '../../Components/Ux/Logo/Vector.png'
 import api from '../../Api'
 import axios from 'axios'
 import { useToast } from '../Context/ToastContext'
+import { LoaderIcon } from '../../assets/Icon'
 
-// Definindo o schema de validação com Zod
 const createAccountSchema = z
   .object({
-    name: z
-      .string({ required_error: 'O nome é obrigatório' })
-      .min(3, 'O nome deve ter pelo menos 3 caracteres'),
-    email: z
-      .string({ required_error: 'O e-mail é obrigatório' })
-      .email('Digite um e-mail válido'),
+    name: z.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
+    email: z.string().email('Digite um e-mail válido'),
     cpf: z
-      .string({ required_error: 'O CPF é obrigatório' })
-      .min(11, 'O CPF deve ter 11 caracteres'),
+      .string()
+      .min(14, 'O CPF deve ter 11 caracteres')
+      .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido'),
     phone: z
-      .string({ required_error: 'O telefone é obrigatório' })
-      .min(10, 'O telefone deve ter pelo menos 10 dígitos'),
-    workLocation: z
-      .string({ required_error: 'Local de trabalho obrigatório' })
-      .min(3, 'Local de trabalho obrigatório'),
+      .string()
+      .min(15, 'O telefone deve ter 10 caracteres')
+      .regex(/^\(\d{2}\) \d{5}-\d{4}$/, 'Número inválido'),
+    workLocation: z.string().min(3, 'Local de trabalho obrigatório'),
     password: z
-      .string({ required_error: 'A senha é obrigatória' })
+      .string()
       .min(8, 'A senha deve ter pelo menos 8 caracteres')
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/,
-        'A senha deve conter pelo menos uma letra minúscula, uma letra maiúscula, um número e um caractere especial',
+        'A senha deve conter pelo menos uma letra minúscula, uma maiúscula, um número e um caractere especial',
       ),
-    confirmPassword: z.string({ required_error: 'Confirme sua senha' }),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As senhas não coincidem',
     path: ['confirmPassword'],
   })
 
-type CreateAccountData = z.infer<typeof createAccountSchema>
+type CreateAccountFormData = z.infer<typeof createAccountSchema>
 
 export default function CompoCreateAccount() {
   const { showSuccess, showError } = useToast()
   const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
-  } = useForm<CreateAccountData>({
+  } = useForm({
     resolver: zodResolver(createAccountSchema),
     mode: 'onChange',
-    defaultValues: {
-      name: '',
-      email: '',
-      cpf: '',
-      phone: '',
-      workLocation: '',
-      password: '',
-      confirmPassword: '',
-    },
   })
 
-  const handleCreateAccount = async (data: CreateAccountData) => {
+  const handleCreateAccount = async (data: CreateAccountFormData) => {
     const payload = {
       name: data.name,
       email: data.email,
@@ -73,35 +62,24 @@ export default function CompoCreateAccount() {
       workLocation: data.workLocation,
       password: data.password,
     }
-
     try {
-      const response = await api.post('/auth/register', payload)
-
-      if (response.status === 201) {
-        showSuccess('Conta criada com sucesso!')
-        navigate('/auth/login')
-      }
+      await api.post('/auth/register', payload)
+      showSuccess('Conta criada com sucesso!')
+      navigate('/auth/login')
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        const errorMessage =
-          error.response.data?.message || 'Erro ao criar a conta'
-        showError(errorMessage)
+        showError(error.response.data?.message || 'Erro ao criar a conta')
       }
     }
   }
+
   return (
     <div className="relative min-h-screen bg-gray-100">
       <div className="absolute z-10 h-screen w-full sm:w-1/2 bg-blue-500 flex items-center justify-center"></div>
       <div className="relative z-20 flex items-center justify-center min-h-screen">
         <div className="flex w-full sm:w-[800px] shadow-lg flex-col sm:flex-row">
           <div className="flex mb-10 items-center justify-center w-full sm:w-1/2 bg-blue-500">
-            <img
-              src={Logo}
-              alt="Logo"
-              className="w-48 h-48 rounded-md"
-              width="200"
-              height="200"
-            />
+            <img src={Logo} alt="Logo" className="w-48 h-48 rounded-md" />
           </div>
           <div className="flex flex-col z-30 items-center justify-center w-full sm:w-1/2 px-10 py-10 bg-white">
             <h2 className="mb-6 text-2xl font-bold">Criar Conta</h2>
@@ -122,7 +100,7 @@ export default function CompoCreateAccount() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium my-2">Email</label>
+                <label className="block text-sm font-medium">Email</label>
                 <Input
                   type="text"
                   {...register('email')}
@@ -134,12 +112,13 @@ export default function CompoCreateAccount() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium my-2">CPF</label>
-                <MaskedInput
-                  mask="999.999.999-99"
-                  type="text"
-                  placeholder="Digite seu CPF"
-                  {...register('cpf')}
+                <label className="block text-sm font-medium">CPF</label>
+                <Controller
+                  name="cpf"
+                  control={control}
+                  render={({ field }) => (
+                    <MaskedInput {...field} mask="999.999.999-99" />
+                  )}
                 />
                 {errors.cpf && (
                   <p className="text-red-500 text-sm">{errors.cpf.message}</p>
@@ -147,14 +126,13 @@ export default function CompoCreateAccount() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium my-2">
-                  Telefone
-                </label>
-                <MaskedInput
-                  mask="(99) 99999-9999"
-                  type="text"
-                  placeholder="Digite seu telefone"
-                  {...register('phone')}
+                <label className="block text-sm font-medium">Telefone</label>
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field }) => (
+                    <MaskedInput {...field} mask="(99) 99999-9999" />
+                  )}
                 />
                 {errors.phone && (
                   <p className="text-red-500 text-sm">{errors.phone.message}</p>
@@ -162,7 +140,7 @@ export default function CompoCreateAccount() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium my-2">
+                <label className="block text-sm font-medium">
                   Local de Trabalho
                 </label>
                 <Input
@@ -178,7 +156,7 @@ export default function CompoCreateAccount() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium my-2">Senha</label>
+                <label className="block text-sm font-medium">Senha</label>
                 <Input
                   {...register('password')}
                   type="password"
@@ -192,7 +170,7 @@ export default function CompoCreateAccount() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium my-2">
+                <label className="block text-sm font-medium">
                   Confirme a Senha
                 </label>
                 <Input
@@ -211,29 +189,12 @@ export default function CompoCreateAccount() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-blue-500 py-2 my-2 px-8 rounded-md text-white hover:bg-blue-700 duration-300 w-full sm:w-auto flex items-center justify-center"
+                  className="bg-blue-500 py-2 px-8 rounded-md text-white hover:bg-blue-700 duration-300 w-full sm:w-auto flex items-center justify-center"
                 >
                   {isSubmitting && (
-                    <svg
-                      className="animate-spin h-5 w-5 text-white mr-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                      />
-                    </svg>
+                    <span className=" mr-2">
+                      <LoaderIcon className="w-5 h-5 animate-spin" />
+                    </span>
                   )}
                   Cadastrar
                 </button>
