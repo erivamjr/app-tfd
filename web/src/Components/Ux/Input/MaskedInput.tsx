@@ -8,21 +8,21 @@ interface MaskedInputProps {
   placeholder?: string
 }
 
-const MaskedInput: React.FC<MaskedInputProps> = ({
-  mask,
-  value,
-  onChange,
-  placeholder,
-}) => {
-  return (
-    <InputMask
-      mask={mask}
-      value={value}
-      onChange={onChange}
-      className="border border-gray-300 p-2 rounded w-full focus:ring-blue-500 focus:border-blue-500"
-      placeholder={placeholder}
-    />
-  )
-}
+const MaskedInput = React.forwardRef<HTMLInputElement, MaskedInputProps>(
+  ({ mask, value, onChange, placeholder }, ref) => {
+    return (
+      <InputMask
+        mask={mask}
+        value={value}
+        onChange={onChange}
+        className="border border-gray-300 p-2 rounded w-full focus:ring-blue-500 focus:border-blue-500"
+        placeholder={placeholder}
+        ref={ref}
+      />
+    )
+  },
+)
+
+MaskedInput.displayName = 'MaskedInput'
 
 export default MaskedInput
