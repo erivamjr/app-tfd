@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
 import Alert from '../Ux/Alert/Alert'
@@ -9,12 +9,10 @@ import api from '../../Api'
 import { Priority, Status } from '../Hooks/Api/Appointments/TypeAppointments'
 import Input from '../Ux/Input/Input'
 import Label from '../Ux/Label/Label'
-import { DataContext } from '../Context/DataContext'
 
 export default function EditRequest() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { users } = useContext(DataContext)
   const [conditions, setConditions] = useState({
     isPregnant: false,
     hasHypertension: false,
@@ -76,8 +74,7 @@ export default function EditRequest() {
         setFormData({
           specialtyName: appointment.specialty?.name || '',
           patientName: appointment.patient?.name || '',
-          userName:
-            users.find((user) => user.id === appointment.userId)?.name || '',
+          userName: appointment.user?.name || '',
           specialtyId: appointment.specialtyId || '',
           patientId: appointment.patientId || '',
           userId: appointment.userId || '',
@@ -109,7 +106,7 @@ export default function EditRequest() {
     }
 
     fetchAppointment()
-  }, [id, users])
+  }, [id])
 
   const handleChange = (
     e: React.ChangeEvent<
