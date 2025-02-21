@@ -7,100 +7,103 @@ import AdminToolbar from '../Ux/AdminToolbar/AdminToolbar'
 import { IoReturnDownBack } from 'react-icons/io5'
 import Label from '../Ux/Label/Label'
 import api from '../../Api'
-import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useForm } from 'react-hook-form'
+import { PatientFormData, schemaPatient } from '../../schema/patient.chema'
+import { brazilStates, genderOptions } from '../../utils/utils'
+import { SelectReact } from '../Ux/Input/SelectReact'
+import MaskedInput from '../Ux/Input/MaskedInput'
+import { format, parseISO } from 'date-fns'
+import { useToast } from '../Context/ToastContext'
 
 export default function EditPatient() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [patient, setPatient] = useState<Patient>()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isError, setIsError] = useState<boolean>(false)
-
-  const [formData, setFormData] = useState({
-    name: '',
-    cpf: '',
-    rg: '',
-    phone: '',
-    gender: '',
-    susCard: '',
-    birthDate: '',
-    motherName: '',
-    address: '',
-    number: '',
-    complement: '',
-    state: '',
-    district: '',
-    city: '',
-    zipCode: '',
+  const { showError, showSuccess } = useToast()
+  const [patient, setPatient] = useState<PatientFormData>()
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<PatientFormData>({
+    resolver: zodResolver(schemaPatient),
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      cpf: '',
+      rg: '',
+      phone: '',
+      gender: '',
+      susCard: '',
+      birthDate: '',
+      motherName: '',
+      address: '',
+      number: '',
+      complement: '',
+      state: '',
+      district: '',
+      city: '',
+      zipCode: '',
+    },
   })
 
   useEffect(() => {
     const fetchPatient = async () => {
       try {
-        setIsLoading(true)
         const response = await api.get(`/patients/${id}`)
         setPatient(response.data)
       } catch (error) {
         console.error('Erro ao buscar paciente:', error)
-        setIsError(true)
-      } finally {
-        setIsLoading(false)
+        showError('Erro ao buscar paciente')
       }
     }
-
     fetchPatient()
-  }, [id])
+  }, [id, showError])
 
   useEffect(() => {
     if (patient) {
-      const birthDateStr =
-        typeof patient.birthDate === 'object'
-          ? patient.birthDate.toISOString()
-          : patient.birthDate
-
-      const dateOnly = birthDateStr ? birthDateStr.split('T')[0] : ''
-
-      setFormData({
-        name: patient.name || '',
-        cpf: patient.cpf || '',
-        rg: patient.rg || '',
-        phone: patient.phone || '',
-        gender: patient.gender || '',
-        susCard: patient.susCard || '',
-        birthDate: dateOnly || '',
-        motherName: patient.motherName || '',
-        address: patient.address || '',
-        number: patient.number ? String(patient.number) : '',
-        complement: patient.complement || '',
-        state: patient.state || '',
-        district: patient.district || '',
-        city: patient.city || '',
-        zipCode: patient.zipCode?.toString() ?? '',
+      reset({
+        name: patient.name,
+        cpf: patient.cpf,
+        rg: patient.rg,
+        phone: patient.phone,
+        gender: patient.gender,
+        susCard: patient.susCard,
+        birthDate: patient.birthDate
+          ? format(parseISO(patient.birthDate), 'yyyy-MM-dd')
+          : '',
+        motherName: patient.motherName,
+        address: patient.address,
+        number: patient.number,
+        complement: patient.complement,
+        state: patient.state,
+        district: patient.district,
+        city: patient.city,
+        zipCode: patient.zipCode,
       })
-    } else {
-      console.log('Not patient found.')
     }
-  }, [patient, id])
+  }, [patient, reset])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prevData) => ({ ...prevData, [name]: value }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmitPatient = async (data: PatientFormData) => {
     try {
-      await api.patch(`/patients/${id}`, formData)
-      alert('Paciente atualizado com sucesso')
+      await api.patch(`/patients/${id}`, data)
+      showSuccess('Paciente atualizado com sucesso')
       navigate('/patients')
     } catch (error) {
       console.error('Erro ao atualizar paciente:', error)
-      alert('Erro ao atualizar o paciente')
+      showError('Erro ao atualizar o paciente')
     }
   }
 
-  if (isLoading) return <Alert type="success" message="Carregando..." />
-  if (isError) return <Alert type="error" message="Erro ao carregar dados!" />
+  if (isSubmitting) {
+    return <Alert type="info" message="Salvando alterações..." />
+  }
+
+  if (!patient) {
+    return <Alert type="info" message="Carregando paciente..." />
+  }
 
   return (
     <div>
@@ -112,7 +115,7 @@ export default function EditPatient() {
           <div className="flex gap-3">
             <button
               className="bg-white text-blue-600 p-3 rounded shadow-md hover:bg-gray-100"
-              onClick={() => navigate('/patients')}
+              onClick={() => navigate(-1)}
             >
               <IoReturnDownBack />
             </button>
@@ -121,46 +124,57 @@ export default function EditPatient() {
       </AdminToolbar>
 
       <Container>
-        <form onSubmit={handleSubmit} className="grid gap-2 p-5">
+        <form
+          onSubmit={handleSubmit(handleSubmitPatient)}
+          className="grid gap-2 p-5"
+        >
           <Label label="Nome" />
           <Input
             type="text"
-            placeholder="Nome"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
+            {...register('name')}
+            placeholder="Digite o nome completo"
           />
+          {errors.name && (
+            <p className="text-red-500 text-sm">{errors.name.message}</p>
+          )}
           <div className="md:grid grid-cols-3 gap-2">
             <div>
               <Label label="CPF" />
-              <Input
-                type="text"
-                placeholder="CPF"
+              <Controller
                 name="cpf"
-                value={formData.cpf}
-                onChange={handleChange}
+                control={control}
+                render={({ field }) => (
+                  <MaskedInput {...field} mask="999.999.999-99" />
+                )}
               />
+              {errors.cpf && (
+                <p className="text-red-500 text-sm">{errors.cpf.message}</p>
+              )}
             </div>
 
             <div>
               <Label label="RG" />
               <Input
                 type="text"
-                placeholder="RG"
-                name="rg"
-                value={formData.rg}
-                onChange={handleChange}
+                {...register('rg')}
+                placeholder="Digite o RG"
               />
+              {errors.rg && (
+                <p className="text-red-500 text-sm">{errors.rg.message}</p>
+              )}
             </div>
             <div>
               <Label label="Data de Nascimento" />
               <Input
                 type="date"
+                {...register('birthDate')}
                 placeholder="Data de Nascimento"
-                name="birthDate"
-                value={formData.birthDate}
-                onChange={handleChange}
               />
+              {errors.birthDate && (
+                <p className="text-red-500 text-sm">
+                  {errors.birthDate.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -169,75 +183,94 @@ export default function EditPatient() {
               <Label label="Número do SUS" />
               <Input
                 type="text"
-                placeholder="Número do SUS"
-                name="susCard"
-                value={formData.susCard}
-                onChange={handleChange}
+                {...register('susCard')}
+                placeholder="Digite o cartão SUS"
               />
+              {errors.susCard && (
+                <p className="text-red-500 text-sm">{errors.susCard.message}</p>
+              )}
             </div>
 
             <div>
               <Label label="Telefone" />
-              <Input
-                type="text"
-                placeholder="Telefone"
+              <Controller
                 name="phone"
-                value={formData.phone}
-                onChange={handleChange}
+                control={control}
+                render={({ field }) => (
+                  <MaskedInput {...field} mask="(99) 99999-9999" />
+                )}
               />
+              {errors.phone && (
+                <p className="text-red-500 text-sm">{errors.phone.message}</p>
+              )}
             </div>
 
             <div>
               <Label label="Gênero" />
-              <Input
-                type="text"
-                placeholder="Gênero"
+              <Controller
                 name="gender"
-                value={formData.gender}
-                onChange={handleChange}
+                control={control}
+                render={({ field }) => (
+                  <SelectReact
+                    options={genderOptions}
+                    placeholder="Selecione o gênero"
+                    selected={field.value}
+                    handleChange={(option) => field.onChange(option?.value)}
+                  />
+                )}
               />
+
+              {errors.gender && (
+                <p className="text-red-500 text-sm">{errors.gender.message}</p>
+              )}
             </div>
           </div>
 
           <Label label="Nome da Mãe" />
           <Input
             type="text"
-            placeholder="Nome da Mãe"
-            name="motherName"
-            value={formData.motherName}
-            onChange={handleChange}
+            {...register('motherName')}
+            placeholder="Digite o nome da mãe"
           />
+          {errors.motherName && (
+            <p className="text-red-500 text-sm">{errors.motherName.message}</p>
+          )}
 
           <div className="md:grid grid-cols-5 gap-2">
             <div className="col-span-3">
               <Label label="Endereço" />
               <Input
                 type="text"
-                placeholder="Endereço"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
+                {...register('address')}
+                placeholder="Digite o endereço"
               />
+              {errors.address && (
+                <p className="text-red-500 text-sm">{errors.address.message}</p>
+              )}
             </div>
             <div>
               <Label label="Número" />
               <Input
                 type="text"
-                placeholder="Número"
-                name="number"
-                value={formData.number}
-                onChange={handleChange}
+                {...register('number')}
+                placeholder="Digite o número"
               />
+              {errors.number && (
+                <p className="text-red-500 text-sm">{errors.number.message}</p>
+              )}
             </div>
             <div>
               <Label label="Complemento" />
               <Input
                 type="text"
-                placeholder="Complemento"
-                name="complement"
-                value={formData.complement}
-                onChange={handleChange}
+                {...register('complement')}
+                placeholder="Digite o complemento"
               />
+              {errors.complement && (
+                <p className="text-red-500 text-sm">
+                  {errors.complement.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -246,50 +279,64 @@ export default function EditPatient() {
               <Label label="Bairro" />
               <Input
                 type="text"
-                placeholder="Bairro"
-                name="district"
-                value={formData.district}
-                onChange={handleChange}
+                {...register('district')}
+                placeholder="Digite o bairro"
               />
+              {errors.district && (
+                <p className="text-red-500 text-sm">
+                  {errors.district.message}
+                </p>
+              )}
             </div>
 
             <div>
               <Label label="Cidade" />
               <Input
                 type="text"
-                placeholder="Cidade"
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
+                {...register('city')}
+                placeholder="Digite a cidade"
               />
+              {errors.city && (
+                <p className="text-red-500 text-sm">{errors.city.message}</p>
+              )}
             </div>
 
             <div>
               <Label label="Estado" />
-              <Input
-                type="text"
-                placeholder="Estado"
+              <Controller
                 name="state"
-                value={formData.state}
-                onChange={handleChange}
+                control={control}
+                render={({ field }) => (
+                  <SelectReact
+                    options={brazilStates}
+                    placeholder="Selecione o gênero"
+                    selected={field.value}
+                    handleChange={(option) => field.onChange(option?.value)}
+                  />
+                )}
               />
+              {errors.state && (
+                <p className="text-red-500 text-sm">{errors.state.message}</p>
+              )}
             </div>
 
             <div>
               <Label label="CEP" />
               <Input
                 type="text"
-                placeholder="CEP"
-                name="zipCode"
-                value={formData.zipCode}
-                onChange={handleChange}
+                {...register('zipCode')}
+                placeholder="Digite o CEP"
               />
+              {errors.zipCode && (
+                <p className="text-red-500 text-sm">{errors.zipCode.message}</p>
+              )}
             </div>
           </div>
 
           <button
             type="submit"
             className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
+            disabled={isSubmitting}
           >
             Salvar Alterações
           </button>
