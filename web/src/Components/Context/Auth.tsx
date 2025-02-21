@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { UserProps } from '../Hooks/Api/Appointments/TypeAppointments'
 import { AxiosError } from 'axios'
 import api from '../../Api'
+import { useToast } from './ToastContext'
 
 interface AuthProviderProps {
   children: ReactNode
@@ -25,6 +26,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true)
   const [authError, setAuthError] = useState<string | null>(null)
   const navigate = useNavigate()
+  const { showError } = useToast()
 
   useEffect(() => {
     const recoveredToken = localStorage.getItem('token')
@@ -88,6 +90,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (error.response?.status === 404) {
           setAuthError('Rota não encontrada. Verifique a URL no backend.')
         } else if (error.response?.status === 401) {
+          showError('Credenciais inválidas. Verifique seu email e senha.')
+          console.log('Email ou senha incorretos')
           setAuthError('Credenciais inválidas. Verifique seu email e senha.')
         } else {
           setAuthError('Erro inesperado. Tente novamente mais tarde.')

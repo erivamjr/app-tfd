@@ -4,6 +4,7 @@ import { Toast } from 'primereact/toast'
 interface ToastContextProps {
   showSuccess: (message: string) => void
   showError: (message: string) => void
+  showInfo: (message: string) => void
 }
 
 const ToastContext = createContext<ToastContextProps | undefined>(undefined)
@@ -33,8 +34,17 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
     })
   }
 
+  const showInfo = (message: string) => {
+    toast.current?.show({
+      severity: 'info',
+      summary: 'Informação',
+      detail: message,
+      life: 3000,
+    })
+  }
+
   return (
-    <ToastContext.Provider value={{ showSuccess, showError }}>
+    <ToastContext.Provider value={{ showSuccess, showError, showInfo }}>
       <Toast ref={toast} />
       {children}
     </ToastContext.Provider>

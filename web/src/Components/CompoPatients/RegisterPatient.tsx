@@ -1,59 +1,58 @@
 import { AxiosError } from 'axios'
-import { useState, FormEvent } from 'react'
 import { CiFloppyDisk } from 'react-icons/ci'
 import { IoReturnDownBack } from 'react-icons/io5'
 import { useNavigate } from 'react-router-dom'
 
 import api from '../../Api'
 import Label from '../Ux/Label/Label'
-import Loading from '../Ux/Loading/Loading'
 import Input from '../Ux/Input/Input'
 import AdminToolbar from '../Ux/AdminToolbar/AdminToolbar'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useForm } from 'react-hook-form'
+import { SelectReact } from '../Ux/Input/SelectReact'
+import { genderOptions, brazilStates } from '../../utils/utils'
+import { useToast } from '../Context/ToastContext'
+import MaskedInput from '../Ux/Input/MaskedInput'
+import { LoaderIcon } from '../../assets/Icon'
+import { schemaPatient, PatientFormData } from '../../schema/patient.chema'
 
 export default function RegisterPatients() {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [name, setName] = useState<string>('')
-  const [cpf, setCpf] = useState<string>('')
-  const [rg, setRg] = useState<string>('')
-  const [phone, setPhone] = useState<string>('')
-  const [gender, setGender] = useState<string>('')
-  const [susCard, setSusCard] = useState<string>('')
-  const [birthDate, setBirthDate] = useState<string>('')
-  const [motherName, setMotherName] = useState<string>('')
-  const [number, setNumber] = useState<string>('')
-  const [complement, setComplement] = useState<string>('')
-  const [state, setState] = useState<string>('')
-  const [district, setDistrict] = useState<string>('')
-  const [city, setCity] = useState<string>('')
-  const [zipCode, setZipCode] = useState<string>('')
-  const [address, setAddress] = useState<string>('')
+  const { showSuccess, showError } = useToast()
   const navigate = useNavigate()
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(schemaPatient),
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      cpf: '',
+      rg: '',
+      phone: '',
+      gender: '',
+      susCard: '',
+      birthDate: '',
+      motherName: '',
+      address: '',
+      number: '',
+      complement: '',
+      state: 'PA',
+      district: '',
+      city: 'Portel',
+      zipCode: '68480-000',
+    },
+  })
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault()
-    setIsLoading(true)
-
+  async function handleSubmitPatient(data: PatientFormData) {
     try {
-      await api.post('patients', {
-        name,
-        gender,
-        cpf,
-        rg,
-        address,
-        number,
-        complement,
-        district,
-        city,
-        state,
-        zipCode,
-        phone,
-        susCard,
-        birthDate,
-        motherName,
-        active: true,
-      })
+      await api.post('patients', { ...data, active: true })
 
-      alert('Paciente cadastrado com sucesso!')
+      showSuccess('Paciente cadastrado com sucesso!')
+      reset()
       navigate('/patients')
       handleResetFields()
     } catch (error) {
@@ -62,29 +61,13 @@ export default function RegisterPatients() {
       const { status } = axiosError.request
 
       if (status === 409) {
-        alert('Paciente já cadastrado!')
+        showError('Paciente já cadastrado!')
       }
-    } finally {
-      setIsLoading(false)
     }
   }
 
   function handleResetFields() {
-    setName('')
-    setCpf('')
-    setRg('')
-    setPhone('')
-    setGender('')
-    setSusCard('')
-    setBirthDate('')
-    setMotherName('')
-    setNumber('')
-    setComplement('')
-    setState('')
-    setDistrict('')
-    setCity('')
-    setZipCode('')
-    setAddress('')
+    console.log('handleResetFields')
   }
 
   return (
@@ -104,7 +87,7 @@ export default function RegisterPatients() {
           </div>
         </div>
       </AdminToolbar>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit(handleSubmitPatient)} className="space-y-4">
         <div className="w-full flex flex-wrap md:flex-nowrap">
           <div className="flex-1 p-3">
             <h2 className="text-bold text-xl pb-2">Dados Pessoais</h2>
@@ -112,80 +95,112 @@ export default function RegisterPatients() {
               <Label label="Nome Completo" />
               <Input
                 type="text"
-                name="name"
+                {...register('name')}
                 placeholder="Digite o nome completo"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
               />
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name.message}</p>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div>
                   <Label label="Data de Nascimento" />
                   <Input
                     type="date"
-                    name="birthDate"
-                    value={birthDate}
-                    onChange={(e) => setBirthDate(e.target.value)}
+                    {...register('birthDate')}
+                    placeholder="Data de Nascimento"
                   />
+                  {errors.birthDate && (
+                    <p className="text-red-500 text-sm">
+                      {errors.birthDate.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label label="Gênero" />
-                  <Input
-                    type="text"
+
+                  <Controller
                     name="gender"
-                    placeholder="Gênero"
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
+                    control={control}
+                    render={({ field }) => (
+                      <SelectReact
+                        options={genderOptions}
+                        placeholder="Selecione o gênero"
+                        selected={field.value}
+                        handleChange={(option) => field.onChange(option?.value)}
+                      />
+                    )}
                   />
+
+                  {errors.gender && (
+                    <p className="text-red-500 text-sm">
+                      {errors.gender.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label label="CPF" />
-                  <Input
-                    type="text"
+                  <Controller
                     name="cpf"
-                    placeholder="Digite o CPF"
-                    value={cpf}
-                    onChange={(e) => setCpf(e.target.value)}
+                    control={control}
+                    render={({ field }) => (
+                      <MaskedInput {...field} mask="999.999.999-99" />
+                    )}
                   />
+                  {errors.cpf && (
+                    <p className="text-red-500 text-sm">{errors.cpf.message}</p>
+                  )}
                 </div>
                 <div>
                   <Label label="RG" />
                   <Input
                     type="text"
-                    name="rg"
+                    {...register('rg')}
                     placeholder="Digite o RG"
-                    value={rg}
-                    onChange={(e) => setRg(e.target.value)}
                   />
+                  {errors.rg && (
+                    <p className="text-red-500 text-sm">{errors.rg.message}</p>
+                  )}
                 </div>
                 <div>
                   <Label label="Cartão do SUS" />
                   <Input
                     type="text"
-                    name="susCard"
-                    placeholder="Digite o número do cartão do SUS"
-                    value={susCard}
-                    onChange={(e) => setSusCard(e.target.value)}
+                    {...register('susCard')}
+                    placeholder="Digite o cartão SUS"
                   />
+                  {errors.susCard && (
+                    <p className="text-red-500 text-sm">
+                      {errors.susCard.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label label="Nome da Mãe" />
                   <Input
                     type="text"
-                    name="motherName"
+                    {...register('motherName')}
                     placeholder="Digite o nome da mãe"
-                    value={motherName}
-                    onChange={(e) => setMotherName(e.target.value)}
                   />
+                  {errors.motherName && (
+                    <p className="text-red-500 text-sm">
+                      {errors.motherName.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label label="Telefone" />
-                  <Input
-                    type="text"
+                  <Controller
                     name="phone"
-                    placeholder="Digite o telefone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    control={control}
+                    render={({ field }) => (
+                      <MaskedInput {...field} mask="(99) 99999-9999" />
+                    )}
                   />
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm">
+                      {errors.phone.message}
+                    </p>
+                  )}
                 </div>
               </div>
               <h2 className="text-bold text-xl pb-2">Endereço</h2>
@@ -194,80 +209,113 @@ export default function RegisterPatients() {
                   <Label label="Endereço" />
                   <Input
                     type="text"
-                    name="address"
+                    {...register('address')}
                     placeholder="Digite o endereço"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
                   />
+                  {errors.address && (
+                    <p className="text-red-500 text-sm">
+                      {errors.address.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label label="Número" />
                   <Input
                     type="text"
-                    name="number"
+                    {...register('number')}
                     placeholder="Digite o número"
-                    value={number}
-                    onChange={(e) => setNumber(e.target.value)}
                   />
+                  {errors.number && (
+                    <p className="text-red-500 text-sm">
+                      {errors.number.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label label="Complemento" />
                   <Input
                     type="text"
-                    name="complement"
+                    {...register('complement')}
                     placeholder="Digite o complemento"
-                    value={complement}
-                    onChange={(e) => setComplement(e.target.value)}
                   />
+                  {errors.complement && (
+                    <p className="text-red-500 text-sm">
+                      {errors.complement.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label label="Bairro" />
                   <Input
                     type="text"
-                    name="district"
+                    {...register('district')}
                     placeholder="Digite o bairro"
-                    value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
                   />
+                  {errors.district && (
+                    <p className="text-red-500 text-sm">
+                      {errors.district.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label label="Cidade" />
                   <Input
                     type="text"
-                    name="city"
+                    {...register('city')}
                     placeholder="Digite a cidade"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
                   />
+                  {errors.city && (
+                    <p className="text-red-500 text-sm">
+                      {errors.city.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label label="Estado" />
-                  <Input
-                    type="text"
+                  <Controller
                     name="state"
-                    placeholder="Digite o estado"
-                    value={state}
-                    onChange={(e) => setState(e.target.value)}
+                    control={control}
+                    render={({ field }) => (
+                      <SelectReact
+                        options={brazilStates}
+                        placeholder="Selecione o gênero"
+                        selected={field.value}
+                        handleChange={(option) => field.onChange(option?.value)}
+                      />
+                    )}
                   />
+                  {errors.state && (
+                    <p className="text-red-500 text-sm">
+                      {errors.state.message}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label label="CEP" />
                   <Input
                     type="text"
-                    name="zipCode"
+                    {...register('zipCode')}
                     placeholder="Digite o CEP"
-                    value={zipCode}
-                    onChange={(e) => setZipCode(e.target.value)}
                   />
+                  {errors.zipCode && (
+                    <p className="text-red-500 text-sm">
+                      {errors.zipCode.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div className="flex justify-center">
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? (
-              <Loading />
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <div className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-8 rounded flex items-center gap-2 cursor-pointer">
+                <span className=" mr-2">
+                  <LoaderIcon className="w-5 h-5 animate-spin" />
+                </span>
+                Salvar
+              </div>
             ) : (
               <div className="bg-blue-500 text-white hover:bg-blue-700 py-2 px-8 rounded flex items-center gap-2 cursor-pointer">
                 <CiFloppyDisk size={24} fill="white" />
