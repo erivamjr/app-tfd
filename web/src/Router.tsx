@@ -50,9 +50,9 @@ function AdminPrivate({ children }: { children: JSX.Element }) {
 
 export default function AppRouter() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <ToastProvider>
+    <ToastProvider>
+      <BrowserRouter>
+        <AuthProvider>
           <Routes>
             {/* Rotas públicas */}
             <Route path="/auth" element={<Auth />} />
@@ -120,8 +120,8 @@ export default function AppRouter() {
               }
             />
           </Routes>
-        </ToastProvider>
-      </AuthProvider>
-    </BrowserRouter>
+        </AuthProvider>
+      </BrowserRouter>
+    </ToastProvider>
   )
 }
