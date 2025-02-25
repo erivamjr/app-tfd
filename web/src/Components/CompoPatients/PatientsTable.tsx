@@ -24,7 +24,7 @@ export default function PatientsTable() {
   const [expandedRows, setExpandedRows] = useState<string[]>([])
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 6
+  const itemsPerPage = 10
   const [search, setSearch] = useState('')
   const [searchTherm, setSearchTherm] = useState('')
   const [patientDelete, setPatientDelete] = useState<Patient>()

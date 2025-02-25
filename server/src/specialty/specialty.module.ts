@@ -8,9 +8,10 @@ import { SpecialtyService } from './specialty.service';
 import { SpecialtyController } from './specialty.controller';
 import { PrismaModule } from '../database/prisma.module';
 import { SpecialtyIdCheckMiddleware } from '../middlewares/specialty-id-checkmiddlewares';
+import { SharedModule } from '../shared/shared.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, SharedModule],
   controllers: [SpecialtyController],
   providers: [SpecialtyService],
 })

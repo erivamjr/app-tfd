@@ -8,7 +8,6 @@ import api from '../../Api'
 import useSpecialties from '../Hooks/Api/Specialties/Specialties'
 import Alert from '../Ux/Alert/Alert'
 import { Patient } from '../Hooks/Api/Patiens/TypePatiens'
-import CreatableSelect from 'react-select/creatable'
 import Autocomplete from '../Ux/Autocomplete'
 
 import { AuthContext } from '../Context/Auth'
@@ -16,7 +15,12 @@ import { useNavigate } from 'react-router-dom'
 import { IoReturnDownBack } from 'react-icons/io5'
 import AdminToolbar from '../Ux/AdminToolbar/AdminToolbar'
 import Container from '../Ux/Container/Container'
+import { SelectReact } from '../Ux/Input/SelectReact'
 
+interface selectEspcialtyProps {
+  value: string
+  label: string
+}
 export default function CreateRequest() {
   const [isLoadingPatient, setIsLoadingPatient] = useState<boolean>(false)
   const { specialties, isLoading } = useSpecialties()
@@ -49,7 +53,8 @@ export default function CreateRequest() {
     hasCourtOrder: false,
     isSuspected: false,
   })
-  const [selectedSpecialty, setSelectedSpecialty] = useState(null)
+  const [selectedSpecialty, setSelectedSpecialty] =
+    useState<selectEspcialtyProps | null>(null)
 
   const { user } = useContext(AuthContext)
   const navigate = useNavigate()
@@ -238,6 +243,9 @@ export default function CreateRequest() {
       [condition]: !prev[condition],
     }))
   }
+
+  console.log('selectedSpecialty', selectedSpecialty)
+
   return (
     <Container>
       <AdminToolbar>
@@ -358,42 +366,18 @@ export default function CreateRequest() {
                   {isLoading ? (
                     <Loading />
                   ) : (
-                    <CreatableSelect
-                      isClearable
-                      value={selectedSpecialty}
+                    <SelectReact
                       options={specialties.map((specialty) => ({
                         value: specialty.id,
                         label: specialty.name,
                       }))}
-                      onChange={handleSpecialtyChange}
-                      styles={{
-                        control: (provided, state) => ({
-                          ...provided,
-                          borderColor: state.isFocused ? '#121212' : '#d9d9d9',
-                          boxShadow: state.isFocused
-                            ? '0 0 0 1px #121212'
-                            : 'none',
-                          '&:hover': {
-                            borderColor: '#121212',
-                          },
-                        }),
-                        menu: (base) => ({
-                          ...base,
-                          marginTop: '0.5rem',
-                          borderRadius: '0.25rem',
-                          boxShadow:
-                            '0 0 0 1px rgba(0, 0, 0, 0.05), 0 4px 11px rgba(0, 0, 0, 0.1)',
-                        }),
-                        option: (base, state) => ({
-                          ...base,
-                          backgroundColor: state.isSelected
-                            ? '#e0e0e0'
-                            : 'white',
-                          ':hover': {
-                            backgroundColor: '#f0f0f0',
-                          },
-                        }),
-                      }}
+                      handleChange={handleSpecialtyChange}
+                      placeholder="Especialidade"
+                      selected={
+                        selectedSpecialty
+                          ? (selectedSpecialty.label as string)
+                          : ''
+                      }
                     />
                   )}
                 </div>

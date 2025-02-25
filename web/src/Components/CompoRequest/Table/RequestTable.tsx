@@ -33,7 +33,7 @@ export default function RequestTable() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isModalWhatsappOpen, setIsModalWhatsappOpen] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 6
+  const itemsPerPage = 10
   const [searchValue, setSearchValue] = useState('')
   const [appointmentsModal, setAppointmentsModal] = useState<TypeAppointment>()
   const [selectedSpecialty, setSelectedSpecialty] = useState('')
