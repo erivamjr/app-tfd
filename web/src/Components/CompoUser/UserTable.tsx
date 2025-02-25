@@ -19,7 +19,10 @@ export default function UserTable() {
 
   useEffect(() => {
     setLocalUsers((prevUsers) => {
-      const updatedUsers = users.map((user) => {
+      const usersWithoutSUSLine = users.filter(
+        (user) => user.name !== 'SUSLine',
+      )
+      const updatedUsers = usersWithoutSUSLine.map((user) => {
         const prevUser = prevUsers.find((prev) => prev.id === user.id)
         return prevUser ? { ...prevUser, ...user } : user
       })
