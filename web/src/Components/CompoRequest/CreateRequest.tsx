@@ -244,8 +244,6 @@ export default function CreateRequest() {
     }))
   }
 
-  console.log('selectedSpecialty', selectedSpecialty)
-
   return (
     <Container>
       <AdminToolbar>
