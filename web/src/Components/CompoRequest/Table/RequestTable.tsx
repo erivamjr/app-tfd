@@ -209,6 +209,10 @@ export default function RequestTable() {
       .join(' ') // Junta os emojis em uma string
   }
 
+  const position = appointmentsPage.findIndex(
+    (user) => user.patient.name === appointmentsModal?.patient.name,
+  )
+
   return (
     <div>
       <div className="flex justify-end mb-4">
@@ -351,7 +355,7 @@ export default function RequestTable() {
               <div className="flex items-center justify-between p-4 cursor-pointer">
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-gray-900">
-                    {appointment.patient.name}
+                    {position} - {appointment.patient.name}
                   </span>
                   <span>
                     {priorityEmojis[appointment.priority] || ''}
