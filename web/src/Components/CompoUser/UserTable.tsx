@@ -18,11 +18,13 @@ export default function UserTable() {
   const [localUsers, setLocalUsers] = useState(users)
 
   useEffect(() => {
+    const excludedIds = [
+      '141acc2f-be65-410a-9ffe-9a5fdb7fed0c',
+      'f1b3b3b3-1b3b-4b3b-8b3b-1b3b3b3b3b3b',
+    ]
     setLocalUsers((prevUsers) => {
       const usersWithoutSUSLine = users.filter(
-        (user) =>
-          user.id !== '141acc2f-be65-410a-9ffe-9a5fdb7fed0c' &&
-          user.id !== 'f1b3b3b3-1b3b-4b3b-8b3b-1b3b3b3b3b3b',
+        (user) => !excludedIds.includes(user.id),
       )
       const updatedUsers = usersWithoutSUSLine.map((user) => {
         const prevUser = prevUsers.find((prev) => prev.id === user.id)
