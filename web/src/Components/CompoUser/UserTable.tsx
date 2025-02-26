@@ -20,7 +20,7 @@ export default function UserTable() {
   useEffect(() => {
     const excludedIds = [
       '141acc2f-be65-410a-9ffe-9a5fdb7fed0c',
-      'f1b3b3b3-1b3b-4b3b-8b3b-1b3b3b3b3b3b',
+      'f14324fb-53b9-4f97-8b60-8f1d174b5584',
     ]
     setLocalUsers((prevUsers) => {
       const usersWithoutSUSLine = users.filter(
