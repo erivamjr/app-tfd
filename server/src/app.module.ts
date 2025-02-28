@@ -23,7 +23,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
         ignoreUserAgents: [/googlebot/gi],
       },
     ]),
-    ConfigModule.forRoot(), // Carrega variáveis do .env
+    ConfigModule.forRoot({ isGlobal: true }), // Carrega variáveis do .env
     SharedModule,
     UsersModule,
     AuthModule,
